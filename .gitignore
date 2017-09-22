@@ -1,0 +1,6 @@
+# Internal
+config.toml
+
+# Node
+node_modules/
+package-lock.json

@@ -1,0 +1,22 @@
+[discord]
+token = "main_bot_token"
+
+[[commands]]
+prefix = "Qdnp"
+aliases = [ "Qdcp" ]
+
+[[commands]]
+prefix = "Qdprev"
+
+[[commands]]
+prefix = "Qdnext"
+
+[voice]
+passes = 2
+bitrate = 44100
+
+[[radios]]
+token = "radio_bot_1_token"
+channel = "330121740758024193"
+name = "Q-Dance Radio"
+url = "http://audio.true.nl/qdance-hard"
