@@ -287,6 +287,13 @@ class RedditRadio
 
 		msg.channel.send("Now playing: :musical_note: **" + this.current_song + "**");
 	}
+	
+	onCmdUpdate(msg)
+	{
+		if(this.isAdmin(msg.member)) {
+			//
+		}
+	}
 }
 
 module.exports = RedditRadio;
