@@ -82,7 +82,7 @@ class RedditRadio
 			}
 		}
 		console.log("Removed Files");
-		fs.removeSync("./"+this.config.github.dest+"/.git/");
+		fs.removeSync("./"+this.config.github.dest+"//.git/");
 
 		fs.move("./"+this.config.github.dest+"//", "./", { overwrite: true }, err => {
 			if (err){
