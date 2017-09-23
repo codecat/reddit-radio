@@ -1,6 +1,11 @@
 [discord]
 token = "main_bot_token"
 
+[github]
+url = "https://github.com/KurzaCationer/reddit-radio"
+dest = "./reddit-radio/"
+safeFiles = ["config.toml", "reddit-radio"]
+
 [[commands]]
 prefix = "Qdnp"
 aliases = [ "Qdcp" ]
