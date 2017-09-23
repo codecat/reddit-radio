@@ -8,8 +8,8 @@
     "node-opus": "^0.2.7",
     "toml": "^2.3.3",
     "ytdl-core": "^0.17.1",
-	"simple-git": "^1.71.1",
-	"nodemon": "^1.11.0"
+	  "simple-git": "^1.77.0",
+	  "nodemon": "^1.11.0"
   },
   "devDependencies": {},
   "author": "Codecat" 
