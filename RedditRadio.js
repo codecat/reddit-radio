@@ -22,10 +22,8 @@ class RedditRadio
 		this.client.on("message", (msg) => { this.onMessage(msg); });
 
 		this.radios = [];
-
-		this.cdone = false;
-
-		this.queue = new SongQueue();
+    
+		this.queue = new SongQueue(this.config);
 		this.current_song = false;
 
 		this.voice_connection = false;
@@ -118,7 +116,9 @@ class RedditRadio
 		if (this.voice_dispatcher === false) {
 			this.current_song = this.queue.next();
 			if (this.current_song !== null) {
-				this.voice_dispatcher = this.voice_connection.playStream(this.current_song.stream, this.config.voice);
+				this.voice_dispatcher = this.voice_connection.playArbitraryInput(this.current_song.stream, this.config.voice);
+				//this.voice_dispatcher = this.voice_connection.playStream(this.current_song.stream, this.config.voice);
+
 				this.voice_dispatcher.on("end", () => {
 					this.voice_dispatcher = false;
 					this.current_song = false;
@@ -311,7 +311,7 @@ class RedditRadio
 			return;
 		}
 
-		msg.channel.send("Now playing: :musical_note: **" + this.current_song + "**");
+		msg.channel.send("Now playing: :musical_note: **" + this.current_song.title + "**");
 	}
 	
 	onCmdUpdate(msg)

@@ -2,14 +2,16 @@ var Song = require("./Song");
 
 class SongQueue
 {
-	constructor()
+	constructor(config)
 	{
+		this.config = config;
+
 		this.list = [];
 	}
 
 	add(url, callback)
 	{
-		new Song(url, (song) => {
+		new Song(this.config, url, (song) => {
 			if (!song.valid) {
 				callback(false);
 				return;
