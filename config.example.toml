@@ -15,6 +15,9 @@ prefix = "Qdnext"
 passes = 2
 bitrate = 44100
 
+[soundcloud]
+client_id = "soundcloud_client_id"
+
 [[radios]]
 token = "radio_bot_1_token"
 channel = "330121740758024193"
