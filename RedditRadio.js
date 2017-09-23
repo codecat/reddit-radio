@@ -1,3 +1,4 @@
+var sg = require('simple-git');
 var discord = require("discord.js");
 var toml = require("toml");
 
@@ -17,6 +18,8 @@ class RedditRadio
 		this.client = new discord.Client();
 		this.client.on("ready", () => { this.onReady(); });
 		this.client.on("message", (msg) => { this.onMessage(msg); });
+		
+		this.github = "https://github.com/KurzaCationer/reddit-radio";
 
 		this.radios = [];
 
