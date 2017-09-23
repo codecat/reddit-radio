@@ -83,6 +83,7 @@ class RedditRadio
 				return console.error(err);
 			}
 		});
+		cprocess.execSync("npm install");		
 		console.log("Done!");
 	}
 
