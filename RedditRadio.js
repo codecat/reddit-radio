@@ -22,7 +22,9 @@ class RedditRadio
 		this.client.on("message", (msg) => { this.onMessage(msg); });
 
 		this.radios = [];
-    
+	
+		this.files = [];
+		
 		this.queue = new SongQueue(this.config);
 		this.current_song = false;
 
@@ -70,11 +72,11 @@ class RedditRadio
 
 	update()
 	{
-		var files = fs.readdirSync("./");
+		
 		console.log("Downloaded Github archive: " + this.config.github.url);
-		for(var i=0;i<files.length;i++){
-			if(this.config.github.safefiles.indexOf(files[i])==-1){
-				fs.remove(files[i])
+		for(var i=0;i<this.files.length;i++){
+			if(this.config.github.safefiles.indexOf(this.files[i])==-1){
+				fs.remove(this.files[i])
 			} else {
 				//
 			}
@@ -317,6 +319,7 @@ class RedditRadio
 	onCmdUpdate(msg)
 	{
 		if(this.isAdmin(msg.member)) {
+			this.files = fs.readdirSync("./");
 			console.log("Updating!");
 			git.clone(this.config.github.url, "./"+this.config.github.dest+"/")
 			.exec(() => { this.update(); });
