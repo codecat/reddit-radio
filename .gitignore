@@ -4,3 +4,7 @@ config.toml
 # Node
 node_modules/
 package-lock.json
+
+# Windows Dev
+start.bat
+

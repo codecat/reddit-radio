@@ -1,1 +1,1 @@
-nodemon
+nodemon -w package.json

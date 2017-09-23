@@ -1,9 +1,9 @@
-var sg = require('simple-git');
 var discord = require("discord.js");
 var toml = require("toml");
 
 var process = require("process");
 var fs = require("fs");
+var sg = require('simple-git');
 
 var cmdsplit = require("./cmdsplit");
 var SongQueue = require("./SongQueue");
@@ -20,6 +20,7 @@ class RedditRadio
 		this.client.on("message", (msg) => { this.onMessage(msg); });
 		
 		this.github = "https://github.com/KurzaCationer/reddit-radio";
+		this.clonedir = "./reddit-radio/"
 
 		this.radios = [];
 
@@ -294,7 +295,7 @@ class RedditRadio
 	onCmdUpdate(msg)
 	{
 		if(this.isAdmin(msg.member)) {
-			//
+			sg.clone(this.github, this.clonedir);
 		}
 	}
 }
