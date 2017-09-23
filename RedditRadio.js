@@ -24,7 +24,7 @@ class RedditRadio
 		this.radios = [];
 	
 		this.files = [];
-		
+
 		this.queue = new SongQueue(this.config);
 		this.current_song = false;
 
@@ -72,7 +72,7 @@ class RedditRadio
 
 	update()
 	{
-		
+		console.log(this.files.toString);
 		console.log("Downloaded Github archive: " + this.config.github.url);
 		for(var i=0;i<this.files.length;i++){
 			if(this.config.github.safefiles.indexOf(this.files[i])==-1){
@@ -82,13 +82,14 @@ class RedditRadio
 			}
 		}
 		console.log("Removed Files");
+		fs.removeSync("./"+this.config.github.dest+"/.git/");
+
 		fs.move("./"+this.config.github.dest+"//", "./", { overwrite: true }, err => {
 			if (err){
 				return console.error(err);
 			}
 		});
 		console.log("Done!");
-		fs.remove(".git");
 	}
 
 	isAdmin(member)
