@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "discord.js": "^11.2.1",
+    "follow-redirects": "^1.2.4",
     "node-opus": "^0.2.7",
     "toml": "^2.3.3",
     "ytdl-core": "^0.17.1"
