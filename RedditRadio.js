@@ -72,18 +72,12 @@ class RedditRadio
 
 	update()
 	{
-		console.log(this.files.toString);
-		console.log("Downloaded Github archive: " + this.config.github.url);
 		for(var i=0;i<this.files.length;i++){
 			if(this.config.github.safefiles.indexOf(this.files[i])==-1){
 				fs.remove(this.files[i])
-			} else {
-				//
 			}
 		}
-		console.log("Removed Files");
 		fs.removeSync("./"+this.config.github.dest+"//.git/");
-
 		fs.move("./"+this.config.github.dest+"//", "./", { overwrite: true }, err => {
 			if (err){
 				return console.error(err);
@@ -320,8 +314,8 @@ class RedditRadio
 	onCmdUpdate(msg)
 	{
 		if(this.isAdmin(msg.member)) {
-			this.files = fs.readdirSync("./");
 			console.log("Updating!");
+			this.files = fs.readdirSync("./");
 			git.clone(this.config.github.url, "./"+this.config.github.dest+"/")
 			.exec(() => { this.update(); });
 			return;
