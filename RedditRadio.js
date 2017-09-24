@@ -282,7 +282,7 @@ class RedditRadio
 
 	onCmdNp(msg)
 	{
-		if (this.current_song === false) {
+		if (!this.current_song) {
 			msg.channel.send("I'm not playing anything right now. :thinking:");
 			return;
 		}
