@@ -140,13 +140,21 @@ class RedditRadio
 		var cmdName = "onCmd" + cmdID;
 
 		if (this[cmdName] !== undefined) {
-			console.log("Built-in command from \"" + msg.member.user.username + "\": " + cmdID);
+			if (msg.member !== null) {
+				console.log("Built-in command from \"" + msg.member.user.username + "\": " + cmdID);
+			} else {
+				console.log("Built-in command from offline member: " + cmdID);
+			}
 			this[cmdName].apply(this, [ msg ].concat(parse.slice(1)));
 			return;
 		}
 
 		if (this.commands[cmdID] !== undefined) {
-			console.log("External command from \"" + msg.member.user.username + "\": " + cmdID);
+			if (msg.member !== null) {
+				console.log("External command from \"" + msg.member.user.username + "\": " + cmdID);
+			} else {
+				console.log("External command from offline member: " + cmdID);
+			}
 			this.commands[cmdID].apply(this, [ msg ].concat(parse.slice(1)));
 			return;
 		}
