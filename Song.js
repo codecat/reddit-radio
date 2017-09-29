@@ -22,6 +22,8 @@ class Song
 			this.makeYoutubeStream(callback);
 		} else if (url.match(/^https:\/\/soundcloud.com\/[^\/]+\/.+$/)) {
 			this.makeSoundcloudStream(config.soundcloud, callback);
+		} else if (url.endsWith(".mp3")) {
+			this.makeMP3Stream(callback);
 		} else {
 			console.log("Unrecognized url: " + url);
 			callback(this);
@@ -70,6 +72,18 @@ class Song
 				callback(this);
 			});
 		});
+	}
+
+	makeMP3Stream(callback)
+	{
+		this.title = this.url;
+		this.author = "The Internet";
+
+		this.stream = this.url;
+
+		this.valid = true;
+
+		callback(this);
 	}
 }
 
