@@ -16,7 +16,7 @@ class Song
 		this.title = "";
 		this.author = "";
 		this.image = "";
-		this.waveform = "";
+		this.live = false;
 
 		if (url.match(/youtube.com\/watch\?v=/)) {
 			this.makeYoutubeStream(callback);
@@ -37,6 +37,38 @@ class Song
 		});
 
 		this.stream.on("info", (info, format) => {
+			if (info.live_default_broadcast == "1") {
+				this.live = true;
+			}
+
+			if (this.live) {
+				// Workaround for a crash in ytdl-core, I think?
+				// If we're livestreaming, can use the m3u8 stream directly. This means we will also get video.
+				// So we just try to get the lowest video quality with a 128kbps audio quality (or lower if nothing else).
+				var audioFormats = [];
+				for (var i = 0; i < info.formats.length; i++) {
+					var f = info.formats[i];
+					if (f.audioBitrate !== null && f.audioBitrate <= 128 && f.url.endsWith(".m3u8")) {
+						audioFormats.push(f);
+					}
+				}
+
+				var sortedFormats = audioFormats.sort((a, b) => {
+					if (a.audioBitrate > b.audioBitrate) {
+						return -1;
+					} else if (a.audioBitrate < b.audioBitrate) {
+						return 1;
+					}
+					return -a.resolution.localeCompare(b.resolution);
+				});
+
+				var useFormat = sortedFormats[0];
+				console.log("YouTube livestream! Using format: " + useFormat.audioBitrate + "kbps audio, " + useFormat.resolution + " video");
+
+				this.stream.destroy();
+				this.stream = useFormat.url;
+			}
+
 			this.title = info.title;
 			this.author = info.author.name;
 			this.image = info.iurlhq;

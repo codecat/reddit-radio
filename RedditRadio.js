@@ -295,7 +295,15 @@ class RedditRadio
 			return;
 		}
 
-		msg.channel.send("Now playing: :musical_note: **" + this.current_song.title + "**");
+		var text = "";
+		if (this.current_song.live) {
+			text += "Now *livestreaming*: :red_circle:";
+		} else {
+			text += "Now playing:";
+		}
+		text += " :musical_note: **" + this.current_song.title + "**";
+
+		msg.channel.send(text);
 	}
 }
 
