@@ -2,7 +2,10 @@ var discord = require("discord.js");
 var toml = require("toml");
 
 var process = require("process");
-var fs = require("fs");
+var cprocess = require("child_process");
+var fs = require("fs-extra");
+
+var git = require("simple-git")();
 
 var cmdsplit = require("./cmdsplit");
 var SongQueue = require("./SongQueue");
@@ -19,6 +22,8 @@ class RedditRadio
 		this.client.on("message", (msg) => { this.onMessage(msg); });
 
 		this.radios = [];
+	
+		this.files = [];
 
 		this.queue = new SongQueue(this.config);
 		this.current_song = false;
@@ -63,6 +68,23 @@ class RedditRadio
 			console.log("Client stopped.");
 			process.exit();
 		});
+	}
+
+	update()
+	{
+		for(var i=0;i<this.files.length;i++){
+			if(this.config.github.safefiles.indexOf(this.files[i])==-1){
+				fs.remove(this.files[i])
+			}
+		}
+		fs.removeSync("./"+this.config.github.dest+"//.git/");
+		fs.move("./"+this.config.github.dest+"//", "./", { overwrite: true }, err => {
+			if (err){
+				return console.error(err);
+			}
+		});
+		cprocess.execSync("npm install");		
+		console.log("Done!");
 	}
 
 	isAdmin(member)
@@ -304,6 +326,21 @@ class RedditRadio
 		text += " :musical_note: **" + this.current_song.title + "**";
 
 		msg.channel.send(text);
+	}
+	
+	onCmdUpdate(msg)
+	{
+		if(this.isAdmin(msg.member)) {
+			console.log("Updating!");
+			this.files = fs.readdirSync("./");
+			git.clone(this.config.github.url, "./"+this.config.github.dest+"/")
+			.exec(() => { this.update(); });
+			return;
+		} else {
+			console.log("**You're not an admin!**");
+			return;
+		}
+
 	}
 }
 
