@@ -225,6 +225,11 @@ class RedditRadio
 			return;
 		}
 
+		if (url === undefined) {
+			msg.channel.send("You have to give me a URL, otherwise I don't know what to play. :sob:");
+			return;
+		}
+
 		this.queue.add(url, (song) => {
 			if (song === false) {
 				msg.channel.send("I can't play that URL, sorry... :sob:");

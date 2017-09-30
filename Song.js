@@ -45,10 +45,12 @@ class Song
 				// Workaround for a crash in ytdl-core, I think?
 				// If we're livestreaming, can use the m3u8 stream directly. This means we will also get video.
 				// So we just try to get the lowest video quality with a 128kbps audio quality (or lower if nothing else).
+				// WE NEED TO GET RID OF THIS IF WE CAN ACTUALLY FIX THE DAMN THING
 				var audioFormats = [];
 				for (var i = 0; i < info.formats.length; i++) {
 					var f = info.formats[i];
 					if (f.audioBitrate !== null && f.audioBitrate <= 128 && f.url.endsWith(".m3u8")) {
+						console.log("-- Found format: " + f.audioBitrate + "kbps audio, " + f.resolution + " video");
 						audioFormats.push(f);
 					}
 				}
@@ -59,7 +61,29 @@ class Song
 					} else if (a.audioBitrate < b.audioBitrate) {
 						return 1;
 					}
-					return -a.resolution.localeCompare(b.resolution);
+				});
+
+				var highestBitrate = sortedFormats[0].audioBitrate;
+				console.log("Highest audio bitrate: " + highestBitrate);
+
+				var highFormats = [];
+				for (var i = 0; i < sortedFormats.length; i++) {
+					if (sortedFormats[i].audioBitrate == highestBitrate) {
+						highFormats.push(sortedFormats[i]);
+					}
+				}
+
+				sortedFormats = highFormats.sort((a, b) => {
+					var resA = parseInt(a.resolution);
+					var resB = parseInt(b.resolution);
+
+					if (resA > resB) {
+						return 1;
+					} else if (resA < resB) {
+						return -1;
+					}
+
+					return 0;
 				});
 
 				var useFormat = sortedFormats[0];
