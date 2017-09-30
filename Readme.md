@@ -9,5 +9,8 @@ It does:
   * YouTube
   * YouTube livestreams
   * Soundcloud
+  * Facebook videos
+  * Facebook livestreams (video & audio)
+  * Periscope livestreams
   * Direct MP3 links
 * Makes Headhunterz shrug. ¯\\\_(ツ)\_/¯

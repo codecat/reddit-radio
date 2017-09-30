@@ -125,7 +125,15 @@ class RedditRadio
 	onTick()
 	{
 		if (this.voice_dispatcher === false) {
-			this.current_song = this.queue.next();
+			while (true) {
+				this.current_song = this.queue.next();
+				if (this.current_song === null || this.current_song.valid) {
+					break;
+				}
+				if (!this.current_song.valid) {
+					console.log("Current song is invalid!", this.current_song);
+				}
+			}
 			if (this.current_song !== null) {
 				this.voice_dispatcher = this.voice_connection.playArbitraryInput(this.current_song.stream, this.config.voice);
 				//this.voice_dispatcher = this.voice_connection.playStream(this.current_song.stream, this.config.voice);

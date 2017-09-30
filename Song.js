@@ -25,6 +25,8 @@ class Song
 			this.makeSoundcloudStream(config.soundcloud, callback);
 		} else if (url.match(/^https:\/\/www\.facebook\.com\/.*\/videos\/[0-9]+/)) {
 			this.makeFacebookStream(callback);
+		} else if (url.match(/^https:\/\/www.pscp.tv\/w\/[A-Za-z0-9]{13}/)) {
+			this.makePeriscopeStream(callback);
 		} else if (url.endsWith(".mp3")) {
 			this.makeMP3Stream(callback);
 		} else {
@@ -164,6 +166,46 @@ class Song
 				}
 
 				this.live = (matchLive && matchLive[1] == "true");
+
+				callback(this);
+			});
+		});
+	}
+
+	makePeriscopeStream(callback)
+	{
+		var matchID = this.url.match(/^https:\/\/www.pscp.tv\/w\/([A-Za-z0-9]{13})/);
+		if (!matchID) {
+			return;
+		}
+
+		https.get("https://proxsee.pscp.tv/api/v2/accessVideoPublic?broadcast_id=" + matchID[1], (res) => {
+			var data = "";
+			res.setEncoding("utf8");
+			res.on("data", function(chunk) { data += chunk; });
+			res.on("end", () => {
+				var obj = JSON.parse(data);
+
+				var streamUrl = "";
+
+				if (obj.type == "StreamTypeReplay") {
+					console.log("This is a periscope replay, it's not live!");
+					//streamUrl = obj.replay_url;
+					callback(this);
+					return;
+				} else {
+					console.log("Periscope live!");
+					streamUrl = obj.hls_url;
+				}
+
+				this.title = obj.broadcast.status;
+				this.author = obj.broadcast.user_display_name;
+				this.image = obj.broadcast.image_url;
+				this.live = true;
+
+				this.stream = streamUrl;
+
+				this.valid = true;
 
 				callback(this);
 			});
