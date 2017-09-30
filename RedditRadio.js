@@ -305,7 +305,24 @@ class RedditRadio
 
 	onCmdClearQueue(msg)
 	{
-		//
+		if (this.queue.length() == 0) {
+			msg.channel.send("Queue is already empty. :shrug:");
+			return;
+		}
+
+		if (this.isDJ(msg.member)) {
+			this.queue.clear();
+			msg.channel.send("DL told me to clear the queue! :ok_hand:");
+			return;
+		}
+
+		if (this.voice_connection.channel.members.length <= 3) {
+			this.queue.clear();
+			msg.channel.send("Cleared the queue!");
+			return;
+		}
+
+		msg.channel.send("I don't want to clear the queue right now! :flushed:");
 	}
 
 	onCmdNp(msg)
