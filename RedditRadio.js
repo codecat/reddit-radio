@@ -27,6 +27,15 @@ class RedditRadio
 		this.voice_dispatcher = false;
 
 		this.commands = [];
+		this.loadConfigCommands();
+	}
+
+	loadConfigCommands()
+	{
+		if (this.config.commands === undefined) {
+			return;
+		}
+
 		for (var i = 0; i < this.config.commands.length; i++) {
 			var cmd = this.config.commands[i];
 			this.commands[cmd.prefix] = require("./commands/" + cmd.prefix);
@@ -39,14 +48,23 @@ class RedditRadio
 		}
 	}
 
+	loadConfigRadios()
+	{
+		if (this.config.radios === undefined) {
+			return;
+		}
+
+		for (var i = 0; i < this.config.radios.length; i++) {
+			this.radios.push(new Radio(this.config, this.config.radios[i]));
+		}
+	}
+
 	start()
 	{
 		this.client.login(this.config.discord.token);
 		setInterval(() => { this.onTick(); }, 1000);
 
-		for (var i = 0; i < this.config.radios.length; i++) {
-			this.radios.push(new Radio(this.config, this.config.radios[i]));
-		}
+		this.loadConfigRadios();
 	}
 
 	stop()

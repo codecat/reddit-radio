@@ -1,5 +1,6 @@
 var ytdl = require("ytdl-core");
 var https = require("follow-redirects").https;
+var url = require("url");
 
 class Song
 {
@@ -22,6 +23,8 @@ class Song
 			this.makeYoutubeStream(callback);
 		} else if (url.match(/^https:\/\/soundcloud.com\/[^\/]+\/.+$/)) {
 			this.makeSoundcloudStream(config.soundcloud, callback);
+		} else if (url.match(/^https:\/\/www\.facebook\.com\/.*\/videos\/[0-9]+/)) {
+			this.makeFacebookStream(callback);
 		} else if (url.endsWith(".mp3")) {
 			this.makeMP3Stream(callback);
 		} else {
@@ -124,6 +127,40 @@ class Song
 				this.stream = obj.stream_url + "?client_id=" + config.client_id;
 
 				this.valid = true;
+
+				callback(this);
+			});
+		});
+	}
+
+	makeFacebookStream(callback)
+	{
+		var parse = url.parse(this.url);
+		https.get({
+			host: parse.host,
+			path: parse.path,
+			headers: {
+				"User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:55.0) Gecko/20100101 Firefox/55.0",
+				"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+			}
+		}, (res) => {
+			var data = "";
+			res.setEncoding("utf8");
+			res.on("data", function(chunk) { data += chunk; });
+			res.on("end", () => {
+				var matchOwnerName = data.match(/ownerName:"([^\"]+)"/);
+				var matchUrl = data.match(/hd_src:"([^\"]+)"/);
+
+				if (matchOwnerName) {
+					this.title = matchOwnerName[1];
+				} else {
+					this.title = "Facebook video";
+				}
+
+				if (matchUrl) {
+					this.stream = matchUrl[1];
+					this.valid = true;
+				}
 
 				callback(this);
 			});
