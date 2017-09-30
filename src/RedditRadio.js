@@ -5,14 +5,14 @@ var process = require("process");
 var fs = require("fs");
 
 var cmdsplit = require("./cmdsplit");
-var SongQueue = require("./SongQueue");
-var Radio = require("./Radio");
+var SongQueue = require("./radio/SongQueue");
+var Radio = require("./radio/Radio");
 
 class RedditRadio
 {
 	constructor()
 	{
-		this.config = toml.parse(fs.readFileSync("config.toml", "utf8"));
+		this.config = toml.parse(fs.readFileSync("./src/config.toml", "utf8"));
 
 		this.client = new discord.Client();
 		this.client.on("ready", () => { this.onReady(); });

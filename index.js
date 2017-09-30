@@ -1,4 +1,4 @@
-var RedditRadio = require("./RedditRadio");
+var RedditRadio = require("./src/RedditRadio");
 
 var bot = new RedditRadio();
 bot.start();
