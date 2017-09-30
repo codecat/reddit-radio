@@ -87,6 +87,21 @@ class RedditRadio
 		return false;
 	}
 
+	isDJ(member)
+	{
+		if (this.isMod(member)) {
+			return true;
+		}
+
+		for (var roleID of member.roles.keys()) {
+			var role = member.roles.get(roleID);
+			if (role.name == "Discord DJ") {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	onTick()
 	{
 		if (this.voice_dispatcher === false) {
@@ -198,8 +213,8 @@ class RedditRadio
 			return;
 		}
 
-		if (this.isMod(msg.member)) {
-			msg.channel.send("Mod told me to leave. :ok_hand:");
+		if (this.isDJ(msg.member)) {
+			msg.channel.send("DJ told me to leave. :ok_hand:");
 			this.voice_connection.disconnect();
 			return;
 		}
@@ -273,9 +288,9 @@ class RedditRadio
 			return;
 		}
 
-		if (this.isMod(msg.member)) {
+		if (this.isDJ(msg.member)) {
 			this.voice_dispatcher.end();
-			msg.channel.send("Mod told me to skip this track! :ok_hand:");
+			msg.channel.send("DJ told me to skip this track! :ok_hand:");
 			return;
 		}
 
