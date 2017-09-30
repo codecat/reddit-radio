@@ -148,6 +148,7 @@ class Song
 			res.setEncoding("utf8");
 			res.on("data", function(chunk) { data += chunk; });
 			res.on("end", () => {
+				var matchLive = data.match(/isLive:(true|false)/);
 				var matchOwnerName = data.match(/ownerName:"([^\"]+)"/);
 				var matchUrl = data.match(/hd_src:"([^\"]+)"/);
 
@@ -161,6 +162,8 @@ class Song
 					this.stream = matchUrl[1];
 					this.valid = true;
 				}
+
+				this.live = (matchLive && matchLive[1] == "true");
 
 				callback(this);
 			});
