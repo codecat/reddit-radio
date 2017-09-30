@@ -23,6 +23,8 @@ class RedditRadio
 		this.queue = new SongQueue(this.config);
 		this.current_song = false;
 
+		this.locked = false;
+
 		this.voice_connection = false;
 		this.voice_dispatcher = false;
 
@@ -237,6 +239,11 @@ class RedditRadio
 			return;
 		}
 
+		if (this.locked) {
+			msg.channel.send("I'm locked.. :flushed:");
+			return;
+		}
+
 		if (this.voice_connection.channel.members.get(msg.member.id) === undefined) {
 			msg.channel.send("You are not in my voice channel. :rolling_eyes:");
 			return;
@@ -251,8 +258,45 @@ class RedditRadio
 		this.voice_connection.disconnect();
 	}
 
+	onCmdLock(msg)
+	{
+		if (!this.isMod(msg.member)) {
+			msg.channel.send("You're not a mod though.. :flushed:");
+			return;
+		}
+
+		if (this.locked) {
+			msg.channel.send("Jukebox is already locked! :lock:");
+			return;
+		}
+
+		this.locked = true;
+		msg.channel.send("Jukebox is now locked. **I will only listen to DJ's and mods!** :lock:");
+	}
+
+	onCmdUnlock(msg)
+	{
+		if (!this.isMod(msg.member)) {
+			msg.channel.send("You're not a mod though.. :flushed:");
+			return;
+		}
+
+		if (!this.locked) {
+			msg.channel.send("Jukebox is not locked right now! :unlock:");
+			return;
+		}
+
+		this.locked = false;
+		msg.channel.send("Jukebox is now unlocked. :unlock:");
+	}
+
 	onCmdPlay(msg, url)
 	{
+		if (this.locked && !this.isDJ(msg.member)) {
+			msg.channel.send("I'm locked.. :flushed:");
+			return;
+		}
+
 		if (this.voice_connection === false) {
 			msg.channel.send("I'm not in a voice channel. :thinking:");
 			return;
@@ -274,6 +318,11 @@ class RedditRadio
 
 	onCmdPause(msg)
 	{
+		if (this.locked && !this.isDJ(msg.member)) {
+			msg.channel.send("I'm locked.. :flushed:");
+			return;
+		}
+
 		if (this.voice_dispatcher === false) {
 			msg.channel.send("I'm not playing anything right now. :thinking:");
 			return;
@@ -285,6 +334,11 @@ class RedditRadio
 
 	onCmdResume(msg)
 	{
+		if (this.locked && !this.isDJ(msg.member)) {
+			msg.channel.send("I'm locked.. :flushed:");
+			return;
+		}
+
 		if (this.voice_dispatcher === false) {
 			msg.channel.send("I wasn't playing anything right now. :thinking:");
 			return;
@@ -312,6 +366,11 @@ class RedditRadio
 			return;
 		}
 
+		if (this.locked) {
+			msg.channel.send("I'm locked.. :flushed:");
+			return;
+		}
+
 		if (this.voice_connection.channel.members.length <= 3) {
 			msg.channel.send("Skipping! :track_next:");
 			this.voice_dispatcher.end();
@@ -331,6 +390,11 @@ class RedditRadio
 		if (this.isDJ(msg.member)) {
 			this.queue.clear();
 			msg.channel.send("DL told me to clear the queue! :ok_hand:");
+			return;
+		}
+
+		if (this.locked) {
+			msg.channel.send("I'm locked.. :flushed:");
 			return;
 		}
 

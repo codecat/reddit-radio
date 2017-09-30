@@ -153,20 +153,17 @@ class Song
 				var matchUrl = data.match(/hd_src:"([^\"]+)"/);
 
 				if (matchOwnerName) {
-					console.log("Facebook stream title: " + matchOwnerName[1]);
 					this.title = matchOwnerName[1];
 				} else {
 					this.title = "Facebook video";
 				}
 
 				if (matchUrl) {
-					console.log("Facebook stream URL: " + matchUrl[1]);
 					this.stream = matchUrl[1];
 					this.valid = true;
 				}
 
 				this.live = (matchLive && matchLive[1] == "true");
-				console.log("Facebook live: " + this.live);
 
 				callback(this);
 			});
