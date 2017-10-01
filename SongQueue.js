@@ -21,9 +21,26 @@ class SongQueue
 		});
 	}
 
+	insert(url, callback)
+	{
+		new Song(this.config, url, (song) => {
+			if (!song.valid) {
+				callback(false);
+				return;
+			}
+			this.list.splice(0, 0, song);
+			callback(song);
+		});
+	}
+
 	length()
 	{
 		return this.list.length;
+	}
+
+	clear()
+	{
+		this.list = [];
 	}
 
 	remove(index)

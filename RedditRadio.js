@@ -136,10 +136,35 @@ class RedditRadio
 			}
 			if (this.current_song !== null) {
 				this.voice_dispatcher = this.voice_connection.playArbitraryInput(this.current_song.stream, this.config.voice);
-				//this.voice_dispatcher = this.voice_connection.playStream(this.current_song.stream, this.config.voice);
 
-				this.voice_dispatcher.on("end", () => {
+				this.voice_connection.on("error", (error) => {
+					console.log("Stream error: " + error);
+					if (this.current_song) {
+						if (this.current_song.live) {
+							console.log("LIVESTREAM ERROR, REJUKING!!");
+							this.queue.insert(this.current_song.url, (song) => {
+								if (song === false) {
+									console.log("Couldn't restart stream!");
+									return;
+								}
+								console.log("Restarted stream! :D");
+							});
+						}
+					} else {
+						console.log("No current_song..");
+					}
+				});
+				this.voice_dispatcher.on("end", (reason) => {
+					console.log("Stream ended: " + reason);
 					this.voice_dispatcher = false;
+					if (this.current_song) {
+						if (this.current_song.live) {
+							console.log("LIVESTREAM END!!");
+							return;
+						}
+					} else {
+						console.log("No current_song in end..");
+					}
 					this.current_song = false;
 				});
 			}
@@ -203,6 +228,22 @@ class RedditRadio
 		}
 
 		console.log("Unknown command: \"" + cmdName + "\"");
+	}
+
+	onSongAdded(msg, song, now)
+	{
+		if (song === false) {
+			msg.channel.send("I can't play that URL, sorry... :sob:");
+			return;
+		}
+		if (now) {
+			msg.channel.send("Okay, I'm gonna play it right now! :musical_note: **" + song.title + "**");
+			if (this.voice_dispatcher) {
+				this.voice_dispatcher.end();
+			}
+		} else {
+			msg.channel.send("Okay, I added it to the jukebox! :musical_note: **" + song.title + "**");
+		}
 	}
 
 	onCmdGithub(msg)
@@ -315,13 +356,27 @@ class RedditRadio
 			return;
 		}
 
-		this.queue.add(url, (song) => {
-			if (song === false) {
-				msg.channel.send("I can't play that URL, sorry... :sob:");
-				return;
-			}
-			msg.channel.send("Okay, I added it to the jukebox! :musical_note: **" + song.title + "**");
-		});
+		this.queue.add(url, (song) => { this.onSongAdded(msg, song, false); });
+	}
+
+	onCmdPlayNow(msg, url)
+	{
+		if (!this.isDJ(msg.member)) {
+			msg.channel.send("Only a DJ can use this command.. :flushed:");
+			return;
+		}
+
+		if (this.voice_connection === false) {
+			msg.channel.send("I'm not in a voice channel. :thinking:");
+			return;
+		}
+
+		if (url === undefined) {
+			msg.channel.send("You have to give me a URL, otherwise I don't know what to play. :sob:");
+			return;
+		}
+
+		this.queue.insert(url, (song) => { this.onSongAdded(msg, song, true); });
 	}
 
 	onCmdPause(msg)
@@ -386,6 +441,22 @@ class RedditRadio
 		}
 
 		msg.channel.send("I don't want to skip yet! :flushed:");
+	}
+
+	onCmdQueue(msg)
+	{
+		if (this.queue.length() == 0) {
+			msg.channel.send("The jukebox queue is empty. :sob:");
+			return;
+		}
+
+		var ret = "Next up:\n";
+		for (var i = 0; i < this.queue.list.length; i++) {
+			var song = this.queue.list[i];
+			ret += (i + 1) + ". " + song.author + " - **" + song.title + "**\n";
+		}
+
+		msg.channel.send(ret);
 	}
 
 	onCmdClearQueue(msg)
