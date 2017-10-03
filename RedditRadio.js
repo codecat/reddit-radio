@@ -135,6 +135,14 @@ class RedditRadio
 				}
 			}
 			if (this.current_song !== null) {
+				if (this.voice_connection === false) {
+					console.log("Voice connection was false, destroying dispatcher!");
+					if (this.voice_dispatcher !== false) {
+						this.voice_dispatcher.destroy();
+						this.voice_dispatcher = false;
+					}
+					return;
+				}
 				this.voice_dispatcher = this.voice_connection.playArbitraryInput(this.current_song.stream, this.config.voice);
 
 				this.voice_connection.on("error", (error) => {

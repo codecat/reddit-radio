@@ -116,6 +116,11 @@ class Song
 			res.setEncoding("utf8");
 			res.on("data", function(chunk) { data += chunk; });
 			res.on("end", () => {
+				if (data == "") {
+					console.log("There is no response for that URL. Resolve URL = " + urlResolve);
+					callback(this);
+					return;
+				}
 				var obj = JSON.parse(data);
 				if (obj.errors !== undefined && obj.errors.length > 0) {
 					console.log("Soundcloud fetch error", obj.errors);
