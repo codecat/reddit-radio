@@ -19,7 +19,7 @@ class Song
 		this.image = "";
 		this.live = false;
 
-		if (url.match(/youtube.com\/watch\?v=/)) {
+		if (url.match(/^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$/)) {
 			this.makeYoutubeStream(callback);
 		} else if (url.match(/^https:\/\/soundcloud.com\/[^\/]+\/.+$/)) {
 			this.makeSoundcloudStream(config.soundcloud, callback);
