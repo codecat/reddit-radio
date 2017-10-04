@@ -77,7 +77,9 @@ class Radio
 			this.voice_dispatcher.end();
 		}
 
-		this.voice_connection.disconnect();
+		if (this.voice_connection !== false) {
+			this.voice_connection.disconnect();
+		}
 	}
 
 	startBroadcast()
