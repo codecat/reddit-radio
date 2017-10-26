@@ -15,7 +15,7 @@ module.exports = function(msg) {
 					title: "HardBase.fm last played with " + obj.u + ":",
 					description: obj.a + " - " + obj.t
 				});
-				embed.setThumbnail(obj.i);
+				embed.setThumbnail("https://api.tb-group.fm/images/release/" + obj.r);
 				embed.setColor("#132C44");
 				msg.channel.send("", embed);
 			} catch (err) {
