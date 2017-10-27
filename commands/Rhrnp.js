@@ -13,9 +13,14 @@ module.exports = function(msg) {
 				var artist = match[1];
 				var track = match[2];
 
+				var embedDescription = track;
+				if (artist != "" && artist != "p") {
+					embedDescription = artist + " - " + track;
+				}
+
 				var embed = new discord.RichEmbed({
 					title: "Real Hardstyle Radio is now playing:",
-					description: artist + " - " + track
+					description: embedDescription
 				});
 				embed.setColor("#215B81");
 				msg.channel.send("", embed);
