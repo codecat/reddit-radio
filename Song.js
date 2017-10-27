@@ -27,7 +27,7 @@ class Song
 			this.makeFacebookStream(callback);
 		} else if (url.match(/^https:\/\/www.pscp.tv\/w\/[A-Za-z0-9]{13}/)) {
 			this.makePeriscopeStream(callback);
-		} else if (url.endsWith(".mp3")) {
+		} else if (url.endsWith(".mp3") && (url.startsWirth("http://") || url.startsWith("https://"))) {
 			this.makeMP3Stream(callback);
 		} else {
 			console.log("Unrecognized url: " + url);

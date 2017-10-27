@@ -8,6 +8,7 @@
     "follow-redirects": "^1.2.5",
     "node-opus": "^0.2.7",
     "toml": "^2.3.3",
+    "twitter": "^1.7.1",
     "ytdl-core": "^0.17.1"
   },
   "devDependencies": {},

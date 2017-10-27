@@ -7,6 +7,7 @@ var fs = require("fs");
 var cmdsplit = require("./cmdsplit");
 var SongQueue = require("./SongQueue");
 var Radio = require("./Radio");
+var Twit = require("./Twit");
 
 class RedditRadio
 {
@@ -23,6 +24,9 @@ class RedditRadio
 		this.queue = new SongQueue(this.config);
 		this.current_song = false;
 
+		this.twits = [];
+		this.loadTwitter();
+
 		this.locked = false;
 
 		this.voice_connection = false;
@@ -30,6 +34,17 @@ class RedditRadio
 
 		this.commands = [];
 		this.loadConfigCommands();
+	}
+
+	loadTwitter()
+	{
+		if (this.config.twits === undefined) {
+			return;
+		}
+
+		for (var i = 0; i < this.config.twits.length; i++) {
+			this.twits.push(new Twit(this.config.twitter, this.config.twits[i], this.client));
+		}
 	}
 
 	loadConfigCommands()
@@ -176,6 +191,10 @@ class RedditRadio
 					this.current_song = false;
 				});
 			}
+		}
+
+		for (var i = 0; i < this.twits.length; i++) {
+			this.twits[i].onTick();
 		}
 	}
 
