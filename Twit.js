@@ -4,9 +4,8 @@ class Twit
 {
 	constructor(twitterConfig, twitConfig, discord)
 	{
+		this.discord = discord;
 		this.config = twitConfig;
-
-		this.channel = discord.channels.get(this.config.channel);
 
 		this.client = new Twitter(twitterConfig);
 
@@ -29,14 +28,17 @@ class Twit
 	{
 		this.client.get("lists/statuses", {
 			slug: this.config.slug,
-			owner_screen_name: this.config.user
+			owner_screen_name: this.config.user,
+			include_rts: false
 		}, (error, tweets, response) => {
+			var channel = this.discord.channels.get(this.config.channel);
+
 			for (var i = 0; i < tweets.length; i++) {
 				var tweet = tweets[i];
 				if (this.lastTime < Date.parse(tweet.created_at)) {
 					var url = "https://twitter.com/" + tweet.user.screen_name + "/status/" + tweet.id;
 					console.log("New tweet: " + url);
-					this.channel.send("<:twitter:373576839085686804> " + url);
+					channel.send("<:twitter:373576839085686804> " + url);
 				}
 			}
 
