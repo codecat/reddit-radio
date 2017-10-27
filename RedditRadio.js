@@ -355,7 +355,23 @@ class RedditRadio
 		}
 
 		if (this.voice_connection === false) {
-			msg.channel.send("I'm not in a voice channel. :thinking:");
+			if (!msg.member.voiceChannel) {
+				msg.channel.send("You need to be in a voice channel. :frowning2:");
+				return;
+			}
+
+			msg.member.voiceChannel.join().then((conn) => {
+				this.voice_connection = conn;
+				this.voice_connection.on("disconnect", () => {
+					this.voice_connection = false;
+					console.log("Disconnected from voice chat!");
+				});
+				console.log("Connected to voice chat!");
+
+				msg.channel.send("Hello! :wave:");
+
+				this.queue.add(url, (song) => { this.onSongAdded(msg, song, false); });
+			});
 			return;
 		}
 
@@ -375,7 +391,23 @@ class RedditRadio
 		}
 
 		if (this.voice_connection === false) {
-			msg.channel.send("I'm not in a voice channel. :thinking:");
+			if (!msg.member.voiceChannel) {
+				msg.channel.send("You need to be in a voice channel. :frowning2:");
+				return;
+			}
+
+			msg.member.voiceChannel.join().then((conn) => {
+				this.voice_connection = conn;
+				this.voice_connection.on("disconnect", () => {
+					this.voice_connection = false;
+					console.log("Disconnected from voice chat!");
+				});
+				console.log("Connected to voice chat!");
+
+				msg.channel.send("Hello! :wave:");
+
+				this.queue.add(url, (song) => { this.onSongAdded(msg, song, false); });
+			});
 			return;
 		}
 
