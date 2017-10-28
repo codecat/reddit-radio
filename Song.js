@@ -1,6 +1,7 @@
 var ytdl = require("ytdl-core");
 var https = require("follow-redirects").https;
 var url = require("url");
+var yt_search = require('youtube-search');
 
 class Song
 {
@@ -29,6 +30,18 @@ class Song
 			this.makePeriscopeStream(callback);
 		} else if (url.endsWith(".mp3") && (url.startsWirth("http://") || url.startsWith("https://"))) {
 			this.makeMP3Stream(callback);
+		} else if (config.youtube && config.youtube.token) {
+			console.log("Searching in YouTube: " + url);
+			var options = {
+				maxResults: 1,
+				key: config.youtube.token
+			};
+			yt_search(url, options, (error, results) => {
+				if (error) return console.log(error);
+				if (results.length <= 0) return console.log('No YouTube results for ' + url);
+			 	this.url = results[0].link;
+				this.makeYoutubeStream(callback);
+			});
 		} else {
 			console.log("Unrecognized url: " + url);
 			callback(this);

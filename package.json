@@ -9,6 +9,7 @@
     "node-opus": "^0.2.7",
     "toml": "^2.3.3",
     "twitter": "^1.7.1",
+    "youtube-search": "^1.0.10",
     "ytdl-core": "^0.17.1"
   },
   "devDependencies": {},

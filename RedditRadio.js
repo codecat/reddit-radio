@@ -240,7 +240,8 @@ class RedditRadio
 			} else {
 				console.log("Built-in command from offline member: " + cmdID);
 			}
-			this[cmdName].apply(this, [ msg ].concat(parse.slice(1)));
+			parse.shift();
+			this[cmdName].apply(this, [ msg ].concat(parse.join(' ')));
 			return;
 		}
 
