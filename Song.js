@@ -38,11 +38,11 @@ class Song
 			};
 			yt_search(url, options, (error, results) => {
 				if (error) {
-					console.log(error);
+					console.log("Failed to search Youtube: \"" + error + "\"");
 					return;
 				}
 				if (results.length <= 0) {
-					console.log("Failed to search Youtube: \"" + error + "\"");
+					console.log("No Youtube results were found for \"" + url + "\"");
 					return 
 				}
 			 	this.url = results[0].link;
