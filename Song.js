@@ -5,14 +5,14 @@ var yt_search = require('youtube-search');
 
 class Song
 {
-	constructor(config, url, callback)
+	constructor(config, query, callback)
 	{
-		var wrappedUrl = url.match(/^<(.+)>$/);
+		var wrappedUrl = query.match(/^<(.+)>$/);
 		if (wrappedUrl) {
-			url = wrappedUrl[1];
+			query = wrappedUrl[1];
 		}
 
-		this.url = url;
+		this.url = query;
 		this.valid = false;
 
 		this.title = "";
@@ -20,36 +20,36 @@ class Song
 		this.image = "";
 		this.live = false;
 
-		if (url.match(/^(https?\:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)/)) {
+		if (query.match(/^(https?\:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)/)) {
 			this.makeYoutubeStream(callback);
-		} else if (url.match(/^https:\/\/soundcloud.com\/[^\/]+\/.+$/)) {
+		} else if (query.match(/^https:\/\/soundcloud.com\/[^\/]+\/.+$/)) {
 			this.makeSoundcloudStream(config.soundcloud, callback);
-		} else if (url.match(/^https:\/\/www\.facebook\.com\/.*\/videos\/[0-9]+/)) {
+		} else if (query.match(/^https:\/\/www\.facebook\.com\/.*\/videos\/[0-9]+/)) {
 			this.makeFacebookStream(callback);
-		} else if (url.match(/^https:\/\/www.pscp.tv\/w\/[A-Za-z0-9]{13}/)) {
+		} else if (query.match(/^https:\/\/www.pscp.tv\/w\/[A-Za-z0-9]{13}/)) {
 			this.makePeriscopeStream(callback);
-		} else if (url.endsWith(".mp3") && (url.startsWirth("http://") || url.startsWith("https://"))) {
+		} else if (query.endsWith(".mp3") && (query.startsWirth("http://") || query.startsWith("https://"))) {
 			this.makeMP3Stream(callback);
 		} else if (config.youtube && config.youtube.token) {
-			console.log("Searching in YouTube: " + url);
+			console.log("Searching in YouTube: " + query);
 			var options = {
 				maxResults: 1,
 				key: config.youtube.token
 			};
-			yt_search(url, options, (error, results) => {
+			yt_search(query, options, (error, results) => {
 				if (error) {
 					console.log("Failed to search Youtube: \"" + error + "\"");
 					return;
 				}
 				if (results.length <= 0) {
-					console.log("No Youtube results were found for \"" + url + "\"");
+					console.log("No Youtube results were found for \"" + query + "\"");
 					return 
 				}
 			 	this.url = results[0].link;
 				this.makeYoutubeStream(callback);
 			});
 		} else {
-			console.log("Unrecognized url: " + url);
+			console.log("Unrecognized url: " + query);
 			callback(this);
 		}
 	}
