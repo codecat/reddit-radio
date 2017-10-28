@@ -37,8 +37,14 @@ class Song
 				key: config.youtube.token
 			};
 			yt_search(url, options, (error, results) => {
-				if (error) return console.log(error);
-				if (results.length <= 0) return console.log('No YouTube results for ' + url);
+				if (error) {
+					console.log(error);
+					return;
+				}
+				if (results.length <= 0) {
+					console.log("Failed to search Youtube: \"" + error + "\"");
+					return 
+				}
 			 	this.url = results[0].link;
 				this.makeYoutubeStream(callback);
 			});
