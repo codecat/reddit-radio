@@ -493,7 +493,6 @@ class RedditRadio
 
 		if (this.queue.length() == 0) {
 			this.voice_dispatcher.end();
-			this.voice_dispatcher.destroy();
 			msg.channel.send("That's all, folks! <:headygasm:330120648309342210>");
 			return;
 		}
