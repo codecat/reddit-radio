@@ -36,7 +36,7 @@ class Twit
 			for (var i = 0; i < tweets.length; i++) {
 				var tweet = tweets[i];
 				if (this.lastTime < Date.parse(tweet.created_at)) {
-					var url = "https://twitter.com/" + tweet.user.screen_name + "/status/" + tweet.id;
+					var url = "https://twitter.com/" + tweet.user.screen_name + "/status/" + tweet.id_str;
 					console.log("New tweet: " + url);
 					channel.send("<:twitter:373576839085686804> " + url);
 				}
