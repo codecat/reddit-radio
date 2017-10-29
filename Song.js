@@ -66,6 +66,11 @@ class Song
 			res.setEncoding("utf8");
 			res.on("data", function(chunk) { data += chunk; });
 			res.on("end", () => {
+				if (data == "") {
+					console.log("Soundcloud search response was empty for some reason..");
+					return;
+				}
+
 				var obj = JSON.parse(data);
 				if (obj.length == 0) {
 					if (!this.searchYoutube(query, config)) {
