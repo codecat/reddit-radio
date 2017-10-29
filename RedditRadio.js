@@ -493,6 +493,7 @@ class RedditRadio
 
 		if (this.queue.length() == 0) {
 			this.voice_dispatcher.end();
+			this.voice_dispatcher.destroy();
 			msg.channel.send("That's all, folks! <:headygasm:330120648309342210>");
 			return;
 		}
@@ -605,7 +606,7 @@ class RedditRadio
 			emoji += ":red_circle:";
 		}
 
-		var text = prefix + " " + emoji + " **" + song.title + "**";
+		var text = emoji + " **" + song.title + "**";
 
 		if (song.duration > 0) {
 			text += " (" + this.formatMilliseconds(song.duration) + ")";
