@@ -36,7 +36,7 @@ class Song
 		} else {
 			var matchSearch = query.match(/^([^ ]+) (.*)$/);
 			if (matchSearch) {
-				var service = matchSearch[0].toLowerCase();
+				var service = matchSearch[1].toLowerCase();
 				if (service == "youtube" || service == "yt") {
 					if (this.searchYoutube(matchSearch[1])) {
 						return;
