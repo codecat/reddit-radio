@@ -15,6 +15,13 @@ prefix = "Qdnext"
 passes = 2
 bitrate = 44100
 
+[emoji]
+twitter = "<:twitter:373576839085686804>"
+youtube = "<:youtube:374131863427743774>"
+soundcloud = "<:soundcloud:374132011486674944>"
+facebook = "<:facebook:374140079482077184>"
+periscope = "<:periscope:374140311934337025>"
+
 [soundcloud]
 client_id = "soundcloud_client_id"
 
