@@ -366,21 +366,26 @@ class RedditRadio
 		msg.channel.send("Jukebox is now unlocked. :unlock:");
 	}
 
-	onCmdPlay(msg, url)
+	onCmdPlay(msg)
 	{
+		if (!msg.member) {
+			msg.channel.send("Slipping into the DM's, are we? :smirk:");
+			return;
+		}
+
 		if (this.locked && !this.isDJ(msg.member)) {
 			msg.channel.send("I'm locked.. :flushed:");
 			return;
 		}
 
-		if (url === undefined) {
+		var args = Array.from(arguments);
+		args.shift();
+		var query = args.join(" ");
+
+		if (query == "") {
 			msg.channel.send("You have to give me a URL, otherwise I don't know what to play. :sob:");
 			return;
 		}
-
-		var args = Array.from(arguments);
-		args.shift();
-		var query = args.join(' ');
 
 		if (this.voice_connection === false) {
 			if (!msg.member.voiceChannel) {
