@@ -18,6 +18,9 @@ bitrate = 44100
 [soundcloud]
 client_id = "soundcloud_client_id"
 
+[youtube]
+token = "youtube_token_here"
+
 [[radios]]
 token = "radio_bot_1_token"
 channel = "330121740758024193"

@@ -9,9 +9,9 @@ class SongQueue
 		this.list = [];
 	}
 
-	add(url, callback)
+	add(query, callback)
 	{
-		new Song(this.config, url, (song) => {
+		new Song(this.config, query, (song) => {
 			if (!song.valid) {
 				callback(false);
 				return;
@@ -21,9 +21,9 @@ class SongQueue
 		});
 	}
 
-	insert(url, callback)
+	insert(query, callback)
 	{
-		new Song(this.config, url, (song) => {
+		new Song(this.config, query, (song) => {
 			if (!song.valid) {
 				callback(false);
 				return;

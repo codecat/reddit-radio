@@ -373,6 +373,15 @@ class RedditRadio
 			return;
 		}
 
+		if (url === undefined) {
+			msg.channel.send("You have to give me a URL, otherwise I don't know what to play. :sob:");
+			return;
+		}
+
+		var args = Array.from(arguments);
+		args.shift();
+		var query = args.join(' ');
+
 		if (this.voice_connection === false) {
 			if (!msg.member.voiceChannel) {
 				msg.channel.send("You need to be in a voice channel. :frowning2:");
@@ -389,17 +398,12 @@ class RedditRadio
 
 				msg.channel.send("Hello! :wave:");
 
-				this.queue.add(url, (song) => { this.onSongAdded(msg, song, false); });
+				this.queue.add(query, (song) => { this.onSongAdded(msg, song, false); });
 			});
 			return;
 		}
 
-		if (url === undefined) {
-			msg.channel.send("You have to give me a URL, otherwise I don't know what to play. :sob:");
-			return;
-		}
-
-		this.queue.add(url, (song) => { this.onSongAdded(msg, song, false); });
+		this.queue.add(query, (song) => { this.onSongAdded(msg, song, false); });
 	}
 
 	onCmdPlayNow(msg, url)
@@ -409,6 +413,15 @@ class RedditRadio
 			return;
 		}
 
+		if (url === undefined) {
+			msg.channel.send("You have to give me a URL, otherwise I don't know what to play. :sob:");
+			return;
+		}
+
+		var args = Array.from(arguments);
+		args.shift();
+		var query = args.join(' ');
+
 		if (this.voice_connection === false) {
 			if (!msg.member.voiceChannel) {
 				msg.channel.send("You need to be in a voice channel. :frowning2:");
@@ -425,17 +438,12 @@ class RedditRadio
 
 				msg.channel.send("Hello! :wave:");
 
-				this.queue.add(url, (song) => { this.onSongAdded(msg, song, false); });
+				this.queue.add(query, (song) => { this.onSongAdded(msg, song, false); });
 			});
 			return;
 		}
 
-		if (url === undefined) {
-			msg.channel.send("You have to give me a URL, otherwise I don't know what to play. :sob:");
-			return;
-		}
-
-		this.queue.insert(url, (song) => { this.onSongAdded(msg, song, true); });
+		this.queue.insert(query, (song) => { this.onSongAdded(msg, song, true); });
 	}
 
 	onCmdPause(msg)
