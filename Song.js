@@ -19,6 +19,7 @@ class Song
 		this.author = "";
 		this.image = "";
 		this.live = false;
+		this.source = "";
 
 		this.callback = callback;
 
@@ -167,6 +168,7 @@ class Song
 				this.title = info.title;
 				this.author = info.author.name;
 				this.image = info.iurlhq;
+				this.source = "youtube";
 
 				this.valid = true;
 
@@ -181,6 +183,7 @@ class Song
 					this.title = info.title;
 					this.author = info.author.name;
 					this.image = info.iurlhq;
+					this.source = "youtube";
 
 					this.valid = true;
 
@@ -220,6 +223,7 @@ class Song
 		this.title = track.title;
 		this.author = track.user.username;
 		this.image = track.artwork_url;
+		this.source = "soundcloud";
 
 		this.stream = track.stream_url + "?client_id=" + config.client_id;
 
@@ -257,6 +261,8 @@ class Song
 					this.valid = true;
 				}
 
+				this.source = "facebook";
+
 				this.live = (matchLive && matchLive[1] == "true");
 
 				this.callback(this);
@@ -293,6 +299,7 @@ class Song
 				this.title = obj.broadcast.status;
 				this.author = obj.broadcast.user_display_name;
 				this.image = obj.broadcast.image_url;
+				this.source = "periscope";
 				this.live = true;
 
 				this.stream = streamUrl;

@@ -565,13 +565,26 @@ class RedditRadio
 			return;
 		}
 
-		var text = "";
+		var prefix = "";
 		if (this.current_song.live) {
-			text += "Now *livestreaming*: :red_circle:";
+			prefix = "Now **livestreaming**:";
 		} else {
-			text += "Now playing:";
+			prefix = "Now playing:";
 		}
-		text += " :musical_note: **" + this.current_song.title + "**";
+
+		var emoji = "";
+		switch (this.current_song.source) {
+			case "youtube": emoji += this.config.emoji.youtube; break;
+			case "soundcloud": emoji += this.config.emoji.soundcloud; break;
+			case "facebook": emoji += this.config.emoji.facebook; break;
+			case "periscope": emoji += this.config.emoji.periscope; break;
+			default: emoji += ":musical_note:"; break;
+		}
+		if (this.current_song.live) {
+			emoji += ":red_circle:";
+		}
+
+		var text = prefix + " " + emoji + " **" + this.current_song.title + "**";
 
 		msg.channel.send(text);
 	}
