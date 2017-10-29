@@ -38,7 +38,7 @@ class Song
 			if (matchSearch) {
 				var service = matchSearch[1].toLowerCase();
 				if (service == "youtube" || service == "yt") {
-					if (this.searchYoutube(matchSearch[1])) {
+					if (this.searchYoutube(matchSearch[2], config)) {
 						return;
 					}
 				}
