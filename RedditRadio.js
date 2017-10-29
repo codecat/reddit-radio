@@ -263,13 +263,14 @@ class RedditRadio
 			msg.channel.send("I can't play that URL, sorry... :sob:");
 			return;
 		}
+		var songInfo = this.getTrackInfoText(song);
 		if (now) {
-			msg.channel.send("Okay, I'm gonna play it right now! :musical_note: **" + song.title + "**");
+			msg.channel.send("Okay, I'm gonna play it right now! " + songInfo);
 			if (this.voice_dispatcher) {
 				this.voice_dispatcher.end();
 			}
 		} else {
-			msg.channel.send("Okay, I added it to the jukebox! :musical_note: **" + song.title + "**");
+			msg.channel.send("Okay, I added it to the jukebox! " + songInfo);
 		}
 	}
 
@@ -497,8 +498,8 @@ class RedditRadio
 		}
 
 		if (this.isDJ(msg.member)) {
+			msg.channel.send("DJ told me to skip this track! :ok_hand:\nNow: " + this.getTrackInfoText(this.queue.list[0]));
 			this.voice_dispatcher.end();
-			msg.channel.send("DJ told me to skip this track! :ok_hand:");
 			return;
 		}
 
@@ -528,11 +529,7 @@ class RedditRadio
 			var song = this.queue.list[i];
 			var add = (i + 1) + ". ";
 			add += this.getEmoji(song.source) + " ";
-			add += song.author;
-			add += " - **" + song.title + "**";
-			if (song.duration > 0) {
-				add += " (" + this.formatMilliseconds(song.duration) + ")";
-			}
+			add += this.getTrackInfoText(song);
 			add += "\n";
 			if (ret.length + add.length > 1800) {
 				ret += (this.queue.list.length - i) + " more...";
@@ -601,6 +598,22 @@ class RedditRadio
 		return ret;
 	}
 
+	getTrackInfoText(song)
+	{
+		var emoji = this.getEmoji(song.source);
+		if (song.live) {
+			emoji += ":red_circle:";
+		}
+
+		var text = prefix + " " + emoji + " **" + song.title + "**";
+
+		if (song.duration > 0) {
+			text += " (" + this.formatMilliseconds(song.duration) + ")";
+		}
+
+		return text;
+	}
+
 	onCmdNp(msg)
 	{
 		if (!this.current_song) {
@@ -615,16 +628,7 @@ class RedditRadio
 			prefix = "Now playing:";
 		}
 
-		var emoji = this.getEmoji(this.current_song.source);
-		if (this.current_song.live) {
-			emoji += ":red_circle:";
-		}
-
-		var text = prefix + " " + emoji + " **" + this.current_song.title + "**";
-
-		if (this.current_song.duration > 0) {
-			text += "\n(" + this.formatMilliseconds(this.current_song.duration) + ")";
-		}
+		var text = prefix + " " + this.getTrackInfoText(this.current_song);
 
 		msg.channel.send(text);
 	}
