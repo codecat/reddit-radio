@@ -491,7 +491,8 @@ class RedditRadio
 		}
 
 		if (this.queue.length() == 0) {
-			msg.channel.send("There is nothing else in the queue! :sob:");
+			this.voice_dispatcher.end();
+			msg.channel.send("That's all, folks! <:headygasm:330120648309342210>");
 			return;
 		}
 
