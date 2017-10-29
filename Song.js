@@ -5,7 +5,7 @@ var yt_search = require('youtube-search');
 
 class Song
 {
-	constructor(config, query, callback)
+	constructor(config, query, callback, callbackFailure)
 	{
 		var wrappedUrl = query.match(/^<(.+)>$/);
 		if (wrappedUrl) {
@@ -20,41 +20,87 @@ class Song
 		this.image = "";
 		this.live = false;
 
+		this.callback = callback;
+		this.callbackFailure = callbackFailure;
+
 		if (query.match(/^(https?\:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)/)) {
-			this.makeYoutubeStream(callback);
+			this.makeYoutubeStream();
 		} else if (query.match(/^https:\/\/soundcloud.com\/[^\/]+\/.+$/)) {
-			this.makeSoundcloudStream(config.soundcloud, callback);
+			this.makeSoundcloudStream(config.soundcloud);
 		} else if (query.match(/^https:\/\/www\.facebook\.com\/.*\/videos\/[0-9]+/)) {
-			this.makeFacebookStream(callback);
+			this.makeFacebookStream();
 		} else if (query.match(/^https:\/\/www.pscp.tv\/w\/[A-Za-z0-9]{13}/)) {
-			this.makePeriscopeStream(callback);
-		} else if (query.endsWith(".mp3") && (query.startsWirth("http://") || query.startsWith("https://"))) {
-			this.makeMP3Stream(callback);
-		} else if (config.youtube && config.youtube.token) {
-			console.log("Searching in YouTube: " + query);
-			var options = {
-				maxResults: 1,
-				key: config.youtube.token
-			};
-			yt_search(query, options, (error, results) => {
-				if (error) {
-					console.log("Failed to search Youtube: \"" + error + "\"");
-					return;
-				}
-				if (results.length <= 0) {
-					console.log("No Youtube results were found for \"" + query + "\"");
-					return 
-				}
-			 	this.url = results[0].link;
-				this.makeYoutubeStream(callback);
-			});
+			this.makePeriscopeStream();
+		} else if (query.match(/(local\/|https?:\/\/).*\.mp3/)) {
+			this.makeMP3Stream();
 		} else {
-			console.log("Unrecognized url: " + query);
-			callback(this);
+			if (!this.searchSoundcloud(query, config)) {
+				if (!this.searchYoutube(query)) {
+					console.log("Unrecognized url: " + query);
+					callback(this);
+				}
+			}
 		}
 	}
 
-	makeYoutubeStream(callback)
+	searchSoundcloud(query, config)
+	{
+		if (!config.soundcloud || !config.soundcloud.client_id) {
+			return false;
+		}
+
+		var urlResolve = "https://api.soundcloud.com/tracks.json?q=" + encodeURIComponent(query) + "&client_id=" + config.soundcloud.client_id;
+		https.get(urlResolve, (res) => {
+			var data = "";
+			res.setEncoding("utf8");
+			res.on("data", function(chunk) { data += chunk; });
+			res.on("end", () => {
+				var obj = JSON.parse(data);
+				if (obj.length == 0) {
+					if (!this.searchYoutube(query, config)) {
+						this.callback(this);
+					}
+					return;
+				}
+
+				var track = obj[0];
+				this.makeSoundcloudStreamFromTrack(track, config.soundcloud);
+			});
+		});
+
+		return true;
+	}
+
+	searchYoutube(query, config)
+	{
+		if (!config.youtube || !config.youtube.token) {
+			return false;
+		}
+
+		console.log("Searching YouTube: " + query);
+
+		var options = {
+			maxResults: 1,
+			key: config.youtube.token
+		};
+
+		yt_search(query, options, (error, results) => {
+			if (error) {
+				console.log("Failed to search Youtube: \"" + error + "\"");
+				return;
+			}
+			if (results.length <= 0) {
+				console.log("No Youtube results were found for \"" + query + "\"");
+				return 
+			}
+		 	this.url = results[0].link;
+			this.makeYoutubeStream();
+		});
+
+		return true;
+	}
+
+	makeYoutubeStream()
 	{
 		ytdl.getInfo(this.url).then((info) => {
 			if (info.live_default_broadcast || info.live_playback) {
@@ -115,7 +161,7 @@ class Song
 
 				this.valid = true;
 
-				callback(this);
+				this.callback(this);
 
 			} else {
 				this.stream = ytdl(this.url, {
@@ -129,13 +175,13 @@ class Song
 
 					this.valid = true;
 
-					callback(this);
+					this.callback(this);
 				});
 			}
 		});
 	}
 
-	makeSoundcloudStream(config, callback)
+	makeSoundcloudStream(config)
 	{
 		var urlResolve = "https://api.soundcloud.com/resolve.json?url=" + encodeURIComponent(this.url) + "&client_id=" + config.client_id;
 		https.get(urlResolve, (res) => {
@@ -148,26 +194,31 @@ class Song
 					callback(this);
 					return;
 				}
+
 				var obj = JSON.parse(data);
 				if (obj.errors !== undefined && obj.errors.length > 0) {
 					console.log("Soundcloud fetch error", obj.errors);
 					return;
 				}
 
-				this.title = obj.title;
-				this.author = obj.user.username;
-				this.image = obj.artwork_url;
-
-				this.stream = obj.stream_url + "?client_id=" + config.client_id;
-
-				this.valid = true;
-
-				callback(this);
+				this.makeSoundcloudStreamFromTrack(obj, config);
 			});
 		});
 	}
 
-	makeFacebookStream(callback)
+	makeSoundcloudStreamFromTrack(track, config)
+	{
+		this.title = track.title;
+		this.author = track.user.username;
+		this.image = track.artwork_url;
+
+		this.stream = track.stream_url + "?client_id=" + config.client_id;
+
+		this.valid = true;
+		this.callback(this);
+	}
+
+	makeFacebookStream()
 	{
 		var parse = url.parse(this.url);
 		https.get({
@@ -199,12 +250,12 @@ class Song
 
 				this.live = (matchLive && matchLive[1] == "true");
 
-				callback(this);
+				this.callback(this);
 			});
 		});
 	}
 
-	makePeriscopeStream(callback)
+	makePeriscopeStream()
 	{
 		var matchID = this.url.match(/^https:\/\/www.pscp.tv\/w\/([A-Za-z0-9]{13})/);
 		if (!matchID) {
@@ -239,12 +290,12 @@ class Song
 
 				this.valid = true;
 
-				callback(this);
+				this.callback(this);
 			});
 		});
 	}
 
-	makeMP3Stream(callback)
+	makeMP3Stream()
 	{
 		this.title = this.url;
 		this.author = "The Internet";
@@ -253,7 +304,7 @@ class Song
 
 		this.valid = true;
 
-		callback(this);
+		this.callback(this);
 	}
 }
 
