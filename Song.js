@@ -5,7 +5,7 @@ var yt_search = require('youtube-search');
 
 class Song
 {
-	constructor(config, query, callback, callbackFailure)
+	constructor(config, query, callback)
 	{
 		var wrappedUrl = query.match(/^<(.+)>$/);
 		if (wrappedUrl) {
@@ -21,7 +21,6 @@ class Song
 		this.live = false;
 
 		this.callback = callback;
-		this.callbackFailure = callbackFailure;
 
 		if (query.match(/^(https?\:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)/)) {
 			this.makeYoutubeStream();
@@ -34,12 +33,22 @@ class Song
 		} else if (query.match(/(local\/|https?:\/\/).*\.mp3/)) {
 			this.makeMP3Stream();
 		} else {
-			if (!this.searchSoundcloud(query, config)) {
-				if (!this.searchYoutube(query)) {
-					console.log("Unrecognized url: " + query);
-					callback(this);
+			var matchSearch = query.match(/^([^ ]+) (.*)$/);
+			if (matchSearch) {
+				var service = matchSearch[0].toLowerCase();
+				if (service == "youtube" || service == "yt") {
+					if (this.searchYoutube(matchSearch[1])) {
+						return;
+					}
 				}
 			}
+
+			if (this.searchSoundcloud(query, config)) {
+				return;
+			}
+
+			console.log("Unrecognized url: " + query);
+			callback(this);
 		}
 	}
 
