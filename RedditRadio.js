@@ -526,7 +526,19 @@ class RedditRadio
 		var ret = "Next up:\n";
 		for (var i = 0; i < this.queue.list.length; i++) {
 			var song = this.queue.list[i];
-			ret += (i + 1) + ". " + song.author + " - **" + song.title + "**\n";
+			var add = (i + 1) + ". ";
+			add += this.getEmoji(song.source) + " ";
+			add += song.author;
+			add += " - **" + song.title + "**";
+			if (song.duration > 0) {
+				add += " (" + this.formatMilliseconds(song.duration) + ")";
+			}
+			add += "\n";
+			if (ret.length + add.length > 1800) {
+				ret += (this.queue.list.length - i) + " more...";
+				break;
+			}
+			ret += add;
 		}
 
 		msg.channel.send(ret);
@@ -559,6 +571,36 @@ class RedditRadio
 		msg.channel.send("I don't want to clear the queue right now! :flushed:");
 	}
 
+	getEmoji(source)
+	{
+		switch (source) {
+			case "youtube": return this.config.emoji.youtube;
+			case "soundcloud": return this.config.emoji.soundcloud;
+			case "facebook": return this.config.emoji.facebook;
+			case "periscope": return this.config.emoji.periscope;
+		}
+		return ":musical_note:";
+	}
+
+	formatMilliseconds(ms)
+	{
+		var sec = Math.floor(ms / 1000);
+
+		var secs = sec % 60;
+		var mins = Math.floor(sec / 60) % 60;
+		var hours = Math.floor(sec / 60 / 60) % 60;
+
+		var ret = "";
+		if (hours > 0) {
+			ret += hours + "h";
+		}
+		if (mins > 0) {
+			ret += mins + "m";
+		}
+		ret += secs + "s";
+		return ret;
+	}
+
 	onCmdNp(msg)
 	{
 		if (!this.current_song) {
@@ -573,19 +615,16 @@ class RedditRadio
 			prefix = "Now playing:";
 		}
 
-		var emoji = "";
-		switch (this.current_song.source) {
-			case "youtube": emoji += this.config.emoji.youtube; break;
-			case "soundcloud": emoji += this.config.emoji.soundcloud; break;
-			case "facebook": emoji += this.config.emoji.facebook; break;
-			case "periscope": emoji += this.config.emoji.periscope; break;
-			default: emoji += ":musical_note:"; break;
-		}
+		var emoji = this.getEmoji(this.current_song.source);
 		if (this.current_song.live) {
 			emoji += ":red_circle:";
 		}
 
 		var text = prefix + " " + emoji + " **" + this.current_song.title + "**";
+
+		if (this.current_song.duration > 0) {
+			text += "\n(" + this.formatMilliseconds(this.current_song.duration) + ")";
+		}
 
 		msg.channel.send(text);
 	}

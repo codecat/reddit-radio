@@ -20,6 +20,7 @@ class Song
 		this.image = "";
 		this.live = false;
 		this.source = "";
+		this.duration = 0; // milliseconds
 
 		this.callback = callback;
 
@@ -224,6 +225,7 @@ class Song
 		this.author = track.user.username;
 		this.image = track.artwork_url;
 		this.source = "soundcloud";
+		this.duration = track.duration;
 
 		this.stream = track.stream_url + "?client_id=" + config.client_id;
 
