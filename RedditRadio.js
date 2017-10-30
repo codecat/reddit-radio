@@ -528,7 +528,6 @@ class RedditRadio
 		for (var i = 0; i < this.queue.list.length; i++) {
 			var song = this.queue.list[i];
 			var add = (i + 1) + ". ";
-			add += this.getEmoji(song.source) + " ";
 			add += this.getTrackInfoText(song);
 			add += "\n";
 			if (ret.length + add.length > 1800) {
