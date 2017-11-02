@@ -211,13 +211,14 @@ class Song
 			res.on("end", () => {
 				if (data == "") {
 					console.log("There is no response for that URL. Resolve URL = " + urlResolve);
-					callback(this);
+					this.callback(this);
 					return;
 				}
 
 				var obj = JSON.parse(data);
 				if (obj.errors !== undefined && obj.errors.length > 0) {
 					console.log("Soundcloud fetch error", obj.errors);
+					this.callback(this);
 					return;
 				}
 
@@ -250,13 +251,14 @@ class Song
 			res.on("end", () => {
 				if (data == "") {
 					console.log("There is no response for that URL. Resolve URL = " + urlResolve);
-					callback(this);
+					this.callback(this);
 					return;
 				}
 
 				var obj = JSON.parse(data);
 				if (obj.errors !== undefined && obj.errors.length > 0) {
 					console.log("Mixcloud fetch error", obj.errors);
+					this.callback(this);
 					return;
 				}
 
