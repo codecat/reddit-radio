@@ -26,13 +26,15 @@ class Song
 
 		if (query.match(/^(https?\:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)/)) {
 			this.makeYoutubeStream();
-		} else if (query.match(/^https:\/\/soundcloud.com\/[^\/]+\/.+$/)) {
+		} else if (query.match(/^https:\/\/soundcloud\.com\/[^\/]+\/.+$/)) {
 			this.makeSoundcloudStream(config.soundcloud);
+		} else if (query.match(/^https:\/\/www\.mixcloud\.com\/[^\/]+\/.+$/)) {
+			this.makeMixcloudStream(config.soundcloud);
 		} else if (query.match(/^https:\/\/www\.facebook\.com\/.*\/videos\/[0-9]+/)) {
 			this.makeFacebookStream();
-		} else if (query.match(/^https:\/\/www.pscp.tv\/w\/[A-Za-z0-9]{13}/)) {
+		} else if (query.match(/^https:\/\/www\.pscp\.tv\/w\/[A-Za-z0-9]{13}/)) {
 			this.makePeriscopeStream();
-		} else if (query.match(/(local\/|https?:\/\/).*\.mp3/)) {
+		} else if (query.match(/^(local\/|https?:\/\/).*\.mp3/)) {
 			this.makeMP3Stream();
 		} else {
 			var matchSearch = query.match(/^([^ ]+) (.*)$/);
@@ -209,13 +211,14 @@ class Song
 			res.on("end", () => {
 				if (data == "") {
 					console.log("There is no response for that URL. Resolve URL = " + urlResolve);
-					callback(this);
+					this.callback(this);
 					return;
 				}
 
 				var obj = JSON.parse(data);
 				if (obj.errors !== undefined && obj.errors.length > 0) {
 					console.log("Soundcloud fetch error", obj.errors);
+					this.callback(this);
 					return;
 				}
 
@@ -233,6 +236,45 @@ class Song
 		this.duration = track.duration;
 
 		this.stream = track.stream_url + "?client_id=" + config.client_id;
+
+		this.valid = true;
+		this.callback(this);
+	}
+
+	makeMixcloudStream(config)
+	{
+		var resolveUrl = this.url.replace("https://www.", "https://api.");
+		https.get(resolveUrl, (res) => {
+			var data = "";
+			res.setEncoding("utf8");
+			res.on("data", function(chunk) { data += chunk; });
+			res.on("end", () => {
+				if (data == "") {
+					console.log("There is no response for that URL. Resolve URL = " + urlResolve);
+					this.callback(this);
+					return;
+				}
+
+				var obj = JSON.parse(data);
+				if (obj.errors !== undefined && obj.errors.length > 0) {
+					console.log("Mixcloud fetch error", obj.errors);
+					this.callback(this);
+					return;
+				}
+
+				this.makeMixcloudStreamFromTrack(obj, config);
+			});
+		});
+	}
+
+	makeMixcloudStreamFromTrack(track, config) {
+		this.title = track.name;
+		this.author = track.user.username;
+		this.image = track.pictures.large;
+		this.source = "mixcloud";
+		this.duration = track.audio_length * 1000; // Turn into milliseconds
+
+		this.stream = this.url.replace("https://www.mixcloud.com", "http://download.mixcloud-downloader.com/d/mixcloud");
 
 		this.valid = true;
 		this.callback(this);
