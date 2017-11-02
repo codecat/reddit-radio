@@ -32,7 +32,7 @@ class Song
 			this.makeMixcloudStream(config.soundcloud);
 		} else if (query.match(/^https:\/\/www\.facebook\.com\/.*\/videos\/[0-9]+/)) {
 			this.makeFacebookStream();
-		} else if (query.match(/^https:\/\/www.pscp.tv\/w\/[A-Za-z0-9]{13}/)) {
+		} else if (query.match(/^https:\/\/www\.pscp\.tv\/w\/[A-Za-z0-9]{13}/)) {
 			this.makePeriscopeStream();
 		} else if (query.match(/(local\/|https?:\/\/).*\.mp3/)) {
 			this.makeMP3Stream();
