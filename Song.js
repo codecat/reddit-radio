@@ -26,9 +26,9 @@ class Song
 
 		if (query.match(/^(https?\:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)/)) {
 			this.makeYoutubeStream();
-		} else if (query.match(/^https:\/\/soundcloud.com\/[^\/]+\/.+$/)) {
+		} else if (query.match(/^https:\/\/soundcloud\.com\/[^\/]+\/.+$/)) {
 			this.makeSoundcloudStream(config.soundcloud);
-		} else if (query.match(/^https:\/\/www.mixcloud.com\/[^\/]+\/.+$/)) {
+		} else if (query.match(/^https:\/\/www\.mixcloud\.com\/[^\/]+\/.+$/)) {
 			this.makeMixcloudStream(config.soundcloud);
 		} else if (query.match(/^https:\/\/www\.facebook\.com\/.*\/videos\/[0-9]+/)) {
 			this.makeFacebookStream();
@@ -270,7 +270,7 @@ class Song
 		this.author = track.user.username;
 		this.image = track.pictures.large;
 		this.source = "mixcloud";
-		this.duration = track.audio_length;
+		this.duration = track.audio_length * 1000; // Turn into milliseconds
 
 		this.stream = this.url.replace("https://www.mixcloud.com", "http://download.mixcloud-downloader.com/d/mixcloud");
 
