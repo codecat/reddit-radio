@@ -574,6 +574,7 @@ class RedditRadio
 			case "soundcloud": return this.config.emoji.soundcloud;
 			case "facebook": return this.config.emoji.facebook;
 			case "periscope": return this.config.emoji.periscope;
+			case "mixcloud": return this.config.emoji.mixcloud;
 		}
 		return ":musical_note:";
 	}

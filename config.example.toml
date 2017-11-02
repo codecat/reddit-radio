@@ -21,6 +21,7 @@ youtube = "<:youtube:374131863427743774>"
 soundcloud = "<:soundcloud:374132011486674944>"
 facebook = "<:facebook:374140079482077184>"
 periscope = "<:periscope:374140311934337025>"
+mixcloud = "<:mixcloud:375688433844092938>"
 
 [soundcloud]
 client_id = "soundcloud_client_id"
