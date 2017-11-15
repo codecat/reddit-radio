@@ -1,5 +1,5 @@
-# Reddit Radio
-A general purpose Discord bot made for the [/r/hardstyle Discord](https://discord.gg/hardstyle).
+# Reddit Radio [![Discord](https://img.shields.io/discord/319525278978277407.svg)](https://discord.gg/hardstyle)
+A general purpose Discord bot made for the [/r/hardstyle](https://reddit.com/r/hardstyle) Discord.
 
 ## Features
 It does:
