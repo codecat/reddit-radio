@@ -216,10 +216,8 @@ class RedditRadio
 		}
 
 		if (msg.content.toLowerCase().indexOf("am i the only one") != -1 && msg.member !== null) {
-			if (Math.random() > 0.4) {
-				msg.channel.send("<@" + msg.member.id + "> Probably not.");
-				return;
-			}
+			msg.channel.send("<@" + msg.member.id + "> Probably not.");
+			return;
 		}
 
 		var parse = cmdsplit(msg.content);
