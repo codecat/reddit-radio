@@ -102,7 +102,9 @@ class RedditRadio
 
 	setStatusText(status)
 	{
-		if (typeof(status) !== "string") return;
+		if (typeof(status) !== "string") {
+			return;
+		}
 		this.client.user.setGame(status);
 	}
 
