@@ -100,6 +100,14 @@ class RedditRadio
 		});
 	}
 
+	setStatusText(status)
+	{
+		if (typeof(status) !== "string") {
+			return;
+		}
+		this.client.user.setGame(status);
+	}
+
 	isAdmin(member)
 	{
 		for (var roleID of member.roles.keys()) {
@@ -159,6 +167,7 @@ class RedditRadio
 					return;
 				}
 				this.voice_dispatcher = this.voice_connection.playArbitraryInput(this.current_song.stream, this.config.voice);
+				this.setStatusText(this.current_song.title);
 
 				this.voice_connection.on("error", (error) => {
 					console.log("Stream error: " + error);
@@ -189,6 +198,7 @@ class RedditRadio
 						console.log("No current_song in end..");
 					}
 					this.current_song = false;
+					this.setStatusText("");
 				});
 			}
 		}
@@ -201,6 +211,7 @@ class RedditRadio
 	onReady()
 	{
 		console.log("Client started.");
+		this.setStatusText("");
 	}
 
 	onMessage(msg)
