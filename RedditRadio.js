@@ -648,6 +648,17 @@ class RedditRadio
 
 		msg.channel.send(text);
 	}
+
+	onCmdTime(msg)
+	{
+		var date = new Date();
+		var hours = date.getHours();
+		var minutes = date.getMinutes();
+
+		var text = "The local time is: **" + hours + ":" + minutes + "**";
+
+		msg.channel.send(text);
+	}
 }
 
 module.exports = RedditRadio;
