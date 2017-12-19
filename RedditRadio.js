@@ -652,9 +652,10 @@ class RedditRadio
 	onCmdTime(msg)
 	{
 		var date = new Date();
-		var hours = date.getHours(), minutes = date.getMinutes();
+		var hours = date.getHours();
+		var minutes = date.getMinutes();
 
-		var text = "It's **"+hours+":"+minutes+"** for me!";
+		var text = "The local time is: **" + hours + ":" + minutes + "**";
 
 		msg.channel.send(text);
 	}
