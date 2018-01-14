@@ -34,7 +34,7 @@ class Song
 			this.makeFacebookStream();
 		} else if (query.match(/^https:\/\/www\.pscp\.tv\/w\/[A-Za-z0-9]{13}/)) {
 			this.makePeriscopeStream();
-		} else if (query.match(/^(local\/|https?:\/\/).*\.mp3/)) {
+		} else if (query.match(/^(local\/|https?:\/\/).*\.(mp3|m4a)/)) {
 			this.makeMP3Stream();
 		} else {
 			var matchSearch = query.match(/^([^ ]+) (.*)$/);
