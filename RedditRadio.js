@@ -105,7 +105,7 @@ class RedditRadio
 		if (typeof(status) !== "string") {
 			return;
 		}
-		this.client.user.setGame(status);
+		this.client.user.setActivity(status);
 	}
 
 	isAdmin(member)
