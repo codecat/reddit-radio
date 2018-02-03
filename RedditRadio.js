@@ -105,7 +105,12 @@ class RedditRadio
 		if (typeof(status) !== "string") {
 			return;
 		}
-		this.client.user.setActivity(status);
+		this.client.user.setActivity(status, { type: "LISTENING" });
+	}
+
+	resetStatusText()
+	{
+		this.client.user.setPresence({ game: null });
 	}
 
 	isAdmin(member)
@@ -198,7 +203,7 @@ class RedditRadio
 						console.log("No current_song in end..");
 					}
 					this.current_song = false;
-					this.setStatusText("");
+					this.resetStatusText();
 				});
 			}
 		}
@@ -211,7 +216,7 @@ class RedditRadio
 	onReady()
 	{
 		console.log("Client started.");
-		this.setStatusText("");
+		this.resetStatusText();
 	}
 
 	onMessage(msg)
@@ -655,7 +660,7 @@ class RedditRadio
 		var hours = date.getHours();
 		var minutes = date.getMinutes();
 
-		var text = "The local time is: **" + hours + ":" + minutes + "**";
+		var text = "The local time is: **" + hours + ":" + (minutes >= 10 ? minutes : "0" + minutes) + "**";
 
 		msg.channel.send(text);
 	}
