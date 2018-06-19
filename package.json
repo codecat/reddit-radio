@@ -4,15 +4,15 @@
   "description": "discord.gg/hardstyle",
   "main": "index.js",
   "dependencies": {
-    "discord.js": "^11.3.0",
+    "discord.js": "^11.3.2",
     "follow-redirects": "^1.4.1",
     "node-opus": "^0.2.7",
     "sodium": "^2.0.3",
     "toml": "^2.3.3",
     "twitter": "^1.7.1",
-    "uws": "^9.14.0",
-    "youtube-search": "^1.0.10",
-    "ytdl-core": "^0.19.0"
+    "uws": "^9.148.0",
+    "youtube-search": "^1.1.0",
+    "ytdl-core": "^0.20.2"
   },
   "devDependencies": {},
   "author": "Codecat"

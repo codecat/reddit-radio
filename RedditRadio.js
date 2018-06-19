@@ -221,6 +221,12 @@ class RedditRadio
 
 	onMessage(msg)
 	{
+		if (msg.member === null) {
+			return;
+		}
+
+		console.log('[' + Date() + '] ' + msg.member.user.username + '#' + msg.member.user.discriminator + ' in #' + msg.channel.name + ': "' + msg.content + '"');
+
 		if (msg.content.toLowerCase() == "good bot") {
 			msg.channel.send("Thanks");
 			return;
