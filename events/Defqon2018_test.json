@@ -1,0 +1,117 @@
+[
+	{
+		"stage": "red",
+		"mc": "DV8 & Villain",
+		"channel": "459077085013606401",
+		"emoji": ":red_circle:",
+		"url": "https://www.q-dance.com/en/news/defqon-1-2018-or-livestream",
+		"sets": [
+			[ 23, 13, 0, "ANDY SVGE" ],
+			[ 23, 14, 0, "Sound Rush" ],
+			[ 23, 15, 0, "Noisecontrollers" ],
+			[ 23, 16, 0, "POWER HOUR" ],
+			[ 23, 17, 0, "Code Black" ],
+			[ 23, 18, 0, "D-Block & S-te-Fan" ],
+			[ 23, 19, 0, "Wildstylez" ],
+			[ 23, 20, 0, "Ran-D (LIVE)" ],
+			[ 23, 20, 45, "Warface" ],
+			[ 23, 21, 45, "Sub Zero Project" ],
+			[ 23, 22, 30, "The Endshow" ],
+				[ 23, 23, 0, "Nothing" ],
+
+			[ 24, 15, 0, "Zazafront" ],
+			[ 24, 15, 30, "Wasted Penguinz & Adrenalize" ],
+			[ 24, 16, 15, "Ransomnia & Friends" ],
+			[ 24, 16, 45, "Psyko Punkz" ],
+			[ 24, 17, 30, "Dee-Block & S-te-Pack" ],
+			[ 24, 18, 15, "Zatox (LIVE)" ],
+			[ 24, 18, 45, "Tweekacore & Darren Styles" ],
+			[ 24, 19, 30, "Peacock in Concert" ],
+				[ 24, 20, 0, "Nothing" ],
+			[ 24, 21, 0, "Coone" ],
+			[ 24, 22, 0, "Project One" ],
+				[ 24, 23, 0, "Nothing" ]
+		]
+	},
+
+	{
+		"stage": "blue",
+		"mc": "Villain",
+		"channel": "459077096665382942",
+		"emoji": ":large_blue_circle:",
+		"url": "https://www.q-dance.com/en/news/defqon-1-2018-or-livestream",
+		"sets": [
+			[ 20, 21, 38, "Headhunterz" ],
+			[ 22, 21, 0, "Bass Modulators" ],
+			[ 22, 22, 0, "Atmozfears" ],
+			[ 22, 23, 0, "B-Front & Phuture Noize" ],
+			[ 23, 0, 0, "Frequencerz" ],
+				[ 23, 1, 0, "Nothing" ],
+
+			[ 23, 13, 0, "Requiem" ],
+			[ 23, 14, 0, "Digital Punk" ],
+			[ 23, 15, 0, "E-Force" ],
+				[ 23, 16, 0, "Nothing" ],
+			[ 23, 16, 30, "Jason Payne" ],
+			[ 23, 18, 0, "B-Freqz" ],
+			[ 23, 18, 30, "Adaro" ],
+			[ 23, 19, 30, "Radical Redemption (LIVE)" ],
+			[ 23, 20, 0, "Rebelion" ],
+			[ 23, 21, 0, "Main Concern" ],
+				[ 23, 22, 0, "Nothing" ],
+
+			[ 24, 13, 0, "Myst" ],
+			[ 24, 14, 30, "Act of Rage" ],
+			[ 24, 15, 30, "Clockartz" ],
+			[ 24, 16, 30, "Endymion (LIVE)" ],
+			[ 24, 17, 0, "Crypsis & Chain Reaction present \"Unlike Others\"" ],
+			[ 24, 17, 45, "Sub Sonik" ],
+			[ 24, 18, 45, "D-Sturb (LIVE)" ],
+			[ 24, 19, 15, "Frequencerz \"Stealth Mode\"" ],
+			[ 24, 19, 45, "Phuture Noize presents Black Mirror Society (Showcase)" ],
+			[ 24, 20, 30, "Deetox - \"Bring the Riot\" (LIVE)" ],
+				[ 24, 21, 0, "Nothing" ],
+			[ 24, 21, 30, "Rebel[ut]ion" ],
+				[ 24, 22, 0, "Nothing" ]
+		]
+	},
+
+	{
+		"stage": "black",
+		"mc": "Ruffian",
+		"channel": "459077105137745941",
+		"emoji": ":black_circle:",
+		"url": "https://www.q-dance.com/en/news/defqon-1-2018-or-livestream",
+		"sets": [
+			[ 22, 20, 0, "Paul Elstak" ],
+			[ 22, 21, 0, "20 Years of Endymion (LIVE)" ],
+			[ 22, 22, 0, "Korsakoff" ],
+			[ 22, 23, 0, "Tha Playah" ],
+			[ 23, 0, 0, "Destructive Tendencies" ],
+				[ 23, 1, 0, "Nothing" ],
+
+			[ 23, 13, 0, "Neophyte" ],
+			[ 23, 14, 0, "Mad Dog" ],
+				[ 23, 15, 0, "Nothing" ],
+			[ 23, 16, 0, "Art of Fighters" ],
+			[ 23, 17, 0, "Miss K8" ],
+				[ 23, 18, 0, "Nothing" ],
+			[ 23, 18, 30, "Angerfist" ],
+			[ 23, 19, 30, "Andy The Core" ],
+			[ 23, 20, 30, "The Sickest Squad" ],
+			[ 23, 21, 30, "Spitnoise" ],
+				[ 23, 22, 30, "Nothing" ],
+
+			[ 24, 14, 0, "The Melodyst" ],
+			[ 24, 15, 0, "Anime" ],
+			[ 24, 16, 0, "Nosferatu" ],
+			[ 24, 17, 0, "Evil Activities" ],
+				[ 24, 18, 0, "Nothing" ],
+			[ 24, 19, 0, "Deadly Guns" ],
+			[ 24, 20, 0, "D-Fence" ],
+			[ 24, 21, 0, "Partyraiser & Bulletproof" ],
+			[ 24, 22, 0, "Sefa" ],
+				[ 24, 23, 0, "Nothing" ]
+		]
+	}
+]

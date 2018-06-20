@@ -8,6 +8,7 @@ var cmdsplit = require("./cmdsplit");
 var SongQueue = require("./SongQueue");
 var Radio = require("./Radio");
 var Twit = require("./Twit");
+var EventSchedule = require("./EventSchedule");
 
 class RedditRadio
 {
@@ -24,6 +25,8 @@ class RedditRadio
 		this.queue = new SongQueue(this.config);
 		this.current_song = false;
 
+		this.events = [];
+
 		this.twits = [];
 		this.loadTwitter();
 
@@ -34,6 +37,18 @@ class RedditRadio
 
 		this.commands = [];
 		this.loadConfigCommands();
+	}
+
+	loadEvents()
+	{
+		if (this.config.events === undefined) {
+			return;
+		}
+
+		for (var i = 0; i < this.config.events.length; i++) {
+			var event = this.config.events[i];
+			this.events.push(new EventSchedule(event, this.client));
+		}
 	}
 
 	loadTwitter()
@@ -211,12 +226,18 @@ class RedditRadio
 		for (var i = 0; i < this.twits.length; i++) {
 			this.twits[i].onTick();
 		}
+
+		for (var i = 0; i < this.events.length; i++) {
+			this.events[i].onTick();
+		}
 	}
 
 	onReady()
 	{
 		console.log("Client started.");
 		this.resetStatusText();
+
+		this.loadEvents();
 	}
 
 	onMessage(msg)
@@ -225,7 +246,14 @@ class RedditRadio
 			return;
 		}
 
-		console.log('[' + Date() + '] ' + msg.member.user.username + '#' + msg.member.user.discriminator + ' in #' + msg.channel.name + ': "' + msg.content + '"');
+		//console.log('[' + Date() + '] ' + msg.member.user.username + '#' + msg.member.user.discriminator + ' in #' + msg.channel.name + ': "' + msg.content + '"');
+
+		for (var i = 0; i < this.events.length; i++) {
+			if (this.events[i].onMessage(msg)) {
+				console.log("Event command handled from \"" + msg.member.user.username + "\": " + msg.content);
+				return;
+			}
+		}
 
 		if (msg.content.toLowerCase() == "good bot") {
 			msg.channel.send("Thanks");
