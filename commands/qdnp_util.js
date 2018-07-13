@@ -1,11 +1,11 @@
 var discord = require("discord.js");
-var http = require("http");
+var http = require("https");
 
 module.exports = {
 	get: function(dir, callback) {
 		var ret = {};
 
-		http.get("http://radio.q-dance.nl/now-playing", function(res) {
+		http.get("https://feed.q-dance.com/onair", function(res) {
 			var data = "";
 			res.setEncoding("utf8");
 			res.on("data", function(chunk) { data += chunk; });

@@ -25,6 +25,10 @@ class EventSchedule
 			let stage = this.schedule[i];
 
 			stage.channel = this.client.channels.get(stage.channel);
+			stage.channelExtra = null;
+			if (stage.extra_channel !== undefined) {
+				stage.channelExtra = this.client.channels.get(stage.extra_channel);
+			}
 
 			for (var j = 0; j < stage.sets.length; j++) {
 				var set = stage.sets[j];
@@ -69,7 +73,7 @@ class EventSchedule
 			var stage = this.schedule[i];
 			for (var j = 0; j < stage.sets.length; j++) {
 				var set = stage.sets[j];
-				if (set.name.toLowerCase().indexOf(query) != -1) {
+				if (!set.nothing && set.name.toLowerCase().indexOf(query) != -1) {
 					ret.push({
 						set: set,
 						stage: stage
@@ -143,14 +147,26 @@ class EventSchedule
 					current.report = true;
 					if (!current.nothing) {
 						console.log("Starting now: " + current.name);
-						stage.channel.send(":red_circle: STARTING NOW: **" + current.name + "**");
+						var msg = ":red_circle: STARTING NOW: **" + current.name + "**";
+						stage.channel.send(msg);
+						if (stage.channelExtra) {
+							stage.channelExtra.send(msg);
+						}
 					} else {
 						console.log("Stream is not live anymore.");
 						var next = this.getNextSet(stage);
 						if (next !== null && !next.nothing) {
-							stage.channel.send(":no_entry_sign: Stream is not live anymore. Next set is on " + this.getWeekDay(next.date.getDay()) + " at **" + this.getTimeString(next.date) + "** CEST!");
+							var msg = ":no_entry_sign: Stream is not live anymore. Next set is on " + this.getWeekDay(next.date.getDay()) + " at **" + this.getTimeString(next.date) + "** CEST!";
+							stage.channel.send(msg);
+							if (stage.channelExtra) {
+								stage.channelExtra.send(msg);
+							}
 						} else {
-							stage.channel.send("<:qdance:328585093553586176> This was Defqon 1. Thank you for tuning in.");
+							var msg = "<:qdance:328585093553586176> This was Defqon 1. Thank you for tuning in.";
+							stage.channel.send(msg);
+							if (stage.channelExtra) {
+								stage.channelExtra.send(msg);
+							}
 						}
 					}
 					this.updateChannel(stage);
@@ -162,7 +178,11 @@ class EventSchedule
 				if (dateIn5Minutes > next.date && !next.report_5min) {
 					next.report_5min = true;
 					console.log("Starting in 5 minutes: " + next.name);
-					stage.channel.send(":warning: Starting in 5 minutes: **" + next.name + "**");
+					var msg = ":warning: Starting in 5 minutes: **" + next.name + "**";
+					stage.channel.send(msg);
+					if (stage.channelExtra) {
+						stage.channelExtra.send(msg);
+					}
 				}
 			}
 		}
@@ -220,7 +240,11 @@ class EventSchedule
 						}
 
 						var localTime = this.getTimeString(set.date);
-						ret += "- " + this.getWeekDay(set.date.getDay()) + " **" + localTime + "** CEST: **" + set.name + "**\n";
+						if (set.nothing) {
+							ret += "- " + this.getWeekDay(set.date.getDay()) + " **" + localTime + "** CEST, the stream will be offline. :no_entry_sign:\n";
+						} else {
+							ret += "- " + this.getWeekDay(set.date.getDay()) + " **" + localTime + "** CEST: **" + set.name + "**\n";
+						}
 
 						if (lines++ == 5) {
 							break;

@@ -4,7 +4,7 @@
 		"mc": "DV8 & Villain",
 		"channel": "459077085013606401",
 		"emoji": ":red_circle:",
-		"url": "https://www.q-dance.com/en/news/defqon-1-2018-or-livestream",
+		"url": "https://www.q-dance.com/en/videos/defqon-1-livestream-red",
 		"sets": [
 			[ 23, 13, 0, "ANDY SVGE" ],
 			[ 23, 14, 0, "Sound Rush" ],
@@ -25,9 +25,9 @@
 			[ 24, 16, 45, "Psyko Punkz" ],
 			[ 24, 17, 30, "Dee-Block & S-te-Pack" ],
 			[ 24, 18, 15, "Zatox (LIVE)" ],
-			[ 24, 18, 45, "Tweekacore & Darren Styles" ],
-			[ 24, 19, 30, "Peacock in Concert" ],
-				[ 24, 20, 0, "Nothing" ],
+			[ 24, 18, 45, "Peacock in Concert" ],
+			[ 24, 19, 15, "Tweekacore & Darren Styles" ],
+			[ 24, 20, 0, "Brennan Heart (Uncertain)" ],
 			[ 24, 21, 0, "Coone" ],
 			[ 24, 22, 0, "Project One" ],
 				[ 24, 23, 0, "Nothing" ]
@@ -36,10 +36,10 @@
 
 	{
 		"stage": "blue",
-		"mc": "Villain",
+		"mc": "Nolz",
 		"channel": "459077096665382942",
 		"emoji": ":large_blue_circle:",
-		"url": "https://www.q-dance.com/en/news/defqon-1-2018-or-livestream",
+		"url": "https://www.q-dance.com/en/videos/defqon-1-livestream-blue",
 		"sets": [
 			[ 22, 20, 0, "Headhunterz" ],
 			[ 22, 21, 0, "Bass Modulators" ],
@@ -51,7 +51,7 @@
 			[ 23, 13, 0, "Requiem" ],
 			[ 23, 14, 0, "Digital Punk" ],
 			[ 23, 15, 0, "E-Force" ],
-				[ 23, 16, 0, "Nothing" ],
+			[ 23, 16, 0, "Regain (LIVE) (Uncertain)" ],
 			[ 23, 16, 30, "Jason Payne" ],
 			[ 23, 18, 0, "B-Freqz" ],
 			[ 23, 18, 30, "Adaro" ],
@@ -70,7 +70,7 @@
 			[ 24, 19, 15, "Frequencerz \"Stealth Mode\"" ],
 			[ 24, 19, 45, "Phuture Noize presents Black Mirror Society (Showcase)" ],
 			[ 24, 20, 30, "Deetox - \"Bring the Riot\" (LIVE)" ],
-				[ 24, 21, 0, "Nothing" ],
+			[ 24, 21, 0, "Delete VIP (Uncertain)" ],
 			[ 24, 21, 30, "Rebel[ut]ion" ],
 				[ 24, 22, 0, "Nothing" ]
 		]
@@ -78,10 +78,10 @@
 
 	{
 		"stage": "black",
-		"mc": "Ruffian",
+		"mc": "Diesel",
 		"channel": "459077105137745941",
 		"emoji": ":black_circle:",
-		"url": "https://www.q-dance.com/en/news/defqon-1-2018-or-livestream",
+		"url": "https://www.q-dance.com/en/videos/defqon-1-livestream-black",
 		"sets": [
 			[ 22, 20, 0, "Paul Elstak" ],
 			[ 22, 21, 0, "20 Years of Endymion (LIVE)" ],
@@ -92,10 +92,10 @@
 
 			[ 23, 13, 0, "Neophyte" ],
 			[ 23, 14, 0, "Mad Dog" ],
-				[ 23, 15, 0, "Nothing" ],
+			[ 23, 15, 0, "Noize Suppressor" ],
 			[ 23, 16, 0, "Art of Fighters" ],
 			[ 23, 17, 0, "Miss K8" ],
-				[ 23, 18, 0, "Nothing" ],
+			[ 23, 18, 0, "N-Vitral presents \"Bombsquad\" (Uncertain)" ],
 			[ 23, 18, 30, "Angerfist" ],
 			[ 23, 19, 30, "Andy The Core" ],
 			[ 23, 20, 30, "The Sickest Squad" ],
@@ -106,7 +106,7 @@
 			[ 24, 15, 0, "Anime" ],
 			[ 24, 16, 0, "Nosferatu" ],
 			[ 24, 17, 0, "Evil Activities" ],
-				[ 24, 18, 0, "Nothing" ],
+			[ 24, 18, 0, "I:GOR (Uncertain)" ],
 			[ 24, 19, 0, "Deadly Guns" ],
 			[ 24, 20, 0, "D-Fence" ],
 			[ 24, 21, 0, "Partyraiser & Bulletproof" ],
