@@ -33,8 +33,8 @@ class EventSchedule
 			for (var j = 0; j < stage.sets.length; j++) {
 				var set = stage.sets[j];
 
-				//TODO: Don't hardcode for Defqon 2018
-				var setDate = new Date(2018, 5, set[0], set[1], set[2]);
+				//TODO: Don't hardcode for Tomorrowland & Dominator (lol)
+				var setDate = new Date(2018, 7, set[0], set[1], set[2]);
 				var newSet = {
 					date: setDate,
 					name: set[3],
