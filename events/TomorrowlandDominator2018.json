@@ -1,0 +1,64 @@
+[
+	{
+		"stage": "tomorrowland",
+		"mc": "Villain",
+		"channel": "469913276592029706",
+		"emoji": ":one:",
+		"url": "https://www.q-dance.com/en/radio/",
+		"sets": [
+			[ 21, 12, 0, "Unsenses" ],
+			[ 21, 13, 0, "Demi Kanon" ],
+			[ 21, 14, 0, "Mandy & Adrenalize" ],
+			[ 21, 15, 0, "Audiotricz" ],
+			[ 21, 16, 0, "Da Tweekaz" ],
+			[ 21, 17, 0, "Wildstylez" ],
+			[ 21, 18, 0, "Brennan Heart" ],
+			[ 21, 19, 0, "Atmozfears" ],
+			[ 21, 20, 0, "Zatox" ],
+			[ 21, 21, 0, "Ran-D" ],
+			[ 21, 22, 0, "Sub Zero Project" ],
+			[ 21, 23, 0, "Korsakoff" ],
+				[ 22, 0, 0, "Nothing" ],
+
+			[ 28, 12, 0, "Ransom" ],
+			[ 28, 13, 0, "Refuzion" ],
+			[ 28, 14, 0, "Sound Rush" ],
+			[ 28, 15, 0, "Wasted Penguinz" ],
+			[ 28, 16, 0, "Mark With a K & MC Chucky" ],
+			[ 28, 17, 0, "Bass Modulators" ],
+			[ 28, 18, 0, "Code Black" ],
+			[ 28, 19, 0, "Noisecontrollers" ],
+			[ 28, 20, 0, "Psyko Punkz" ],
+			[ 28, 21, 0, "Frequencerz" ],
+			[ 28, 22, 0, "B-Front" ],
+			[ 28, 23, 0, "Partyraiser" ]
+				[ 29, 0, 0, "Nothing" ]
+		]
+	},
+
+	{
+		"stage": "dominator",
+		"mc": "Tha Watcher",
+		"channel": "469913292123668481",
+		"emoji": ":two:",
+		"url": "https://www.hardcoreradio.nl/",
+		"sets": [
+			[ 21, 11, 0, "Broken Minds" ],
+			[ 21, 12, 0, "Never Surrender" ],
+			[ 21, 13, 0, "Furyan" ],
+			[ 21, 14, 0, "Bodyshock (LIVE)" ],
+			[ 21, 14, 30, "D-Fence (LIVE)" ],
+			[ 21, 15, 0, "Paul Elstak" ],
+			[ 21, 16, 0, "Destructive Tendencies (LIVE)" ],
+			[ 21, 16, 30, "Nosferatu & Tha Playah" ],
+			[ 21, 17, 30, "Mad Dog, AniMe, Noize Suppressor & Unexist presents DOGFIGHT (LIVE)" ],
+			[ 21, 18, 0, "Evil Activities & Korsakoff" ],
+			[ 21, 19, 0, "Bulletproof & Partyraiser" ],
+			[ 21, 20, 0, "Dr. Peacock (LIVE)" ],
+			[ 21, 20, 30, "Angerfist & Miss K8" ],
+			[ 21, 21, 30, "N-Vitral (LIVE)" ],
+			[ 21, 22, 0, "Neophyte (25 Years of Neophyte Hardcore)" ],
+				[ 21, 23, 0, "Nothing" ]
+		]
+	}
+]
