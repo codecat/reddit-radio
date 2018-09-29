@@ -9,6 +9,7 @@ var SongQueue = require("./SongQueue");
 var Radio = require("./Radio");
 var Twit = require("./Twit");
 var EventSchedule = require("./EventSchedule");
+var EventImpromptu = require("./EventImpromptu");
 
 class RedditRadio
 {
@@ -47,7 +48,11 @@ class RedditRadio
 
 		for (var i = 0; i < this.config.events.length; i++) {
 			var event = this.config.events[i];
-			this.events.push(new EventSchedule(event, this.client));
+			if (event.impromptu) {
+				this.events.push(new EventImpromptu(this, event, this.client));
+			} else {
+				this.events.push(new EventSchedule(event, this.client));
+			}
 		}
 	}
 
