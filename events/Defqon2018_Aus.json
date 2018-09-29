@@ -1,0 +1,27 @@
+[
+	{
+		"stage": "red",
+		"mc": "Villain",
+		"channel": "489754437624266766",
+		"emoji": ":red_circle:",
+		"url": "https://www.q-dance.com/en/",
+		"sets": [
+			[ 15, 8, 15, "TNT" ],
+			[ 15, 9, 15, "Defqon.1 Legends presents: A Decade of Dedication" ],
+			[ 15, 10, 15, "Sub Zero Project" ],
+			[ 15, 10, 40, "Da Tweekaz" ],
+			[ 15, 11, 38, "Coone" ],
+			[ 15, 12, 38, "Headhunterz" ],
+			[ 15, 13, 50, "The Endshow" ],
+				[ 15, 14, 6, "Nothing" ],
+			[ 15, 16, 0, "TNT (Rebroadcast)" ],
+			[ 15, 17, 0, "Defqon.1 Legends presents: A Decade of Dedication (Rebroadcast)" ],
+			[ 15, 18, 0, "Sub Zero Project (Rebroadcast)" ],
+			[ 15, 18, 30, "Da Tweekaz (Rebroadcast)" ],
+			[ 15, 19, 30, "Coone (Rebroadcast)" ],
+			[ 15, 20, 30, "Headhunterz (Rebroadcast)" ],
+			[ 15, 21, 45, "The Endshow (Rebroadcast)" ],
+				[ 15, 22, 0, "Nothing" ]
+		]
+	}
+]

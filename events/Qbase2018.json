@@ -1,0 +1,112 @@
+[
+	{
+		"stage": "openair",
+		"mc": "DV8",
+		"channel": "487970506910203914",
+		"emoji": ":airplane:",
+		"url": "https://www.q-dance.com/en/videos/q-dance-live-open-air",
+		"sets": [
+			[ 8, 17, 0, "Retrospect" ],
+			[ 8, 18, 30, "Adrenalize" ],
+			[ 8, 20, 0, "KELTEK" ],
+			[ 8, 21, 0, "D-Block & S-te-Fan" ],
+			[ 8, 22, 0, "Sound Rush" ],
+			[ 8, 23, 0, "Coone" ],
+			[ 9, 0, 0, "Atmozfears" ],
+			[ 9, 1, 30, "Noisecontrollers" ],
+			[ 9, 3, 0, "Ran-D & B-Front" ],
+				[ 9, 4, 0, "Nothing" ],
+			[ 9, 6, 30, "Sefa" ],
+				[ 9, 7, 0, "Nothing" ]
+		]
+	},
+
+	{
+		"stage": "hangar",
+		"mc": "Livid & Nolz",
+		"channel": "487970523784019979",
+		"emoji": ":airplane:",
+		"url": "https://www.q-dance.com/en/videos/q-dance-live-hangar",
+		"sets": [
+			[ 8, 17, 0, "D-Attack" ],
+			[ 8, 18, 30, "Rejecta" ],
+			[ 8, 20, 0, "Myst vs. Degos & Re-Done" ],
+			[ 8, 21, 30, "Deetox" ],
+			[ 8, 22, 45, "Adaro" ],
+			[ 9, 0, 0, "Frequencerz" ],
+			[ 9, 1, 0, "Bass Chaserz" ],
+				[ 9, 2, 0, "Nothing" ],
+			[ 9, 2, 30, "E-Force" ],
+				[ 9, 4, 0, "Nothing" ],
+			[ 9, 5, 0, "Rebelion" ],
+			[ 9, 6, 0, "Jason Payne & Apexx" ],
+				[ 9, 7, 0, "Nothing" ]
+		]
+	},
+
+	{
+		"stage": "thunderdome",
+		"mc": "Da Mouth of Madness",
+		"channel": "488016911838347276",
+		"emoji": ":airplane:",
+		"url": "https://www.q-dance.com/en/videos/q-dance-live-thunderdome",
+		"sets": [
+			[ 8, 17, 0, "Waxweazle" ],
+			[ 8, 18, 30, "Vince" ],
+			[ 8, 20, 0, "MD&A" ],
+			[ 8, 20, 30, "Predator" ],
+			[ 8, 22, 0, "Evil Activities" ],
+			[ 8, 23, 30, "Nosferatu" ],
+			[ 9, 0, 30, "The Melodyst" ],
+			[ 9, 1, 30, "Promo" ],
+			[ 9, 3, 0, "I:GOR" ],
+			[ 9, 4, 0, "Unexist" ],
+			[ 9, 5, 0, "Andy The Core & Lady Dammage" ],
+			[ 9, 6, 0, "Spitnoise" ],
+				[ 9, 7, 0, "Nothing" ]
+		]
+	},
+
+	{
+		"stage": "bkjn",
+		"mc": "No-ID & RG",
+		"channel": "488018562124873741",
+		"emoji": ":airplane:",
+		"url": "https://www.q-dance.com/en/videos/q-dance-live-bkjn",
+		"sets": [
+			[ 8, 18, 0, "Hard Effectz vs. Stampede" ],
+			[ 8, 19, 0, "Hyrule War vs. Mr. Ivex" ],
+			[ 8, 20, 0, "Cryogenic" ],
+			[ 8, 21, 0, "Para Italia vs. Aggressive" ],
+			[ 8, 22, 0, "Super Trash Bros [LIVE]" ],
+			[ 8, 22, 30, "Rob Gee & Lunatic present: BKJN Music Showcase" ],
+			[ 8, 23, 45, "Sefa" ],
+			[ 9, 0, 15, "Vandalism" ],
+			[ 9, 1, 0, "Repix" ],
+			[ 9, 2, 0, "Omkara [LIVE]" ],
+			[ 9, 2, 30, "Dr. Peacock" ],
+			[ 9, 3, 30, "Chaotic Hostility & Chrono" ],
+			[ 9, 4, 30, "The Vizitor vs. MBK" ],
+			[ 9, 5, 30, "ELITE [LIVE]" ],
+				[ 9, 6, 0, "Nothing"]
+		]
+	},
+
+	{
+		"stage": "evolution",
+		"mc": "DL",
+		"channel": "488019382094528512",
+		"emoji": ":airplane:",
+		"url": "https://www.q-dance.com/en/videos/q-dance-live-evolution",
+		"sets": [
+			[ 8, 20, 0, "The Pitcher & Retrospect" ],
+			[ 8, 21, 45, "Coone & Ruthless" ],
+			[ 8, 22, 30, "Nightbreed Crew" ],
+			[ 9, 0, 0, "DJ The Prophet & Devin Wild" ],
+			[ 9, 1, 0, "Deetox & Sound Rush" ],
+			[ 9, 2, 30, "D-Fence & Panic" ],
+			[ 9, 3, 45, "Rooler" ],
+				[ 9, 5, 0, "Nothing" ]
+		]
+	}
+]

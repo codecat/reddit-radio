@@ -235,7 +235,11 @@ class Song
 		this.source = "soundcloud";
 		this.duration = track.duration;
 
-		this.stream = track.stream_url + "?client_id=" + config.client_id;
+		if (track.stream_url.indexOf("?")) {
+			this.stream = track.stream_url + "&client_id=" + config.client_id;
+		} else {
+			this.stream = track.stream_url + "?client_id=" + config.client_id;
+		}
 
 		this.valid = true;
 		this.callback(this);

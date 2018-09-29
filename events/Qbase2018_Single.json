@@ -1,0 +1,30 @@
+[
+	{
+		"stage": "qbase",
+		"mc": "DV8 & Livid & Nolz",
+		"channel": "487537296581722112",
+		"emoji": ":airplane:",
+		"url": "https://www.q-dance.com/en/radio/",
+		"sets": [
+			[ 8, 17, 0, "Retrospect / D-Attack" ],
+			[ 8, 18, 30, "Adrenalize / Rejecta" ],
+			[ 8, 20, 0, "KELTEK / Myst vs. Degos & Re-Done" ],
+			[ 8, 21, 0, "D-Block & S-te-Fan / Myst vs. Degos & Re-Done" ],
+			[ 8, 21, 30, "D-Block & S-te-Fan / Deetox" ],
+			[ 8, 22, 0, "Sound Rush / Deetox" ],
+			[ 8, 22, 45, "Sound Rush / Adaro" ],
+			[ 8, 23, 0, "Coone / Adaro" ],
+			[ 9, 0, 0, "Atmozfears / Frequencerz" ],
+			[ 9, 1, 0, "Atmozfears / Bass Chaserz" ],
+			[ 9, 1, 30, "Noisecontrollers / Bass Chaserz" ],
+			[ 9, 2, 0, "Noisecontrollers" ],
+			[ 9, 2, 30, "Noisecontrollers / E-Force" ],
+			[ 9, 3, 0, "Ran-D & B-Front / E-Force" ],
+			[ 9, 4, 0, "???" ],
+			[ 9, 5, 0, "Rebelion" ],
+			[ 9, 6, 0, "Jason Payne & Apexx" ],
+			[ 9, 6, 30, "Sefa / Jason Payne & Apexx" ],
+				[ 9, 7, 0, "Nothing" ]
+		]
+	}
+]

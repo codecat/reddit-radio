@@ -4,9 +4,8 @@
 		"mc": "Villain",
 		"channel": "469913276592029706",
 		"emoji": ":one:",
-		"url": "https://www.q-dance.com/en/radio/",
+		"url": "https://live.tomorrowland.com/",
 		"sets": [
-			[ 21, 12, 0, "Unsenses" ],
 			[ 21, 13, 0, "Demi Kanon" ],
 			[ 21, 14, 0, "Mandy & Adrenalize" ],
 			[ 21, 15, 0, "Audiotricz" ],
@@ -32,33 +31,17 @@
 			[ 28, 21, 0, "Frequencerz" ],
 			[ 28, 22, 0, "B-Front" ],
 			[ 28, 23, 0, "Partyraiser" ],
-				[ 29, 0, 0, "Nothing" ]
-		]
-	},
+				[ 29, 0, 0, "Nothing" ],
 
-	{
-		"stage": "dominator",
-		"mc": "Tha Watcher",
-		"channel": "469913292123668481",
-		"emoji": ":two:",
-		"url": "https://www.hardcoreradio.nl/",
-		"sets": [
-			[ 21, 11, 0, "Broken Minds" ],
-			[ 21, 12, 0, "Never Surrender" ],
-			[ 21, 13, 0, "Furyan" ],
-			[ 21, 14, 0, "Bodyshock (LIVE)" ],
-			[ 21, 14, 30, "D-Fence (LIVE)" ],
-			[ 21, 15, 0, "Paul Elstak" ],
-			[ 21, 16, 0, "Destructive Tendencies (LIVE)" ],
-			[ 21, 16, 30, "Nosferatu & Tha Playah" ],
-			[ 21, 17, 30, "Mad Dog, AniMe, Noize Suppressor & Unexist presents DOGFIGHT (LIVE)" ],
-			[ 21, 18, 0, "Evil Activities & Korsakoff" ],
-			[ 21, 19, 0, "Bulletproof & Partyraiser" ],
-			[ 21, 20, 0, "Dr. Peacock (LIVE)" ],
-			[ 21, 20, 30, "Angerfist & Miss K8" ],
-			[ 21, 21, 30, "N-Vitral (LIVE)" ],
-			[ 21, 22, 0, "Neophyte (25 Years of Neophyte Hardcore)" ],
-				[ 21, 23, 0, "Nothing" ]
+			[ 29, 16, 0, "Da Tweekaz" ],
+			[ 29, 17, 0, "Wildstylez" ],
+			[ 29, 18, 0, "Coone" ],
+			[ 29, 19, 0, "Pablo Discobar" ],
+			[ 29, 19, 30, "Darren Styles" ],
+			[ 29, 20, 15, "Zatox" ],
+			[ 29, 21, 15, "Coone vs. Hard Driver" ],
+			[ 29, 22, 15, "Gunz for Hire" ],
+				[ 29, 23, 0, "Nothing" ]
 		]
 	}
 ]

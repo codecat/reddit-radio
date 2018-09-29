@@ -33,8 +33,8 @@ class EventSchedule
 			for (var j = 0; j < stage.sets.length; j++) {
 				var set = stage.sets[j];
 
-				//TODO: Don't hardcode for Tomorrowland & Dominator (lol)
-				var setDate = new Date(2018, 7, set[0], set[1], set[2]);
+				//TODO: Don't hardcode for Qbase (lolol)
+				var setDate = new Date(2018, 8, set[0], set[1], set[2]);
 				var newSet = {
 					date: setDate,
 					name: set[3],
@@ -162,7 +162,7 @@ class EventSchedule
 								stage.channelExtra.send(msg);
 							}
 						} else {
-							var msg = "<:qdance:328585093553586176> This was Defqon 1. Thank you for tuning in.";
+							var msg = ":tada: This was the end of the livestream. Thank you for tuning in.";
 							stage.channel.send(msg);
 							if (stage.channelExtra) {
 								stage.channelExtra.send(msg);
@@ -311,11 +311,6 @@ class EventSchedule
 				}
 			}
 			msg.channel.send(ret.trim());
-			return true;
-		}
-
-		if (parse[0] == ".timetable") {
-			msg.channel.send(":calendar_spiral: The Defqon 2018 timetable can be found here: <https://www.q-dance.com/en/events/defqon-1/defqon-1-2018/timetable>");
 			return true;
 		}
 

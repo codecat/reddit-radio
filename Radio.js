@@ -25,6 +25,10 @@ class Radio
 			}
 		});
 
+		this.client.on("error", (e) => {
+			console.log("Radio bot error:", e);
+		});
+
 		this.client.on("voiceStateUpdate", (o, n) => {
 			var channel = this.client.channels.get(this.channel);
 			if (n.voiceChannelID == this.channel) {
@@ -65,7 +69,7 @@ class Radio
 				this.startBroadcast();
 			});
 			this.startBroadcast();
-		});
+		}).catch(console.error);
 	}
 
 	leaveChannel()
