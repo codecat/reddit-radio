@@ -34,7 +34,18 @@ class EventImpromptu
 		var parse = cmdsplit(msg.content);
 
 		if (this.radio.isDJ(msg.member)) {
-			if (parse[0] == ".inow") {
+			if (parse[0] == ".ilink" && parse.length == 2) {
+				this.event.link = this.parse[1];
+
+				console.log("New impromptu event link: " + this.parse[1]);
+				this.channel.send(":link: The livestream can be found here: <" + this.event.link + ">");
+
+				msg.delete();
+				this.updateChannel();
+				return true;
+			}
+
+			if (parse[0] == ".inow" && parse.length >= 2) {
 				this.current = parse.slice(1).join(" ").trim();
 				this.ended = false;
 
@@ -47,7 +58,7 @@ class EventImpromptu
 			}
 
 			if (parse[0] == ".ioffline") {
-				this.current = '';
+				this.current = "";
 				this.ended = false;
 
 				console.log("Stream is offline!");
@@ -59,7 +70,7 @@ class EventImpromptu
 			}
 
 			if (parse[0] == ".iend") {
-				this.current = '';
+				this.current = "";
 				this.ended = true;
 
 				console.log("End of event!");
@@ -82,6 +93,11 @@ class EventImpromptu
 
 		if (parse[0] == ".next") {
 			this.channel.send(":robot: This is an event without a timetable.");
+			return true;
+		}
+
+		if (parse[0] == ".link") {
+			this.channel.send(":link: The livestream can be found here: <" + this.event.link + ">");
 			return true;
 		}
 
