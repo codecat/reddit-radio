@@ -1,0 +1,29 @@
+[
+	{
+		"stage": "mainstage",
+		"mc": "DV8 & Villain",
+		"channel": "319525278978277407",
+		"emoji": ":blue_heart::green_heart::yellow_heart::heart:",
+		"url": "https://live.b2s.nl/",
+		"sets": [
+			[ 2019, 2, 9, 21, 0, "Zany" ],
+			[ 2019, 2, 9, 22, 0, "TEAM BLUE (Coone, D-Block & S-te-Fan, Wildstylez)" ],
+			[ 2019, 2, 9, 23, 30, "Headhunterz (LIVE)" ],
+			[ 2019, 2, 10, 0, 0, "TEAM GREEN (Atmozfears, B-Front, Noisecontrollers)" ],
+			[ 2019, 2, 10, 1, 30, "I AM HARDSTYLE Take Over (Brennan Heart, Code Black, Toneshifterz) (LIVE)" ],
+			[ 2019, 2, 10, 2, 15, "Heroes of Hard Bass show" ],
+			[ 2019, 2, 10, 3, 0, "TEAM YELLOW (Frequencerz, Phuture Noize, Sub Zero Project)" ],
+			[ 2019, 2, 10, 4, 30, "Ran-D - We Rule The Night (Showcase) (LIVE)" ],
+			[ 2019, 2, 10, 5, 0, "TEAM RED (E-Force, Radical Redemption, Rejecta)" ],
+			[ 2019, 2, 10, 6, 30, "End of Line (Warface, Delete, Killshot) (LIVE)" ],
+				[ 2019, 2, 10, 7, 0, "Nothing" ]
+		],
+		"faq": [
+			"You can remove ads by logging in to the b2s website with a b2s account (or a Q-dance account).",
+			"Disable your adblocker to fix common issues with the stream player.",
+			"There's only 1 camera for the warmup set, it'll change soon.",
+			"Yes, <@193774894075346944> is recording: <https://old.reddit.com/r/hardstyle/aoybih>",
+			"The timer is counting down until the end of Hard Bass. (hh:mm:ss.mm)"
+		]
+	}
+]

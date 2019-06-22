@@ -1,0 +1,23 @@
+[
+	{
+		"stage": "mainstage",
+		"mc": "Villain",
+		"channel": "319525278978277407",
+		"emoji": ":flag_nl:",
+		"url": "https://www.q-dance.com/en/",
+		"sets": [
+			[ 24, 21, 30, "Luna" ],
+			[ 24, 22, 30, "Sound Rush" ],
+			[ 24, 23, 30, "Coone" ],
+			[ 25, 0, 30, "Bass Modulators" ],
+			[ 25, 1, 30, "Wildstylez (Live)" ],
+			[ 25, 2, 1, "Sub Zero Project" ],
+			[ 25, 3, 16, "Tweekacore" ],
+			[ 25, 4, 1, "Phuture Noize" ],
+			[ 25, 5, 1, "Sub Zero Project & Phuture Noize" ],
+			[ 25, 5, 16, "B-Freqz" ],
+			[ 25, 6, 1, "Dr. Peacock" ],
+				[ 25, 7, 0, "Nothing" ]
+		]
+	}
+]

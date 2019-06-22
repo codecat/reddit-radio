@@ -1,0 +1,23 @@
+[
+	{
+		"stage": "de-huiskamer",
+		"mc": "DV8",
+		"channel": "495260892535980032",
+		"emoji": ":flag_nl:",
+		"url": "https://www.q-dance.com/en/videos/q-dance-live-stream-from-x-qlusive-holland-xxl",
+		"sets": [
+			[ 29, 22, 5, "Zany" ],
+			[ 29, 23, 5, "Demi Kanon" ],
+			[ 29, 23, 53, "Bass Modulators" ],
+			[ 30, 0, 50, "The Partysquad & Outsiders" ],
+			[ 30, 1, 48, "Coone's Inburgeringscursus" ],
+			[ 30, 2, 35, "Ransom & Dr. Rude" ],
+			[ 30, 3, 20, "Psyko Punkz" ],
+			[ 30, 4, 5, "Frequencerz" ],
+			[ 30, 5, 5, "Zazafront" ],
+			[ 30, 5, 35, "Bass Chaserz" ],
+			[ 30, 6, 20, "Dr. Peacock" ],
+				[ 30, 7, 5, "Nothing" ]
+		]
+	}
+]
