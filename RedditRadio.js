@@ -17,6 +17,8 @@ class RedditRadio
 	{
 		this.config = toml.parse(fs.readFileSync("config.toml", "utf8"));
 
+		this.loadCache();
+
 		this.client = new discord.Client();
 		this.client.on("ready", () => { this.onReady(); });
 		this.client.on("message", (msg) => { this.onMessage(msg); });
@@ -38,6 +40,21 @@ class RedditRadio
 
 		this.commands = [];
 		this.loadConfigCommands();
+	}
+
+	loadCache()
+	{
+		this.cache = {};
+		if (!fs.existsSync("cache.json")) {
+			return;
+		}
+
+		this.cache = JSON.parse(fs.readFileSync("cache.json", "utf8"));
+	}
+
+	saveCache()
+	{
+		fs.writeFileSync("cache.json", JSON.stringify(this.cache));
 	}
 
 	loadEvents()
@@ -120,6 +137,20 @@ class RedditRadio
 		});
 	}
 
+	addLogMessage(text, fromMember)
+	{
+		if (!this.logChannel) {
+			console.log("Couldn't log because we couldn't find the log channel:", text);
+			return;
+		}
+
+		if (fromMember) {
+			text += " (via " + fromMember.user.username + ")";
+		}
+
+		this.logChannel.send(":robot: " + text);
+	}
+
 	setStatusText(status)
 	{
 		if (typeof(status) !== "string") {
@@ -163,7 +194,7 @@ class RedditRadio
 
 		for (var roleID of member.roles.keys()) {
 			var role = member.roles.get(roleID);
-			if (role.name == "Discord DJ") {
+			if (role.name == "Jukebox DJ") {
 				return true;
 			}
 		}
@@ -243,6 +274,9 @@ class RedditRadio
 		this.resetStatusText();
 
 		this.loadEvents();
+
+		this.logChannel = this.client.channels.get(this.config.discord.logchannel);
+		this.addLogMessage("Bot started!");
 	}
 
 	onMessage(msg)
@@ -397,7 +431,7 @@ class RedditRadio
 
 	onCmdLock(msg)
 	{
-		if (!this.isMod(msg.member)) {
+		if (!this.isMod(msg.member) && !this.isDJ(msg.member)) {
 			msg.channel.send("You're not a mod though.. :flushed:");
 			return;
 		}
@@ -413,7 +447,7 @@ class RedditRadio
 
 	onCmdUnlock(msg)
 	{
-		if (!this.isMod(msg.member)) {
+		if (!this.isMod(msg.member) && !this.isDJ(msg.member)) {
 			msg.channel.send("You're not a mod though.. :flushed:");
 			return;
 		}
@@ -625,6 +659,28 @@ class RedditRadio
 		}
 
 		msg.channel.send("I don't want to clear the queue right now! :flushed:");
+	}
+
+	onCmdMute(msg)
+	{
+		if (!this.isMod(msg.member)) {
+			return;
+		}
+
+		var mutedRole = msg.guild.roles.find(val => val.name == "Chat mute");
+		if (!mutedRole) {
+			console.error("Couldn't find \"Chat mute\" role!");
+			return;
+		}
+
+		for (var memberID of msg.mentions.members.keys()) {
+			var member = msg.mentions.members.get(memberID);
+			member.addRole(mutedRole);
+
+			this.addLogMessage("Muted " + member.user.username, msg.member);
+		}
+
+		msg.delete();
 	}
 
 	getEmoji(source)

@@ -273,6 +273,10 @@ class Song
 
 	makeMixcloudStreamFromTrack(track, config) {
 		this.title = track.name;
+		if (track.user === undefined) {
+			this.callback(this);
+			return;
+		}
 		this.author = track.user.username;
 		this.image = track.pictures.large;
 		this.source = "mixcloud";

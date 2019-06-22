@@ -9,6 +9,8 @@ class EventSchedule
 		this.event = event;
 		this.client = client;
 
+		this.lastNotFound = new Date();
+
 		console.log('NOTE: Active event: ' + this.event.file);
 
 		this.loadSchedule(this.event.file);
@@ -33,14 +35,13 @@ class EventSchedule
 			for (var j = 0; j < stage.sets.length; j++) {
 				var set = stage.sets[j];
 
-				//TODO: Don't hardcode for Qbase (lolol)
-				var setDate = new Date(2018, 8, set[0], set[1], set[2]);
+				var setDate = new Date(set[0], set[1] - 1, set[2], set[3], set[4]);
 				var newSet = {
 					date: setDate,
-					name: set[3],
+					name: set[5],
 					report: date > setDate,
 					report_5min: dateIn5Minutes > setDate,
-					nothing: set[3] == "Nothing"
+					nothing: set[5] == "Nothing"
 				};
 
 				stage.sets[j] = newSet;
@@ -156,13 +157,13 @@ class EventSchedule
 						console.log("Stream is not live anymore.");
 						var next = this.getNextSet(stage);
 						if (next !== null && !next.nothing) {
-							var msg = ":no_entry_sign: Stream is not live anymore. Next set is on " + this.getWeekDay(next.date.getDay()) + " at **" + this.getTimeString(next.date) + "** CEST!";
+							var msg = ":no_entry_sign: Stream is no longer live. Next set it on " + this.getWeekDay(next.date.getDay()) + " at **" + this.getTimeString(next.date) + "**!";
 							stage.channel.send(msg);
 							if (stage.channelExtra) {
 								stage.channelExtra.send(msg);
 							}
 						} else {
-							var msg = ":tada: This was the end of the livestream. Thank you for tuning in.";
+							var msg = ":tada: This is the end of the livestream. Thanks for watching.";
 							stage.channel.send(msg);
 							if (stage.channelExtra) {
 								stage.channelExtra.send(msg);
@@ -178,7 +179,7 @@ class EventSchedule
 				if (dateIn5Minutes > next.date && !next.report_5min) {
 					next.report_5min = true;
 					console.log("Starting in 5 minutes: " + next.name);
-					var msg = ":warning: Starting in 5 minutes: **" + next.name + "**";
+					var msg = ":warning: **" + next.name + "** starts in 5 minutes!";
 					stage.channel.send(msg);
 					if (stage.channelExtra) {
 						stage.channelExtra.send(msg);
@@ -200,34 +201,34 @@ class EventSchedule
 			var stage = this.schedule[i];
 
 			if (stage.channel == msg.channel) {
-				if (parse[0] == ".np" || parse[0] == ".current" || parse[0] == ".now") {
+				if (parse[0] == ".np" || parse[0] == ".current" || parse[0] == ".now" || parse[0] == ".nu" || parse[0] == ".momenteel") {
 					var current = this.getCurrentSet(stage);
 					if (current !== null && !current.nothing) {
 						var localTime = this.getTimeString(current.date);
-						msg.channel.send(":red_circle: Now playing on the " + stage.stage + " stage: **" + current.name + "**, which started at **" + localTime + "** CEST!");
+						msg.channel.send(":red_circle: Now playing: **" + current.name + "**, started at **" + localTime + "**!");
 					} else {
-						msg.channel.send(":robot: There's currently no set playing on the " + stage.stage + " stage.");
+						msg.channel.send(":robot: Nobody's playing right now.");
 					}
 					return true;
 				}
 
-				if (parse[0] == ".next") {
+				if (parse[0] == ".next" || parse[0] == ".volgende") {
 					var next = this.getNextSet(stage);
 					if (next !== null) {
 						var localTime = this.getTimeString(next.date);
-						msg.channel.send(":soon: Next up on the " + stage.stage + " stage is: **" + next.name + "**, at **" + localTime + "** CEST!");
+						msg.channel.send(":soon: Next up: **" + next.name + "**, at **" + localTime + "**!");
 					} else {
-						msg.channel.send(":robot: There's no next set on the " + stage.stage + " stage.");
+						msg.channel.send(":robot: There's nothing playing next.");
 					}
 					return true;
 				}
 
 				if (parse[0] == ".mc" || parse[0] == ".host") {
-					msg.channel.send(":microphone: The " + stage.stage + " stage MC is: **" + stage.mc + "**");
+					msg.channel.send(":microphone: The MC is: **" + stage.mc + "**");
 					return true;
 				}
 
-				if (parse[0] == ".schedule") {
+				if (parse[0] == ".schedule" || parse[0] == ".programma") {
 					var ret = "";
 
 					var date = new Date();
@@ -241,9 +242,9 @@ class EventSchedule
 
 						var localTime = this.getTimeString(set.date);
 						if (set.nothing) {
-							ret += "- " + this.getWeekDay(set.date.getDay()) + " **" + localTime + "** CEST, the stream will be offline. :no_entry_sign:\n";
+							ret += "- " + this.getWeekDay(set.date.getDay()) + " **" + localTime + "**, the stream will be offline :no_entry_sign:\n";
 						} else {
-							ret += "- " + this.getWeekDay(set.date.getDay()) + " **" + localTime + "** CEST: **" + set.name + "**\n";
+							ret += "- " + this.getWeekDay(set.date.getDay()) + " **" + localTime + "**: **" + set.name + "**\n";
 						}
 
 						if (lines++ == 5) {
@@ -252,9 +253,9 @@ class EventSchedule
 					}
 
 					if (lines == 0) {
-						msg.channel.send("The " + stage.stage + " has nothing coming up anymore! :frowning:");
+						msg.channel.send("We have nothing left! :frowning:");
 					} else {
-						msg.channel.send(":calendar_spiral: Next 5 sets on the " + stage.stage + " stage:\n" + ret.trim());
+						msg.channel.send(":calendar_spiral: Next 5 sets are: (use `.time` for current local time)\n" + ret.trim());
 					}
 					return true;
 				}
@@ -262,6 +263,16 @@ class EventSchedule
 				if (parse[0] == ".stream" || parse[0] == ".link" || parse[0] == ".url") {
 					msg.channel.send(":link: Stream link: <" + stage.url + ">");
 					return true;
+				}
+
+				var matchNumber = parse[0].match(/^\.([0-9]+)$/);
+				if (matchNumber) {
+					var index = matchNumber[1];
+					if (index > 0 && index <= stage.faq.length) {
+						var faq = stage.faq[index - 1];
+						msg.channel.send(":information_source: " + faq);
+						return true;
+					}
 				}
 			}
 		}
@@ -277,6 +288,12 @@ class EventSchedule
 			var ret = "";
 			if (results.length == 0) {
 				ret = "I found nothing :frowning:";
+				// Avoid spamming "I found nothing" when jokers do .find a meaning of life
+				var now = new Date();
+				if ((now - this.lastNotFound) < 60 * 1000) {
+					return true;
+				}
+				this.lastNotFound = now;
 			} else {
 				var date = new Date();
 				for (var i = 0; i < results.length; i++) {
@@ -286,9 +303,9 @@ class EventSchedule
 					var localTime = this.getTimeString(res.set.date);
 
 					if (date > res.date) {
-						ret += res.set.name + " has already been played on **" + weekDay + "**, at **" + localTime + "** CEST, on the " + res.stage.channel.toString() + " stage!\n";
+						ret += res.set.name + " has played on **" + weekDay + "**, at **" + localTime + "**!\n";
 					} else {
-						ret += res.set.name + " is on **" + weekDay + "**, at **" + localTime + "** CEST, on the " + res.stage.channel.toString() + " stage!\n";
+						ret += res.set.name + " plays on **" + weekDay + "**, at **" + localTime + "**!\n";
 					}
 				}
 			}
@@ -305,9 +322,9 @@ class EventSchedule
 				var stage = this.schedule[i];
 				var current = this.getCurrentSet(stage);
 				if (current !== null && !current.nothing) {
-					ret += stage.emoji + " The " + stage.channel.toString() + " stage is now playing: **" + current.name + "**\n";
+					ret += stage.emoji + " Now playing: **" + current.name + "**\n";
 				} else {
-					ret += stage.emoji + " The " + stage.channel.toString() + " stage is currently not live.\n";
+					ret += stage.emoji + " Not currently live.\n";
 				}
 			}
 			msg.channel.send(ret.trim());
@@ -353,7 +370,7 @@ class EventSchedule
 		var next = this.getNextLiveSet(stage);
 
 		if ((current === null || current.nothing) && next === null) {
-			line += " :tada: Thank you for tuning in.";
+			line += " :tada: Thanks for watching.";
 		} else {
 			if (current !== null && !current.nothing) {
 				line += " __" + current.name + "__ (" + this.getTimeString(current.date) + ")";
@@ -364,7 +381,7 @@ class EventSchedule
 			if (next !== null) {
 				line += " :arrow_forward: Next: __" + next.name + "__ (" + this.getTimeString(next.date) + ")";
 			} else {
-				line += " :warning: This is the final livestreamed set!";
+				line += " :warning: This is the last set!";
 			}
 
 			line += " :link: " + stage.url;
