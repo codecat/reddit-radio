@@ -9,7 +9,8 @@ class EventSchedule
 		this.event = event;
 		this.client = client;
 
-		this.lastNotFound = new Date();
+		this.lastNotFound = new Date(1970, 1, 1);
+		this.lastNow = new Date(1970, 1, 1);
 
 		console.log('NOTE: Active event: ' + this.event.file);
 
@@ -26,7 +27,12 @@ class EventSchedule
 		for (var i = 0; i < this.schedule.length; i++) {
 			let stage = this.schedule[i];
 
+			console.log("Event channel: " + stage.channel);
 			stage.channel = this.client.channels.get(stage.channel);
+			if (!stage.channel) {
+				console.log("WARNING: Couldn't find channel!");
+			}
+
 			stage.channelExtra = null;
 			if (stage.extra_channel !== undefined) {
 				stage.channelExtra = this.client.channels.get(stage.extra_channel);
@@ -228,7 +234,7 @@ class EventSchedule
 					return true;
 				}
 
-				if (parse[0] == ".schedule" || parse[0] == ".programma") {
+				if (parse[0] == ".schedule" || parse[0] == ".programma" || parse[0] == ".sched") {
 					var ret = "";
 
 					var date = new Date();
@@ -303,9 +309,9 @@ class EventSchedule
 					var localTime = this.getTimeString(res.set.date);
 
 					if (date > res.date) {
-						ret += res.set.name + " has played on **" + weekDay + "**, at **" + localTime + "**!\n";
+						ret += res.set.name + " already played on **" + weekDay + "**, at **" + localTime + "** on the **" + res.stage.stage + "** stage!\n";
 					} else {
-						ret += res.set.name + " plays on **" + weekDay + "**, at **" + localTime + "**!\n";
+						ret += res.set.name + " plays on **" + weekDay + "**, at **" + localTime + "** on the **" + res.stage.stage + "** " + res.stage.emoji + " stage!\n";
 					}
 				}
 			}
@@ -314,18 +320,33 @@ class EventSchedule
 			return true;
 		}
 
-		//todo: .schedule off-channel global summary command
+		if (parse[0] == ".schedule" || parse[0] == ".programma" || parse[0] == ".sched" || parse[0] == ".current" || parse[0] == ".now") {
+			// Avoid spamming long .now message when jokers spam .now
+			var now = new Date();
+			if ((now - this.lastNow) < 60 * 1000) {
+				return true;
+			}
+			this.lastNow = now;
 
-		if (parse[0] == ".current" || parse[0] == ".now") {
-			var ret = "Now live:\n";
+			var ret = "**LIVE**\n";
 			for (var i = 0; i < this.schedule.length; i++) {
 				var stage = this.schedule[i];
+
 				var current = this.getCurrentSet(stage);
 				if (current !== null && !current.nothing) {
-					ret += stage.emoji + " Now playing: **" + current.name + "**\n";
+					ret += stage.emoji + " " + stage.stage + ": **" + current.name + "**";
 				} else {
-					ret += stage.emoji + " Not currently live.\n";
+					ret += stage.emoji + " " + stage.stage + ": Not live";
 				}
+
+				var next = this.getNextSet(stage);
+				if (next !== null && !next.nothing) {
+					ret += ", next: " + next.name;
+				} else {
+					ret += ".";
+				}
+
+				ret += " " + stage.channel + "\n";
 			}
 			msg.channel.send(ret.trim());
 			return true;

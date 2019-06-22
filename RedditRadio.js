@@ -276,7 +276,7 @@ class RedditRadio
 		this.loadEvents();
 
 		this.logChannel = this.client.channels.get(this.config.discord.logchannel);
-		this.addLogMessage("Bot started!");
+		//this.addLogMessage("Bot started!");
 	}
 
 	onMessage(msg)
