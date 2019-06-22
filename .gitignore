@@ -1,6 +1,7 @@
 # Internal
 config.toml
 local/
+commands/Livenp.js
 
 # Node
 node_modules/
