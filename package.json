@@ -4,15 +4,16 @@
   "description": "discord.gg/hardstyle",
   "main": "index.js",
   "dependencies": {
-    "discord.js": "^11.4.2",
-    "follow-redirects": "^1.5.5",
-    "node-opus": "^0.2.9",
+    "discord.js": "^11.5.1",
+    "follow-redirects": "^1.7.0",
+    "node-opus": "^0.3.2",
     "sodium": "^2.0.3",
-    "toml": "^2.3.3",
+    "toml": "^3.0.0",
     "twitter": "^1.7.1",
     "uws": "^9.148.0",
-    "youtube-search": "^1.1.1",
-    "ytdl-core": "^0.20.4"
+    "youtube-search": "^1.1.4",
+    "ytdl": "^0.11.1",
+    "ytdl-core": "^0.29.2"
   },
   "devDependencies": {},
   "author": "Codecat"
