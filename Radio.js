@@ -68,6 +68,9 @@ class Radio
 			this.voice_connection.on("newSession", () => {
 				this.startBroadcast();
 			});
+			this.voice_connection.on("error", (err) => {
+				console.log("Error: " + err);
+			});
 			this.startBroadcast();
 		}).catch(console.error);
 	}
