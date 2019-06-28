@@ -378,6 +378,16 @@ class RedditRadio
 		msg.channel.send("**All Defqon.1 2019 Stream information** can be found here: <https://www.reddit.com/r/hardstyle/comments/c6kfje/defqon1_2019_is_livestreamed_the_entire_weekend/>");
 	}
 
+	onCmdTimetable(msg)
+	{
+		msg.channel.send("**Defqon.1 2019 timetable**: <https://www.q-dance.com/en/events/defqon-1/defqon-1-weekend-festival-2019/lineup>");
+	}
+
+	onCmdLogin(msg)
+	{
+		msg.channel.send("**If you're having trouble logging in to the Q-dance website**, try disabling your adblocker and/or switching to a different browser.");
+	}
+
 	onCmdConnect(msg)
 	{
 		if (this.voice_connection !== false) {
