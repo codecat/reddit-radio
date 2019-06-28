@@ -333,13 +333,18 @@ class EventSchedule
 				var stage = this.schedule[i];
 
 				var current = this.getCurrentSet(stage);
+				var next = this.getNextSet(stage);
+
+				if (current === null && next !== null && next.date.getDate() != now.getDate()) {
+					continue;
+				}
+
 				if (current !== null && !current.nothing) {
 					ret += stage.emoji + " " + stage.stage + ": **" + current.name + "**";
 				} else {
 					ret += stage.emoji + " " + stage.stage + ": Not live";
 				}
 
-				var next = this.getNextSet(stage);
 				if (next !== null && !next.nothing) {
 					ret += ", next: " + next.name;
 				} else {

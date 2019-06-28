@@ -373,6 +373,11 @@ class RedditRadio
 		msg.channel.send("My code is on Github! :robot: https://github.com/codecat/reddit-radio");
 	}
 
+	onCmdDefqon(msg)
+	{
+		msg.channel.send("**All Defqon.1 2019 Stream information** can be found here: <https://www.reddit.com/r/hardstyle/comments/c6kfje/defqon1_2019_is_livestreamed_the_entire_weekend/>");
+	}
+
 	onCmdConnect(msg)
 	{
 		if (this.voice_connection !== false) {
