@@ -389,6 +389,11 @@ class RedditRadio
 		msg.channel.send("**If you're having trouble logging in to the Q-dance website**, try disabling your adblocker and/or switching to a different browser.");
 	}
 
+	onCmdRec(msg)
+	{
+		msg.channel.send("Yes, people are recording everything, including Q-dance.");
+	}
+
 	onCmdWeather(msg)
 	{
 		var url = "https://api.darksky.net/forecast/" + this.config.weather.apikey + "/" + this.config.weather.coords + "?units=auto";
@@ -399,8 +404,8 @@ class RedditRadio
 			res.on("end", () => {
 				try {
 					var obj = JSON.parse(data);
-					var ret = "**The weather at Defqon.1 is currently:**\n";
-					ret += "*" + obj.currently.summary + "* / **" + obj.currently.temperature + "\u2103** / " + Math.round(obj.currently.humidity * 100) + "% humidity\n";
+					var ret = "**The weather at Defqon.1 is currently:** (powered by darksky.net)\n";
+					ret += "*" + obj.currently.summary + "* / **" + obj.currently.temperature + "\u2103 (" + Math.round((obj.currently.temperature * 9/5) + 32) + "\u2109)** / " + Math.round(obj.currently.humidity * 100) + "% humidity\n";
 					ret += "UV index " + obj.currently.uvIndex + ", wind speed " + obj.currently.windSpeed + " m/s";
 					msg.channel.send(ret);
 				} catch (err) {
