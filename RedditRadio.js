@@ -3,6 +3,7 @@ var toml = require("toml");
 
 var process = require("process");
 var fs = require("fs");
+var https = require("https");
 
 var cmdsplit = require("./cmdsplit");
 var SongQueue = require("./SongQueue");
@@ -386,6 +387,28 @@ class RedditRadio
 	onCmdLogin(msg)
 	{
 		msg.channel.send("**If you're having trouble logging in to the Q-dance website**, try disabling your adblocker and/or switching to a different browser.");
+	}
+
+	onCmdWeather(msg)
+	{
+		var url = "https://api.darksky.net/forecast/" + this.config.weather.apikey + "/" + this.config.weather.coords + "?units=auto";
+		https.get(url, (res) => {
+			var data = "";
+			res.setEncoding("utf8");
+			res.on("data", function(chunk) { data += chunk; });
+			res.on("end", () => {
+				try {
+					var obj = JSON.parse(data);
+					var ret = "**The weather at Defqon.1 is currently:**\n";
+					ret += "*" + obj.currently.summary + "* / **" + obj.currently.temperature + "\u2103** / " + Math.round(obj.currently.humidity * 100) + "% humidity\n";
+					ret += "UV index " + obj.currently.uvIndex + ", wind speed " + obj.currently.windSpeed + " m/s";
+					msg.channel.send(ret);
+				} catch (err) {
+					msg.channel.send("I failed to get the weather... :sob:");
+					console.log(err);
+				}
+			});
+		});
 	}
 
 	onCmdConnect(msg)
