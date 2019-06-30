@@ -289,14 +289,10 @@ class RedditRadio
 		//console.log('[' + Date() + '] ' + msg.member.user.username + '#' + msg.member.user.discriminator + ' in #' + msg.channel.name + ': "' + msg.content + '"');
 
 		var emotes = msg.content.toLowerCase().match(/<a?:[^:]+:[0-9]+>/g);
-		if (emotes) {
-			if (emotes.length > 14) {
-				console.log("Deleted message from \"" + msg.member.user.username + "\" that contained " + emotes.length + " emotes");
-				msg.delete();
-				return;
-			} else {
-				console.log("Emotes from \"" + msg.member.user.username + "\": " + emotes.length);
-			}
+		if (emotes && emotes.length > 14) {
+			console.log("Deleted message from \"" + msg.member.user.username + "\" that contained " + emotes.length + " emotes");
+			msg.delete();
+			return;
 		}
 
 		for (var i = 0; i < this.events.length; i++) {
