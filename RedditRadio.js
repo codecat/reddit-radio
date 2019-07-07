@@ -23,6 +23,7 @@ class RedditRadio
 		this.client = new discord.Client();
 		this.client.on("ready", () => { this.onReady(); });
 		this.client.on("message", (msg) => { this.onMessage(msg); });
+		this.client.on("guildMemberAdd", (member) => { this.onMemberJoin(member); });
 
 		this.radios = [];
 
@@ -279,6 +280,14 @@ class RedditRadio
 
 		this.logChannel = this.client.channels.get(this.config.discord.logchannel);
 		//this.addLogMessage("Bot started!");
+	}
+
+	onMemberJoin(member)
+	{
+		if (member.user.username.match(/^[A-Z][a-z]+[a-f0-9]{4}$/)) {
+			console.log("!! Possible spambot joined: " + member);
+			this.addLogMessage("Possible spambot joined: " + member);
+		}
 	}
 
 	onMessage(msg)
