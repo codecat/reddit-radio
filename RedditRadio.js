@@ -149,6 +149,7 @@ class RedditRadio
 			text += " (via " + fromMember.user.username + ")";
 		}
 
+		console.log("Log: " + text);
 		this.logChannel.send(":robot: " + text);
 	}
 
@@ -290,9 +291,17 @@ class RedditRadio
 
 		var emotes = msg.content.toLowerCase().match(/<a?:[^:]+:[0-9]+>/g);
 		if (emotes && emotes.length > 14) {
-			console.log("Deleted message from \"" + msg.member.user.username + "\" that contained " + emotes.length + " emotes");
+			this.addLogMessage("Deleted message from " + msg.member + " that contained " + emotes.length + " emotes");
 			msg.delete();
 			return;
+		}
+
+		if (msg.content.toLowerCase().match(/(18\+|https?:\/\/)/)) {
+			if (msg.member.user.username.match(/[A-Z][a-z]+[a-f0-9]{4}/)) {
+				this.addLogMessage("Deleted **spam** from " + msg.member + " in " + msg.channel + ": `" + msg.content.replace('`', '\\`') + "`");
+				msg.delete();
+				return;
+			}
 		}
 
 		for (var i = 0; i < this.events.length; i++) {
