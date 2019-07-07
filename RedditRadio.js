@@ -283,6 +283,14 @@ class RedditRadio
 
 	onMessage(msg)
 	{
+		if (msg.content.toLowerCase().match(/(18\+|https?:\/\/)/)) {
+			if (msg.author.username.match(/^[A-Z][a-z]+[a-f0-9]{4}$/)) {
+				this.addLogMessage("Deleted **spam** from " + msg.author + " in " + msg.channel + ": `" + msg.content.replace('`', '\\`') + "`");
+				msg.delete();
+				return;
+			}
+		}
+
 		if (msg.member === null) {
 			return;
 		}
@@ -294,14 +302,6 @@ class RedditRadio
 			this.addLogMessage("Deleted message from " + msg.member + " that contained " + emotes.length + " emotes");
 			msg.delete();
 			return;
-		}
-
-		if (msg.content.toLowerCase().match(/(18\+|https?:\/\/)/)) {
-			if (msg.member.user.username.match(/^[A-Z][a-z]+[a-f0-9]{4}$/)) {
-				this.addLogMessage("Deleted **spam** from " + msg.member + " in " + msg.channel + ": `" + msg.content.replace('`', '\\`') + "`");
-				msg.delete();
-				return;
-			}
 		}
 
 		for (var i = 0; i < this.events.length; i++) {
