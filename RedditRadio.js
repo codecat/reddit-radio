@@ -35,7 +35,7 @@ class RedditRadio
 		this.twits = [];
 		this.loadTwitter();
 
-		this.locked = false;
+		this.locked = true;
 
 		this.voice_connection = false;
 		this.voice_dispatcher = false;
