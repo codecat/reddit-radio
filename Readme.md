@@ -19,7 +19,7 @@ It does:
 ## (Optional) How to run using Docker
 You can use Docker and a mounted volume to easily run Reddit Radio. 
 
-The Reddit Radio Docker image is publically available on Docker Hub and can be found [here](https://hub.docker.com/r/codecat/musicbot) and are automatically built each time a change is made to the master branch.
+The Reddit Radio Docker image is publically available on Docker Hub and can be found [here](https://hub.docker.com/r/codecat/reddit-radio) and are automatically built each time a change is made to the master branch.
 
 ### How to run using built image
 1. Create a folder where you'd like to run the docker image
