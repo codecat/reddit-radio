@@ -1,8 +1,4 @@
-var RedditRadio = require("./RedditRadio");
+var Startup = require("./Startup");
 
-var bot = new RedditRadio();
-bot.start();
-
-process.on("SIGINT", function() {
-	bot.stop();
-});
+let startup = new Startup();
+startup.run();
