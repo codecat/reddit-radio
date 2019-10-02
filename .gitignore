@@ -1,4 +1,5 @@
 # Internal
+config/
 config.toml
 local/
 commands/Livenp.js
