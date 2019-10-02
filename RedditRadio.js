@@ -1,5 +1,4 @@
 var discord = require("discord.js");
-var toml = require("toml");
 
 var process = require("process");
 var fs = require("fs");
