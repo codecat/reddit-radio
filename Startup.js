@@ -12,7 +12,7 @@ class Startup
         this.REGULAR_BOT = 'regular-bot';
 
         let configFile = process.env.CONFIG_FILE || "config.toml";
-		this.config = toml.parse(fs.readFileSync(configFile, "utf8"));
+        this.config = toml.parse(fs.readFileSync(configFile, "utf8"));
     }
 
     run()
