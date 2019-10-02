@@ -28,9 +28,7 @@ class Startup
     setupNoRadio()
     {
         let config = this.config;
-
         delete config.radios;
-        
         this.startBot(config);
     }
 
