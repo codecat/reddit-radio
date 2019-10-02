@@ -292,23 +292,39 @@ class RedditRadio
 
 	onMessage(msg)
 	{
-		if (msg.content.toLowerCase().match(/(18\+|https?:\/\/)/)) {
+		/*
+		if (msg.content.toLowerCase().match(/(18\+|sexy|naked photo)/)) {
 			if (msg.author.username.match(/^[A-Z][a-z]+[a-f0-9]{4}$/)) {
 				this.addLogMessage("Deleted **spam** from " + msg.author + " in " + msg.channel + ": `" + msg.content.replace('`', '\\`') + "`");
 				msg.delete();
 				return;
 			}
 		}
+		*/
 
+		// Ignore DM's or glitched members
 		if (msg.member === null) {
 			return;
 		}
 
-		//console.log('[' + Date() + '] ' + msg.member.user.username + '#' + msg.member.user.discriminator + ' in #' + msg.channel.name + ': "' + msg.content + '"');
+		// Ignore our own messages
+		if (msg.member.user == this.client.user) {
+			return;
+		}
+
+		if (!this.isMod(msg.member)) {
+			if (msg.content.toLowerCase().match(/(kanker|1gabba|discord\.gg|discordapp\.com\/invite)/)) {
+				this.addLogMessage("Deleted unwanted message from " + msg.author + " in " + msg.channel + ": `" + msg.content.replace('`', '\\`') + "`");
+				msg.delete();
+				return;
+			}
+		}
+
+		console.log('[' + Date() + '] ' + msg.member.user.username + '#' + msg.member.user.discriminator + ' in #' + msg.channel.name + ': "' + msg.content + '"');
 
 		var emotes = msg.content.toLowerCase().match(/<a?:[^:]+:[0-9]+>/g);
 		if (emotes && emotes.length > 14) {
-			this.addLogMessage("Deleted message from " + msg.member + " that contained " + emotes.length + " emotes");
+			this.addLogMessage("Deleted message from " + msg.member + " in " + msg.channel + " that contained " + emotes.length + " emotes");
 			msg.delete();
 			return;
 		}
@@ -326,7 +342,7 @@ class RedditRadio
 		}
 
 		if (msg.content.toLowerCase() == "bad bot") {
-			msg.channel.send("I'm sorry :sob: If I did something wrong, you can report a bug! https://github.com/codecat/reddit-radio/issues");
+			msg.channel.send("I'm sorry :sob: If I did something wrong, you can report a bug! <https://github.com/codecat/reddit-radio/issues>");
 			return;
 		}
 
