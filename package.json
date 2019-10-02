@@ -13,7 +13,7 @@
     "uws": "^9.148.0",
     "youtube-search": "^1.1.4",
     "ytdl": "^0.11.1",
-    "ytdl-core": "^0.29.2"
+    "ytdl-core": "^0.29.5"
   },
   "devDependencies": {},
   "author": "Codecat"
