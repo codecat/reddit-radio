@@ -16,8 +16,8 @@ class RedditRadio
 {
 	constructor()
 	{
-		this.config = toml.parse(fs.readFileSync("config.toml", "utf8"));
-
+        let configFile = process.env.CONFIG_FILE || "config.toml";
+		this.config = toml.parse(fs.readFileSync(configFile, "utf8"));
 		this.loadCache();
 
 		this.client = new discord.Client();
