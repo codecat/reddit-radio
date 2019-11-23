@@ -159,24 +159,12 @@ class RedditRadio
 
 	isAdmin(member)
 	{
-		for (var roleID of member.roles.keys()) {
-			var role = member.roles.get(roleID);
-			if (role.hasPermission("ADMINISTRATOR")) {
-				return true;
-			}
-		}
-		return false;
+		return member.hasPermission("ADMINISTRATOR");
 	}
 
 	isMod(member)
 	{
-		for (var roleID of member.roles.keys()) {
-			var role = member.roles.get(roleID);
-			if (role.hasPermission("MANAGE_MESSAGES")) {
-				return true;
-			}
-		}
-		return false;
+		return member.hasPermission("MANAGE_MESSAGES");
 	}
 
 	onTick()
@@ -368,6 +356,28 @@ class RedditRadio
 			member.addRole(mutedRole);
 
 			this.addLogMessage("Muted " + member.user.username, msg.member);
+		}
+
+		msg.delete();
+	}
+
+	onCmdUnmute(msg)
+	{
+		if (!this.isMod(msg.member)) {
+			return;
+		}
+
+		var mutedRole = msg.guild.roles.find(val => val.name == "Chat mute");
+		if (!mutedRole) {
+			console.error("Couldn't find \"Chat mute\" role!");
+			return;
+		}
+
+		for (var memberID of msg.mentions.members.keys()) {
+			var member = msg.mentions.members.get(memberID);
+			member.removeRole(mutedRole);
+
+			this.addLogMessage("Unmuted " + member.user.username, msg.member);
 		}
 
 		msg.delete();
