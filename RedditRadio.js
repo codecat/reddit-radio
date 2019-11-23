@@ -1,5 +1,4 @@
 var discord = require("discord.js");
-var toml = require("toml");
 
 var process = require("process");
 var fs = require("fs");
@@ -13,10 +12,9 @@ var EventImpromptu = require("./EventImpromptu");
 
 class RedditRadio
 {
-	constructor()
+	constructor(config)
 	{
-		let configFile = process.env.CONFIG_FILE || "config.toml";
-		this.config = toml.parse(fs.readFileSync(configFile, "utf8"));
+		this.config = config;
 		this.loadCache();
 
 		this.client = new discord.Client();

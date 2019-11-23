@@ -14,5 +14,10 @@
     "moment": "^2.24.0"
   },
   "devDependencies": {},
+  "scripts": {
+    "start": "node index.js",
+    "radio": "node index.js --radio",
+    "no-radio": "node index.js --no-radios"
+  },
   "author": "Codecat"
 }
