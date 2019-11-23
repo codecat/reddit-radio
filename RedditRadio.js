@@ -6,7 +6,6 @@ var fs = require("fs");
 var https = require("https");
 
 var cmdsplit = require("./cmdsplit");
-var SongQueue = require("./SongQueue");
 var Radio = require("./Radio");
 var Twit = require("./Twit");
 var EventSchedule = require("./EventSchedule");
@@ -26,19 +25,10 @@ class RedditRadio
 		this.client.on("guildMemberAdd", (member) => { this.onMemberJoin(member); });
 
 		this.radios = [];
-
-		this.queue = new SongQueue(this.config);
-		this.current_song = false;
-
 		this.events = [];
 
 		this.twits = [];
 		this.loadTwitter();
-
-		this.locked = true;
-
-		this.voice_connection = false;
-		this.voice_dispatcher = false;
 
 		this.commands = [];
 		this.loadConfigCommands();
@@ -189,79 +179,8 @@ class RedditRadio
 		return false;
 	}
 
-	isDJ(member)
-	{
-		if (this.isMod(member)) {
-			return true;
-		}
-
-		for (var roleID of member.roles.keys()) {
-			var role = member.roles.get(roleID);
-			if (role.name == "Jukebox DJ") {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	onTick()
 	{
-		if (this.voice_dispatcher === false) {
-			while (true) {
-				this.current_song = this.queue.next();
-				if (this.current_song === null || this.current_song.valid) {
-					break;
-				}
-				if (!this.current_song.valid) {
-					console.log("Current song is invalid!", this.current_song);
-				}
-			}
-			if (this.current_song !== null) {
-				if (this.voice_connection === false) {
-					console.log("Voice connection was false, destroying dispatcher!");
-					if (this.voice_dispatcher !== false) {
-						this.voice_dispatcher.destroy();
-						this.voice_dispatcher = false;
-					}
-					return;
-				}
-				this.voice_dispatcher = this.voice_connection.playArbitraryInput(this.current_song.stream, this.config.voice);
-				this.setStatusText(this.current_song.title);
-
-				this.voice_connection.on("error", (error) => {
-					console.log("Stream error: " + error);
-					if (this.current_song) {
-						if (this.current_song.live) {
-							console.log("LIVESTREAM ERROR, REJUKING!!");
-							this.queue.insert(this.current_song.url, (song) => {
-								if (song === false) {
-									console.log("Couldn't restart stream!");
-									return;
-								}
-								console.log("Restarted stream! :D");
-							});
-						}
-					} else {
-						console.log("No current_song..");
-					}
-				});
-				this.voice_dispatcher.on("end", (reason) => {
-					console.log("Stream ended: " + reason);
-					this.voice_dispatcher = false;
-					if (this.current_song) {
-						if (this.current_song.live) {
-							console.log("LIVESTREAM END!!");
-							return;
-						}
-					} else {
-						console.log("No current_song in end..");
-					}
-					this.current_song = false;
-					this.resetStatusText();
-				});
-			}
-		}
-
 		for (var i = 0; i < this.twits.length; i++) {
 			this.twits[i].onTick();
 		}
@@ -284,24 +203,16 @@ class RedditRadio
 
 	onMemberJoin(member)
 	{
+		/*
 		if (member.user.username.match(/^[A-Z][a-z]+[a-f0-9]{4}$/)) {
 			console.log("!! Possible spambot joined: " + member);
 			this.addLogMessage("Possible spambot joined: " + member);
 		}
+		*/
 	}
 
 	onMessage(msg)
 	{
-		/*
-		if (msg.content.toLowerCase().match(/(18\+|sexy|naked photo)/)) {
-			if (msg.author.username.match(/^[A-Z][a-z]+[a-f0-9]{4}$/)) {
-				this.addLogMessage("Deleted **spam** from " + msg.author + " in " + msg.channel + ": `" + msg.content.replace('`', '\\`') + "`");
-				msg.delete();
-				return;
-			}
-		}
-		*/
-
 		// Ignore DM's or glitched members
 		if (msg.member === null) {
 			return;
@@ -317,7 +228,7 @@ class RedditRadio
 		// Delete unwanted messages only if not a moderator
 		if (!this.isMod(msg.member)) {
 			// Delete unwanted messages
-			if (msg.content.toLowerCase().match(this.config.filter.badwords)) {
+			if (this.config.filter && msg.content.toLowerCase().match(this.config.filter.badwords)) {
 				this.addLogMessage("Deleted unwanted message from " + msg.author + " in " + msg.channel + ": `" + msg.content.replace('`', '\\`') + "`");
 				msg.delete();
 				msg.author.send("Your recent message has been automatically deleted. Please take another look at the rules in #info. We automatically delete messages for things like piracy and advertising.");
@@ -355,17 +266,17 @@ class RedditRadio
 		}
 
 		if (msg.content.toLowerCase() == "good bot") {
-			msg.channel.send("Thanks");
+			msg.channel.send(msg.member + " Thanks");
 			return;
 		}
 
 		if (msg.content.toLowerCase() == "bad bot") {
-			msg.channel.send("I'm sorry :sob: If I did something wrong, you can report a bug! <https://github.com/codecat/reddit-radio/issues>");
+			msg.channel.send(msg.member + " I'm sorry :sob: If I did something wrong, you can report a bug! <https://github.com/codecat/reddit-radio/issues>");
 			return;
 		}
 
 		if (msg.content.toLowerCase().indexOf("am i the only one") != -1 && msg.member !== null) {
-			msg.channel.send("<@" + msg.member.id + "> Probably not.");
+			msg.channel.send(msg.member + " Probably not.");
 			return;
 		}
 
@@ -411,31 +322,14 @@ class RedditRadio
 		console.log("Unknown command: \"" + cmdName + "\"");
 	}
 
-	onSongAdded(msg, song, now)
-	{
-		if (song === false) {
-			msg.channel.send("I can't play that URL, sorry... :sob:");
-			return;
-		}
-		var songInfo = this.getTrackInfoText(song);
-		if (now) {
-			msg.channel.send("Okay, I'm gonna play it right now! " + songInfo);
-			if (this.voice_dispatcher) {
-				this.voice_dispatcher.end();
-			}
-		} else {
-			msg.channel.send("Okay, I added it to the jukebox! " + songInfo);
-		}
-	}
-
 	onCmdGithub(msg)
 	{
 		msg.channel.send("My code is on Github! :robot: https://github.com/codecat/reddit-radio");
 	}
 
+	/*
 	onCmdWeather(msg)
 	{
-		/*
 		var url = "https://api.darksky.net/forecast/" + this.config.weather.apikey + "/" + this.config.weather.coords + "?units=auto";
 		https.get(url, (res) => {
 			var data = "";
@@ -454,296 +348,8 @@ class RedditRadio
 				}
 			});
 		});
-		*/
 	}
-
-	onCmdConnect(msg)
-	{
-		if (this.voice_connection !== false) {
-			msg.channel.send("I am already in a voice channel. :thinking:");
-			return;
-		}
-
-		if (!msg.member.voiceChannel) {
-			msg.channel.send("You need to be in a voice channel. :frowning2:");
-			return;
-		}
-
-		msg.member.voiceChannel.join().then((conn) => {
-			this.voice_connection = conn;
-			this.voice_connection.on("disconnect", () => {
-				this.voice_connection = false;
-				console.log("Disconnected from voice chat!");
-			});
-			console.log("Connected to voice chat!");
-
-			msg.channel.send("Hello! :wave:");
-		});
-	}
-
-	onCmdDisconnect(msg)
-	{
-		if (this.voice_connection === false) {
-			msg.channel.send("I'm not in a voice channel. :thinking:");
-			return;
-		}
-
-		if (this.isDJ(msg.member)) {
-			msg.channel.send("DJ told me to leave. :ok_hand:");
-			this.voice_connection.disconnect();
-			return;
-		}
-
-		if (this.locked) {
-			msg.channel.send("I'm locked.. :flushed:");
-			return;
-		}
-
-		if (this.voice_connection.channel.members.get(msg.member.id) === undefined) {
-			msg.channel.send("You are not in my voice channel. :rolling_eyes:");
-			return;
-		}
-
-		if (this.voice_dispatcher !== false && this.voice_connection.channel.members.length > 3) {
-			msg.channel.send("I don't want to leave yet! :flushed:");
-			return;
-		}
-
-		msg.channel.send("Bye! :wave:");
-		this.voice_connection.disconnect();
-	}
-
-	onCmdLock(msg)
-	{
-		if (!this.isMod(msg.member) && !this.isDJ(msg.member)) {
-			msg.channel.send("You're not a mod though.. :flushed:");
-			return;
-		}
-
-		if (this.locked) {
-			msg.channel.send("Jukebox is already locked! :lock:");
-			return;
-		}
-
-		this.locked = true;
-		msg.channel.send("Jukebox is now locked. **I will only listen to DJ's and mods!** :lock:");
-	}
-
-	onCmdUnlock(msg)
-	{
-		if (!this.isMod(msg.member) && !this.isDJ(msg.member)) {
-			msg.channel.send("You're not a mod though.. :flushed:");
-			return;
-		}
-
-		if (!this.locked) {
-			msg.channel.send("Jukebox is not locked right now! :unlock:");
-			return;
-		}
-
-		this.locked = false;
-		msg.channel.send("Jukebox is now unlocked. :unlock:");
-	}
-
-	onCmdPlay(msg)
-	{
-		if (!msg.member) {
-			msg.channel.send("Slipping into the DM's, are we? :smirk:");
-			return;
-		}
-
-		if (this.locked && !this.isDJ(msg.member)) {
-			msg.channel.send("I'm locked.. :flushed:");
-			return;
-		}
-
-		var args = Array.from(arguments);
-		args.shift();
-		var query = args.join(" ");
-
-		if (query == "") {
-			msg.channel.send("You have to give me a URL, otherwise I don't know what to play. :sob:");
-			return;
-		}
-
-		if (this.voice_connection === false) {
-			if (!msg.member.voiceChannel) {
-				msg.channel.send("You need to be in a voice channel. :frowning2:");
-				return;
-			}
-
-			msg.member.voiceChannel.join().then((conn) => {
-				this.voice_connection = conn;
-				this.voice_connection.on("disconnect", () => {
-					this.voice_connection = false;
-					console.log("Disconnected from voice chat!");
-				});
-				console.log("Connected to voice chat!");
-
-				msg.channel.send("Hello! :wave:");
-
-				this.queue.add(query, (song) => { this.onSongAdded(msg, song, false); });
-			});
-			return;
-		}
-
-		this.queue.add(query, (song) => { this.onSongAdded(msg, song, false); });
-	}
-
-	onCmdPlayNow(msg, url)
-	{
-		if (!this.isDJ(msg.member)) {
-			msg.channel.send("Only a DJ can use this command.. :flushed:");
-			return;
-		}
-
-		if (url === undefined) {
-			msg.channel.send("You have to give me a URL, otherwise I don't know what to play. :sob:");
-			return;
-		}
-
-		var args = Array.from(arguments);
-		args.shift();
-		var query = args.join(' ');
-
-		if (this.voice_connection === false) {
-			if (!msg.member.voiceChannel) {
-				msg.channel.send("You need to be in a voice channel. :frowning2:");
-				return;
-			}
-
-			msg.member.voiceChannel.join().then((conn) => {
-				this.voice_connection = conn;
-				this.voice_connection.on("disconnect", () => {
-					this.voice_connection = false;
-					console.log("Disconnected from voice chat!");
-				});
-				console.log("Connected to voice chat!");
-
-				msg.channel.send("Hello! :wave:");
-
-				this.queue.add(query, (song) => { this.onSongAdded(msg, song, false); });
-			});
-			return;
-		}
-
-		this.queue.insert(query, (song) => { this.onSongAdded(msg, song, true); });
-	}
-
-	onCmdPause(msg)
-	{
-		if (this.locked && !this.isDJ(msg.member)) {
-			msg.channel.send("I'm locked.. :flushed:");
-			return;
-		}
-
-		if (this.voice_dispatcher === false) {
-			msg.channel.send("I'm not playing anything right now. :thinking:");
-			return;
-		}
-
-		this.voice_dispatcher.pause();
-		msg.channel.send("Paused! :pause_button:");
-	}
-
-	onCmdResume(msg)
-	{
-		if (this.locked && !this.isDJ(msg.member)) {
-			msg.channel.send("I'm locked.. :flushed:");
-			return;
-		}
-
-		if (this.voice_dispatcher === false) {
-			msg.channel.send("I wasn't playing anything right now. :thinking:");
-			return;
-		}
-
-		this.voice_dispatcher.resume();
-		msg.channel.send("Resuming! :play_pause:");
-	}
-
-	onCmdSkip(msg)
-	{
-		if (this.voice_dispatcher === false) {
-			msg.channel.send("I'm not playing anything right now. :thinking:");
-			return;
-		}
-
-		if (this.queue.length() == 0) {
-			this.voice_dispatcher.end();
-			msg.channel.send("That's all, folks! <:headygasm:330120648309342210>");
-			return;
-		}
-
-		if (this.isDJ(msg.member)) {
-			msg.channel.send("DJ told me to skip this track! :ok_hand:\nNow: " + this.getTrackInfoText(this.queue.list[0]));
-			this.voice_dispatcher.end();
-			return;
-		}
-
-		if (this.locked) {
-			msg.channel.send("I'm locked.. :flushed:");
-			return;
-		}
-
-		if (this.voice_connection.channel.members.length <= 3) {
-			msg.channel.send("Skipping! :track_next:");
-			this.voice_dispatcher.end();
-			return;
-		}
-
-		msg.channel.send("I don't want to skip yet! :flushed:");
-	}
-
-	onCmdQueue(msg)
-	{
-		if (this.queue.length() == 0) {
-			msg.channel.send("The jukebox queue is empty. :sob:");
-			return;
-		}
-
-		var ret = "Next up:\n";
-		for (var i = 0; i < this.queue.list.length; i++) {
-			var song = this.queue.list[i];
-			var add = (i + 1) + ". ";
-			add += this.getTrackInfoText(song);
-			add += "\n";
-			if (ret.length + add.length > 1800) {
-				ret += (this.queue.list.length - i) + " more...";
-				break;
-			}
-			ret += add;
-		}
-
-		msg.channel.send(ret);
-	}
-
-	onCmdClearQueue(msg)
-	{
-		if (this.queue.length() == 0) {
-			msg.channel.send("Queue is already empty. :shrug:");
-			return;
-		}
-
-		if (this.isDJ(msg.member)) {
-			this.queue.clear();
-			msg.channel.send("DL told me to clear the queue! :ok_hand:");
-			return;
-		}
-
-		if (this.locked) {
-			msg.channel.send("I'm locked.. :flushed:");
-			return;
-		}
-
-		if (this.voice_connection.channel.members.length <= 3) {
-			this.queue.clear();
-			msg.channel.send("Cleared the queue!");
-			return;
-		}
-
-		msg.channel.send("I don't want to clear the queue right now! :flushed:");
-	}
+	*/
 
 	onCmdMute(msg)
 	{
@@ -767,18 +373,6 @@ class RedditRadio
 		msg.delete();
 	}
 
-	getEmoji(source)
-	{
-		switch (source) {
-			case "youtube": return this.config.emoji.youtube;
-			case "soundcloud": return this.config.emoji.soundcloud;
-			case "facebook": return this.config.emoji.facebook;
-			case "periscope": return this.config.emoji.periscope;
-			case "mixcloud": return this.config.emoji.mixcloud;
-		}
-		return ":musical_note:";
-	}
-
 	formatMilliseconds(ms)
 	{
 		var sec = Math.floor(ms / 1000);
@@ -796,41 +390,6 @@ class RedditRadio
 		}
 		ret += secs + "s";
 		return ret;
-	}
-
-	getTrackInfoText(song)
-	{
-		var emoji = this.getEmoji(song.source);
-		if (song.live) {
-			emoji += ":red_circle:";
-		}
-
-		var text = emoji + " **" + song.title + "**";
-
-		if (song.duration > 0) {
-			text += " (" + this.formatMilliseconds(song.duration) + ")";
-		}
-
-		return text;
-	}
-
-	onCmdNp(msg)
-	{
-		if (!this.current_song) {
-			msg.channel.send("I'm not playing anything right now. :thinking:");
-			return;
-		}
-
-		var prefix = "";
-		if (this.current_song.live) {
-			prefix = "Now **livestreaming**:";
-		} else {
-			prefix = "Now playing:";
-		}
-
-		var text = prefix + " " + this.getTrackInfoText(this.current_song);
-
-		msg.channel.send(text);
 	}
 
 	onCmdTime(msg)
