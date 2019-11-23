@@ -3,7 +3,7 @@
 		"stage": "mainstage",
 		"channel": "319525278978277407",
 		"emoji": "<:qlimax:438815681706721281>",
-		"url": "https://www.q-dance.com/en/",
+		"url": "https://www.q-dance.com/en/events/qlimax/qlimax-2019/live",
 		"unconfirmed": true,
 		"streamdelay": 0,
 		"sets": [
@@ -21,7 +21,7 @@
 			[ 2019, 11, 24, 7, 0 ]
 		],
 		"responses": {
-			"^\\.(url|stream|link|watch)$": ":tv: Watch the livestream here: **<https://www.q-dance.com/en/>** (Note: This is a paid premium livestream!)",
+			"^\\.(url|stream|link|watch)$": ":tv: Watch the livestream here: **<https://www.q-dance.com/en/events/qlimax/qlimax-2019/live>** (Note: This is a paid premium livestream!)",
 			"^\\.(mc|host)$": ":microphone: The MC is **Villan**, and **Nolz** for the final 2 sets",
 			"^\\.restream$": "The Qlimax stream is a **premium** livestream. As such, we consider all unofficial free re-streams as piracy. Do not post or ask for restreams.",
 			"^\\.qreator$": "It is not confirmed yet who *The Qreator* is. Rumors are it's Prophet or Zany."
