@@ -6,7 +6,6 @@ var https = require("https");
 
 var cmdsplit = require("./cmdsplit");
 var Radio = require("./Radio");
-var Twit = require("./Twit");
 var EventSchedule = require("./EventSchedule");
 var EventImpromptu = require("./EventImpromptu");
 
@@ -24,9 +23,6 @@ class RedditRadio
 
 		this.radios = [];
 		this.events = [];
-
-		this.twits = [];
-		this.loadTwitter();
 
 		this.commands = [];
 		this.loadConfigCommands();
@@ -60,17 +56,6 @@ class RedditRadio
 			} else {
 				this.events.push(new EventSchedule(event, this.client));
 			}
-		}
-	}
-
-	loadTwitter()
-	{
-		if (this.config.twits === undefined) {
-			return;
-		}
-
-		for (var i = 0; i < this.config.twits.length; i++) {
-			this.twits.push(new Twit(this.config.twitter, this.config.twits[i], this.client));
 		}
 	}
 
@@ -167,10 +152,6 @@ class RedditRadio
 
 	onTick()
 	{
-		for (var i = 0; i < this.twits.length; i++) {
-			this.twits[i].onTick();
-		}
-
 		for (var i = 0; i < this.events.length; i++) {
 			this.events[i].onTick();
 		}
