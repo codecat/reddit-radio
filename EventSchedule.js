@@ -278,7 +278,7 @@ class EventSchedule
 					if (lines == 0) {
 						msg.channel.send("We have nothing left! :frowning:");
 					} else {
-						msg.channel.send(":calendar_spiral: Next 5 sets are: (use `.time` for current local time)\n" + ret.trim());
+						msg.channel.send(":calendar_spiral: Next 5 sets are: (the local time is **" + this.getTimeString(moment()) + "**)\n" + ret.trim());
 					}
 					return true;
 				}
