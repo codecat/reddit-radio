@@ -1,4 +1,5 @@
 var fs = require("fs");
+var moment = require("moment");
 
 var cmdsplit = require("./cmdsplit");
 
@@ -21,9 +22,6 @@ class EventSchedule
 	{
 		this.schedule = JSON.parse(fs.readFileSync(filename));
 
-		var date = new Date();
-		var dateIn5Minutes = new Date(date.getTime() + (1000 * 300));
-
 		for (var i = 0; i < this.schedule.length; i++) {
 			let stage = this.schedule[i];
 
@@ -33,20 +31,33 @@ class EventSchedule
 				console.log("WARNING: Couldn't find channel!");
 			}
 
+			var newResponses = [];
+			for (var expression in stage.responses) {
+				let newResponse = {
+					match: new RegExp(expression, "i"),
+					msg: stage.responses[expression]
+				};
+				newResponses.push(newResponse);
+			}
+			stage.responses = newResponses;
+			console.log(stage.responses);
+
 			stage.channelExtra = null;
 			if (stage.extra_channel !== undefined) {
 				stage.channelExtra = this.client.channels.get(stage.extra_channel);
 			}
 
+			var streamDelay = stage.streamdelay;
+
 			for (var j = 0; j < stage.sets.length; j++) {
 				var set = stage.sets[j];
 
-				var setDate = new Date(set[0], set[1] - 1, set[2], set[3], set[4]);
+				var setDate = moment(set.slice(0, 5)).add(streamDelay, 'm');
 				var newSet = {
 					date: setDate,
 					name: set[5],
-					report: date > setDate,
-					report_5min: dateIn5Minutes > setDate,
+					report: moment() > setDate,
+					report_5min: moment().add(5, 'm') > setDate,
 					nothing: (set[5] === undefined || set[5] == "Nothing")
 				};
 
@@ -142,8 +153,7 @@ class EventSchedule
 
 	onTick()
 	{
-		var date = new Date();
-		var dateIn5Minutes = new Date(date.getTime() + (1000 * 300));
+		var date = moment();
 
 		for (var i = 0; i < this.schedule.length; i++) {
 			var stage = this.schedule[i];
@@ -163,7 +173,7 @@ class EventSchedule
 						console.log("Stream is not live anymore.");
 						var next = this.getNextSet(stage);
 						if (next !== null && !next.nothing) {
-							var msg = ":no_entry_sign: Stream is no longer live. Next set it on " + this.getWeekDay(next.date.getDay()) + " at **" + this.getTimeString(next.date) + "**!";
+							var msg = ":no_entry_sign: Stream is no longer live. Next set it on " + this.getWeekDay(next.date.day()) + " at **" + this.getTimeString(next.date) + "**!";
 							stage.channel.send(msg);
 							if (stage.channelExtra) {
 								stage.channelExtra.send(msg);
@@ -182,7 +192,7 @@ class EventSchedule
 
 			var next = this.getNextSet(stage);
 			if (next !== null && !next.nothing) {
-				if (dateIn5Minutes > next.date && !next.report_5min) {
+				if (date.add(5, 'm') > next.date && !next.report_5min) {
 					next.report_5min = true;
 					console.log("Starting in 5 minutes: " + next.name);
 					var msg = ":warning: **" + next.name + "** starts in 5 minutes!";
@@ -197,17 +207,21 @@ class EventSchedule
 
 	onMessage(msg)
 	{
-		if (!msg.content.startsWith(".")) {
-			return false;
-		}
+		var isCommand = msg.content.startsWith(".");
 
-		var parse = cmdsplit(msg.content);
+		var parse = [];
+		if (isCommand) {
+			parse = cmdsplit(msg.content);
+		}
 
 		for (var i = 0; i < this.schedule.length; i++) {
 			var stage = this.schedule[i];
+			if (stage.channel != msg.channel) {
+				continue;
+			}
 
-			if (stage.channel == msg.channel) {
-				if (parse[0] == ".np" || parse[0] == ".current" || parse[0] == ".now" || parse[0] == ".nu" || parse[0] == ".momenteel") {
+			if (isCommand) {
+				if (parse[0] == ".np" || parse[0] == ".current" || parse[0] == ".now") {
 					var current = this.getCurrentSet(stage);
 					if (current !== null && !current.nothing) {
 						var localTime = this.getTimeString(current.date);
@@ -218,23 +232,18 @@ class EventSchedule
 					return true;
 				}
 
-				if (parse[0] == ".next" || parse[0] == ".volgende") {
+				if (parse[0] == ".next") {
 					var next = this.getNextSet(stage);
 					if (next !== null) {
 						var localTime = this.getTimeString(next.date);
-						msg.channel.send(":soon: Next up: **" + next.name + "**, at **" + localTime + "**!");
+						msg.channel.send(":arrow_forward: Next up: **" + next.name + "**, at **" + localTime + "**!");
 					} else {
 						msg.channel.send(":robot: There's nothing playing next.");
 					}
 					return true;
 				}
 
-				if (parse[0] == ".mc" || parse[0] == ".host") {
-					msg.channel.send(":microphone: The MC is: **" + stage.mc + "**");
-					return true;
-				}
-
-				if (parse[0] == ".schedule" || parse[0] == ".programma" || parse[0] == ".sched") {
+				if (parse[0] == ".schedule" || parse[0] == ".timetable" || parse[0] == ".sched") {
 					var ret = "";
 
 					var date = new Date();
@@ -248,9 +257,9 @@ class EventSchedule
 
 						var localTime = this.getTimeString(set.date);
 						if (set.nothing) {
-							ret += "- " + this.getWeekDay(set.date.getDay()) + " **" + localTime + "**, the stream will be offline :no_entry_sign:\n";
+							ret += "- " + this.getWeekDay(set.date.day()) + " **" + localTime + "**, the stream will be offline :no_entry_sign:\n";
 						} else {
-							ret += "- " + this.getWeekDay(set.date.getDay()) + " **" + localTime + "**: **" + set.name + "**\n";
+							ret += "- " + this.getWeekDay(set.date.day()) + " **" + localTime + "**: **" + set.name + "**\n";
 						}
 
 						if (lines++ == 5) {
@@ -265,25 +274,22 @@ class EventSchedule
 					}
 					return true;
 				}
+			}
 
-				if (parse[0] == ".stream" || parse[0] == ".link" || parse[0] == ".url") {
-					msg.channel.send(":link: Stream link: <" + stage.url + ">");
-					return true;
-				}
-
-				var matchNumber = parse[0].match(/^\.([0-9]+)$/);
-				if (matchNumber) {
-					var index = matchNumber[1];
-					if (index > 0 && index <= stage.faq.length) {
-						var faq = stage.faq[index - 1];
-						msg.channel.send(":information_source: " + faq);
-						return true;
+			for (var j = 0; j < stage.responses.length; j++) {
+				var r = stage.responses[j];
+				var match = msg.content.match(r.match);
+				if (match) {
+					var sendMessage = r.msg;
+					for (var k = 0; k < match.length; k++) {
+						sendMessage = sendMessage.replace("$" + k, match[k]);
 					}
+					msg.channel.send(sendMessage);
 				}
 			}
 		}
 
-		if (parse[0] == ".find" && parse.length > 1) {
+		if (isCommand && parse[0] == ".find" && parse.length > 1) {
 			var query = parse.slice(1).join(" ").trim();
 			if (query.length < 2) {
 				return false;
@@ -305,7 +311,7 @@ class EventSchedule
 				for (var i = 0; i < results.length; i++) {
 					var res = results[i];
 
-					var weekDay = this.getWeekDay(res.set.date.getDay());
+					var weekDay = this.getWeekDay(res.set.date.day());
 					var localTime = this.getTimeString(res.set.date);
 
 					if (date > res.date) {
@@ -320,7 +326,7 @@ class EventSchedule
 			return true;
 		}
 
-		if (parse[0] == ".schedule" || parse[0] == ".programma" || parse[0] == ".sched" || parse[0] == ".current" || parse[0] == ".now") {
+		if (isCommand && this.schedule.length > 1 && (parse[0] == ".schedule" || parse[0] == ".timetable" || parse[0] == ".sched" || parse[0] == ".current" || parse[0] == ".now")) {
 			// Avoid spamming long .now message when jokers spam .now
 			var now = new Date();
 			if ((now - this.lastNow) < 60 * 1000) {
@@ -335,7 +341,7 @@ class EventSchedule
 				var current = this.getCurrentSet(stage);
 				var next = this.getNextSet(stage);
 
-				if (current === null && next !== null && next.date.getDate() != now.getDate()) {
+				if (current === null && next !== null && next.date.date() != now.date()) {
 					continue;
 				}
 
@@ -376,10 +382,10 @@ class EventSchedule
 
 	getTimeString(date)
 	{
-		var ret = date.getHours();
+		var ret = date.hour();
 		ret += ":";
 
-		var mins = date.getMinutes();
+		var mins = date.minute();
 		if (mins < 10) {
 			ret += "0";
 		}

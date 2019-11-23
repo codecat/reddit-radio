@@ -5,11 +5,13 @@
   "main": "index.js",
   "dependencies": {
     "discord.js": "^11.5.1",
+    "@discordjs/uws": "^10.149.0",
     "follow-redirects": "^1.9.0",
     "node-opus": "^0.3.3",
     "sodium": "^2.0.3",
     "toml": "^3.0.0",
-    "twitter": "^1.7.1"
+    "twitter": "^1.7.1",
+    "moment": "^2.24.0"
   },
   "devDependencies": {},
   "author": "Codecat"
