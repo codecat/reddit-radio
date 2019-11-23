@@ -40,7 +40,6 @@ class EventSchedule
 				newResponses.push(newResponse);
 			}
 			stage.responses = newResponses;
-			console.log(stage.responses);
 
 			stage.channelExtra = null;
 			if (stage.extra_channel !== undefined) {
@@ -51,8 +50,10 @@ class EventSchedule
 
 			for (var j = 0; j < stage.sets.length; j++) {
 				var set = stage.sets[j];
+				var dateArray = set.slice(0, 5);
+				dateArray[1] -= 1; // months are 0-indexed, for some reason. even in the moment library!
 
-				var setDate = moment(set.slice(0, 5)).add(streamDelay, 'm');
+				var setDate = moment(dateArray).add(streamDelay, 'm');
 				var newSet = {
 					date: setDate,
 					name: set[5],
@@ -224,10 +225,9 @@ class EventSchedule
 				if (parse[0] == ".np" || parse[0] == ".current" || parse[0] == ".now") {
 					var current = this.getCurrentSet(stage);
 					if (current !== null && !current.nothing) {
-						var localTime = this.getTimeString(current.date);
-						msg.channel.send(":red_circle: Now playing: **" + current.name + "**, started at **" + localTime + "**!");
+						msg.channel.send(":red_circle: Now playing: **" + current.name + "**, started " + current.date.fromNow() + "!");
 					} else {
-						msg.channel.send(":robot: Nobody's playing right now.");
+						msg.channel.send("Nobody's playing right now.");
 					}
 					return true;
 				}
@@ -235,16 +235,22 @@ class EventSchedule
 				if (parse[0] == ".next") {
 					var next = this.getNextSet(stage);
 					if (next !== null) {
-						var localTime = this.getTimeString(next.date);
-						msg.channel.send(":arrow_forward: Next up: **" + next.name + "**, at **" + localTime + "**!");
+						var localTime = "**" + this.getTimeString(next.date) + "**";
+						localTime += " (" + next.date.fromNow() + ")";
+
+						msg.channel.send(":arrow_forward: Next up: **" + next.name + "**, at " + localTime);
 					} else {
-						msg.channel.send(":robot: There's nothing playing next.");
+						msg.channel.send("There's nothing playing next.");
 					}
 					return true;
 				}
 
 				if (parse[0] == ".schedule" || parse[0] == ".timetable" || parse[0] == ".sched") {
 					var ret = "";
+
+					if (stage.unconfirmed) {
+						ret = ":warning: **Note:** Set times are not confirmed!\n";
+					}
 
 					var date = new Date();
 
@@ -255,11 +261,13 @@ class EventSchedule
 							continue;
 						}
 
-						var localTime = this.getTimeString(set.date);
+						var localTime = "**" + this.getTimeString(set.date) + "**";
+						localTime += " (" + set.date.fromNow() + ")";
+
 						if (set.nothing) {
-							ret += "- " + this.getWeekDay(set.date.day()) + " **" + localTime + "**, the stream will be offline :no_entry_sign:\n";
+							ret += "- " + this.getWeekDay(set.date.day()) + " " + localTime + ", the stream will be offline :no_entry_sign:\n";
 						} else {
-							ret += "- " + this.getWeekDay(set.date.day()) + " **" + localTime + "**: **" + set.name + "**\n";
+							ret += "- " + this.getWeekDay(set.date.day()) + " " + localTime + ": **" + set.name + "**\n";
 						}
 
 						if (lines++ == 5) {
@@ -285,6 +293,7 @@ class EventSchedule
 						sendMessage = sendMessage.replace("$" + k, match[k]);
 					}
 					msg.channel.send(sendMessage);
+					return true;
 				}
 			}
 		}
@@ -312,12 +321,18 @@ class EventSchedule
 					var res = results[i];
 
 					var weekDay = this.getWeekDay(res.set.date.day());
-					var localTime = this.getTimeString(res.set.date);
+					var localTime = "**" + this.getTimeString(res.set.date) + "**";
+					localTime += " (" + res.set.date.fromNow() + ")";
+
+					var stageMessage = "";
+					if (this.schedule.length > 1) {
+						stageMessage = " on the **" + res.stage.stage + "** " + res.stage.emoji + " stage!";
+					}
 
 					if (date > res.date) {
-						ret += res.set.name + " already played on **" + weekDay + "**, at **" + localTime + "** on the **" + res.stage.stage + "** stage!\n";
+						ret += res.set.name + " already played on **" + weekDay + "**, at " + localTime + stageMessage + "\n";
 					} else {
-						ret += res.set.name + " plays on **" + weekDay + "**, at **" + localTime + "** on the **" + res.stage.stage + "** " + res.stage.emoji + " stage!\n";
+						ret += res.set.name + " plays on **" + weekDay + "**, at " + localTime + stageMessage + "\n";
 					}
 				}
 			}

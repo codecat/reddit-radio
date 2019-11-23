@@ -4,7 +4,7 @@
 		"channel": "580148630862954497",
 		"emoji": "<:patrickpog:603159154022023168>",
 		"url": "https://www.q-dance.com/en/",
-		"timesconfirmed": false,
+		"unconfirmed": true,
 		"streamdelay": 0,
 		"sets": [
 			[ 2019, 11, 23, 21, 45, "The Qreator" ],
