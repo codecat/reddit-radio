@@ -195,7 +195,10 @@ class RedditRadio
 		// Delete unwanted messages only if not a moderator
 		if (!this.isMod(msg.member)) {
 			// Delete unwanted messages
-			if (this.config.filter && msg.content.toLowerCase().match(this.config.filter.badwords)) {
+			if (this.config.filter && (
+				(this.config.filter.badwords && msg.content.toLowerCase().match(this.config.filter.badwords)) ||
+				(this.config.filter.badtokens && msg.content.match(this.config.filter.badtokens))
+				)) {
 				this.addLogMessage("Deleted unwanted message from " + msg.author + " in " + msg.channel + ": `" + msg.content.replace('`', '\\`') + "`");
 				msg.delete();
 				msg.author.send("Your recent message has been automatically deleted. Please take another look at the rules in #info. We automatically delete messages for things like piracy and advertising.");
