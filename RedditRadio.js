@@ -312,20 +312,38 @@ class RedditRadio
 			return;
 		}
 
+		console.log('[' + Date() + '] ' + msg.member.user.username + '#' + msg.member.user.discriminator + ' in #' + msg.channel.name + ': "' + msg.content + '"');
+
+		// Delete unwanted messages only if not a moderator
 		if (!this.isMod(msg.member)) {
-			if (msg.content.toLowerCase().match(/(kanker|1gabba|discord\.gg|discordapp\.com\/invite)/)) {
+			// Delete unwanted messages
+			if (msg.content.toLowerCase().match(this.config.filter.badwords)) {
 				this.addLogMessage("Deleted unwanted message from " + msg.author + " in " + msg.channel + ": `" + msg.content.replace('`', '\\`') + "`");
 				msg.delete();
+				msg.author.send("Your recent message has been automatically deleted. Please take another look at the rules in #info. We automatically delete messages for things like piracy and advertising.");
 				return;
+			}
+
+			// Delete invite links
+			var inviteLinks = msg.content.toLowerCase().match(/discord\.gg\/([A-Za-z0-9]+)/g);
+			if (inviteLinks) {
+				for (var i = 0; i < inviteLinks.length; i++) {
+					//TODO: Put whitelist in config file
+					if (inviteLinks[i].toLowerCase() != "discord.gg/hardstyle") {
+						this.addLogMessage("Deleted Discord invite link from " + msg.author + " in " + msg.channel + ": `" + inviteLinks[i].replace('/', ' slash ') + "`");
+						msg.delete();
+						msg.author.send("Your recent message has been automatically deleted. Please do not post Discord invite links without prior permission from a moderator or admin.");
+						return;
+					}
+				}
 			}
 		}
 
-		console.log('[' + Date() + '] ' + msg.member.user.username + '#' + msg.member.user.discriminator + ' in #' + msg.channel.name + ': "' + msg.content + '"');
-
-		var emotes = msg.content.toLowerCase().match(/<a?:[^:]+:[0-9]+>/g);
+		var emotes = msg.content.toLowerCase().match(/(<a?:[^:]+:[0-9]+>|\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/g);
 		if (emotes && emotes.length > 14) {
 			this.addLogMessage("Deleted message from " + msg.member + " in " + msg.channel + " that contained " + emotes.length + " emotes");
 			msg.delete();
+			msg.author.send("You posted too many emojis. Calm down a little bit!");
 			return;
 		}
 

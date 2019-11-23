@@ -11,6 +11,9 @@ prefix = "Qdprev"
 [[commands]]
 prefix = "Qdnext"
 
+[filter]
+badwords = "(thepiratebay|badwords)"
+
 [voice]
 passes = 2
 bitrate = 44100
