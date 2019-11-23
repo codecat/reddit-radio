@@ -1,0 +1,26 @@
+[
+	{
+		"stage": "mainstage",
+		"channel": "580148630862954497",
+		"emoji": "<:patrickpog:603159154022023168>",
+		"timesconfirmed": false,
+		"sets": [
+			[ 24, 21, 45, "The Qreator" ],
+			[ 24, 22, 30, "KELTEK" ],
+			[ 24, 23, 30, "Sound Rush" ],
+			[ 25, 0, 30, "D-Block & S-te-Fan" ],
+			[ 25, 1, 30, "Headhunterz" ],
+			[ 25, 2, 15, "B-Front" ],
+			[ 25, 3, 30, "Ran-D \"We Rule The Night\"" ],
+			[ 25, 4, 0, "D-Sturb" ],
+			[ 25, 5, 0, "Rejecta (LIVE)" ],
+			[ 25, 5, 30, "Radical Redemption" ],
+			[ 25, 6, 15, "Miss K8" ],
+				[ 25, 7, 0 ]
+		],
+		"commands": {
+			"url": "Watch the livestream here: <https://www.q-dance.com/en/>",
+			"mc": "The MC is **Villan**, and **Nolz** for the final 2 sets"
+		}
+	}
+]

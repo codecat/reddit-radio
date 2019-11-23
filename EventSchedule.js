@@ -47,7 +47,7 @@ class EventSchedule
 					name: set[5],
 					report: date > setDate,
 					report_5min: dateIn5Minutes > setDate,
-					nothing: set[5] == "Nothing"
+					nothing: (set[5] === undefined || set[5] == "Nothing")
 				};
 
 				stage.sets[j] = newSet;
