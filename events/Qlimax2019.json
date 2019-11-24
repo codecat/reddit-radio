@@ -4,17 +4,18 @@
 		"channel": "319525278978277407",
 		"emoji": "<:qlimax:438815681706721281>",
 		"url": "https://www.q-dance.com/en/events/qlimax/qlimax-2019/live",
-		"unconfirmed": true,
-		"streamdelay": 0,
+		"unconfirmed": false,
+		"streamdelay": 4,
 		"sets": [
 			[ 2019, 11, 23, 21, 45, "The Qreator" ],
-			[ 2019, 11, 23, 22, 30, "KELTEK" ],
+			[ 2019, 11, 23, 22, 45, "KELTEK" ],
 			[ 2019, 11, 23, 23, 30, "Sound Rush" ],
-			[ 2019, 11, 24, 0, 30, "D-Block & S-te-Fan" ],
+			[ 2019, 11, 24, 0, 30, "B-Front" ],
+			[ 2019, 11, 24, 0, 40, "D-Block & S-te-Fan" ],
 			[ 2019, 11, 24, 1, 30, "Headhunterz" ],
-			[ 2019, 11, 24, 2, 15, "B-Front" ],
+			[ 2019, 11, 24, 2, 30, "B-Front" ],
 			[ 2019, 11, 24, 3, 30, "Ran-D \"We Rule The Night\"" ],
-			[ 2019, 11, 24, 4, 0, "D-Sturb" ],
+			[ 2019, 11, 24, 4, 15, "D-Sturb" ],
 			[ 2019, 11, 24, 5, 0, "Rejecta (LIVE)" ],
 			[ 2019, 11, 24, 5, 30, "Radical Redemption" ],
 			[ 2019, 11, 24, 6, 15, "Miss K8" ],
@@ -24,7 +25,7 @@
 			"^\\.(url|stream|link|watch)$": ":tv: Watch the livestream here: **<https://www.q-dance.com/en/events/qlimax/qlimax-2019/live>** (Note: This is a paid premium livestream!)",
 			"^\\.(mc|host)$": ":microphone: The MC is **Villan**, and **Nolz** for the final 2 sets",
 			"^\\.restream$": "The Qlimax stream is a **premium** livestream. As such, we consider all unofficial free re-streams as piracy. Do not post or ask for restreams.",
-			"^\\.qreator$": "It is not confirmed yet who *The Qreator* is. Rumors are it's Prophet or Zany."
+			"^\\.qreator$": "It is not confirmed yet who *The Qreator* is. It was not revealed during their set."
 		}
 	}
 ]
