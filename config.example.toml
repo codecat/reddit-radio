@@ -1,39 +1,27 @@
 [discord]
 token = "main_bot_token"
 
-[[commands]]
-prefix = "Qdnp"
-aliases = [ "Qdcp" ]
-
-[[commands]]
-prefix = "Qdprev"
-
-[[commands]]
-prefix = "Qdnext"
+#[database]
+#url = "mongodb://localhost:27017"
+#db = "redditradio"
 
 [filter]
 badwords = "(thepiratebay|badwords)"
 
-[voice]
-passes = 2
-bitrate = 44100
+[modules.qdance]
 
-[emoji]
-twitter = "<:twitter:373576839085686804>"
-youtube = "<:youtube:374131863427743774>"
-soundcloud = "<:soundcloud:374132011486674944>"
-facebook = "<:facebook:374140079482077184>"
-periscope = "<:periscope:374140311934337025>"
-mixcloud = "<:mixcloud:375688433844092938>"
+#[modules.event]
+#file = "events/Qlimax2019.json"
 
-[soundcloud]
-client_id = "soundcloud_client_id"
-
-[youtube]
-token = "youtube_token_here"
+#[modules.eventquick]
+#channel = "651911168650248208"
 
 [[radios]]
 token = "radio_bot_1_token"
 channel = "330121740758024193"
 name = "Q-Dance Radio"
 url = "http://audio.true.nl/qdance-hard"
+
+[voice]
+passes = 2
+bitrate = 44100

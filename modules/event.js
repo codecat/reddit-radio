@@ -1,25 +1,26 @@
 var fs = require("fs");
 var moment = require("moment");
 
-var cmdsplit = require("./cmdsplit");
+var cmdsplit = require("./../cmdsplit");
 
 class EventSchedule
 {
-	constructor(event, client)
+	constructor(config, client, bot)
 	{
-		this.event = event;
+		this.event = config;
 		this.client = client;
+		this.bot = bot;
 
 		this.lastNotFound = new Date(1970, 1, 1);
 		this.lastNow = new Date(1970, 1, 1);
-
-		console.log('NOTE: Active event: ' + this.event.file);
 
 		this.loadSchedule(this.event.file);
 	}
 
 	loadSchedule(filename)
 	{
+		console.log('Loading schedule: "' + filename + '"');
+
 		this.schedule = JSON.parse(fs.readFileSync(filename));
 
 		for (var i = 0; i < this.schedule.length; i++) {
@@ -77,6 +78,17 @@ class EventSchedule
 		for (var i = 0; i < this.schedule.length; i++) {
 			var s = this.schedule[i];
 			if (s.stage == stage) {
+				return s;
+			}
+		}
+		return null;
+	}
+
+	getStageByChannel(channel)
+	{
+		for (var i = 0; i < this.schedule.length; i++) {
+			var s = this.schedule[i];
+			if (s.channel == channel) {
 				return s;
 			}
 		}
@@ -206,82 +218,145 @@ class EventSchedule
 		}
 	}
 
-	onMessage(msg)
+	onCmdCurrent(msg) { this.onCmdNp(msg); }
+	onCmdNow(msg) { this.onCmdNp(msg); }
+	onCmdNp(msg)
 	{
-		var isCommand = msg.content.startsWith(".");
-
-		var parse = [];
-		if (isCommand) {
-			parse = cmdsplit(msg.content);
+		var stage = this.getStageByChannel(msg.channel);
+		if (!stage) {
+			return;
 		}
 
+		var current = this.getCurrentSet(stage);
+		if (current !== null && !current.nothing) {
+			msg.channel.send(":red_circle: Now playing: **" + current.name + "**, started " + current.date.fromNow() + "!");
+		} else {
+			msg.channel.send("Nobody's playing right now.");
+		}
+	}
+
+	onCmdNext(msg)
+	{
+		var stage = this.getStageByChannel(msg.channel);
+		if (!stage) {
+			return;
+		}
+
+		var next = this.getNextSet(stage);
+		if (next !== null) {
+			var localTime = "**" + this.getTimeString(next.date) + "**";
+			localTime += " (" + next.date.fromNow() + ")";
+
+			msg.channel.send(":arrow_forward: Next up: **" + next.name + "**, at " + localTime);
+		} else {
+			msg.channel.send("There's nothing playing next.");
+		}
+	}
+
+	onCmdTimetable(msg) { this.onCmdSchedule(msg); }
+	onCmdSched(msg) { this.onCmdSchedule(msg); }
+	onCmdSchedule(msg)
+	{
+		var stage = this.getStageByChannel(msg.channel);
+		if (!stage) {
+			return;
+		}
+
+		var ret = "";
+
+		if (stage.unconfirmed) {
+			ret = ":warning: **Note:** Set times are not confirmed!\n";
+		}
+
+		var date = moment();
+
+		var lines = 0;
+		for (var i = 0; i < stage.sets.length; i++) {
+			var set = stage.sets[i];
+			if (date > set.date) {
+				continue;
+			}
+
+			var localTime = "**" + this.getTimeString(set.date) + "**";
+			localTime += " (" + set.date.fromNow() + ")";
+
+			if (set.nothing) {
+				ret += "- " + this.getWeekDay(set.date.day()) + " " + localTime + ", the stream will be offline :no_entry_sign:\n";
+			} else {
+				ret += "- " + this.getWeekDay(set.date.day()) + " " + localTime + ": **" + set.name + "**\n";
+			}
+
+			if (lines++ == 5) {
+				break;
+			}
+		}
+
+		if (lines == 0) {
+			msg.channel.send("We have nothing left! :frowning:");
+		} else {
+			msg.channel.send(":calendar_spiral: Next 5 sets are: (the local time is **" + this.getTimeString(moment()) + "**)\n" + ret.trim());
+		}
+	}
+
+	onCmdFind(msg)
+	{
+		var query = Array.from(arguments).slice(1).join(" ").trim();
+		if (query.length < 2) {
+			return;
+		}
+
+		var results = this.findSets(query);
+
+		var ret = "";
+		if (results.length == 0) {
+			ret = "I found nothing :frowning:";
+			// Avoid spamming "I found nothing" when jokers do .find a meaning of life
+			var now = new Date();
+			if ((now - this.lastNotFound) < 60 * 1000) {
+				return;
+			}
+			this.lastNotFound = now;
+		} else {
+			var date = new Date();
+			for (var i = 0; i < results.length; i++) {
+				var res = results[i];
+
+				var weekDay = this.getWeekDay(res.set.date.day());
+				var localTime = "**" + this.getTimeString(res.set.date) + "**";
+				localTime += " (" + res.set.date.fromNow() + ")";
+
+				var stageMessage = "";
+				if (this.schedule.length > 1) {
+					stageMessage = " on the **" + res.stage.stage + "** " + res.stage.emoji + " stage!";
+				}
+
+				if (date > res.date) {
+					ret += res.set.name + " already played on **" + weekDay + "**, at " + localTime + stageMessage + "\n";
+				} else {
+					ret += res.set.name + " plays on **" + weekDay + "**, at " + localTime + stageMessage + "\n";
+				}
+			}
+		}
+
+		msg.channel.send(":calendar_spiral: " + ret.trim());
+	}
+
+	onCmdReloadSchedule(msg)
+	{
+		if (!this.bot.isAdmin(msg.member)) {
+			return;
+		}
+
+		this.loadSchedule(this.event.file);
+		msg.channel.send(msg.member + " Schedule reloaded!");
+	}
+
+	onMessage(msg)
+	{
 		for (var i = 0; i < this.schedule.length; i++) {
 			var stage = this.schedule[i];
 			if (stage.channel != msg.channel) {
 				continue;
-			}
-
-			if (isCommand) {
-				if (parse[0] == ".np" || parse[0] == ".current" || parse[0] == ".now") {
-					var current = this.getCurrentSet(stage);
-					if (current !== null && !current.nothing) {
-						msg.channel.send(":red_circle: Now playing: **" + current.name + "**, started " + current.date.fromNow() + "!");
-					} else {
-						msg.channel.send("Nobody's playing right now.");
-					}
-					return true;
-				}
-
-				if (parse[0] == ".next") {
-					var next = this.getNextSet(stage);
-					if (next !== null) {
-						var localTime = "**" + this.getTimeString(next.date) + "**";
-						localTime += " (" + next.date.fromNow() + ")";
-
-						msg.channel.send(":arrow_forward: Next up: **" + next.name + "**, at " + localTime);
-					} else {
-						msg.channel.send("There's nothing playing next.");
-					}
-					return true;
-				}
-
-				if (parse[0] == ".schedule" || parse[0] == ".timetable" || parse[0] == ".sched") {
-					var ret = "";
-
-					if (stage.unconfirmed) {
-						ret = ":warning: **Note:** Set times are not confirmed!\n";
-					}
-
-					var date = new Date();
-
-					var lines = 0;
-					for (var i = 0; i < stage.sets.length; i++) {
-						var set = stage.sets[i];
-						if (date > set.date) {
-							continue;
-						}
-
-						var localTime = "**" + this.getTimeString(set.date) + "**";
-						localTime += " (" + set.date.fromNow() + ")";
-
-						if (set.nothing) {
-							ret += "- " + this.getWeekDay(set.date.day()) + " " + localTime + ", the stream will be offline :no_entry_sign:\n";
-						} else {
-							ret += "- " + this.getWeekDay(set.date.day()) + " " + localTime + ": **" + set.name + "**\n";
-						}
-
-						if (lines++ == 5) {
-							break;
-						}
-					}
-
-					if (lines == 0) {
-						msg.channel.send("We have nothing left! :frowning:");
-					} else {
-						msg.channel.send(":calendar_spiral: Next 5 sets are: (the local time is **" + this.getTimeString(moment()) + "**)\n" + ret.trim());
-					}
-					return true;
-				}
 			}
 
 			for (var j = 0; j < stage.responses.length; j++) {
@@ -298,47 +373,11 @@ class EventSchedule
 			}
 		}
 
-		if (isCommand && parse[0] == ".find" && parse.length > 1) {
-			var query = parse.slice(1).join(" ").trim();
-			if (query.length < 2) {
-				return false;
-			}
+		var isCommand = msg.content.startsWith(".");
 
-			var results = this.findSets(query);
-
-			var ret = "";
-			if (results.length == 0) {
-				ret = "I found nothing :frowning:";
-				// Avoid spamming "I found nothing" when jokers do .find a meaning of life
-				var now = new Date();
-				if ((now - this.lastNotFound) < 60 * 1000) {
-					return true;
-				}
-				this.lastNotFound = now;
-			} else {
-				var date = new Date();
-				for (var i = 0; i < results.length; i++) {
-					var res = results[i];
-
-					var weekDay = this.getWeekDay(res.set.date.day());
-					var localTime = "**" + this.getTimeString(res.set.date) + "**";
-					localTime += " (" + res.set.date.fromNow() + ")";
-
-					var stageMessage = "";
-					if (this.schedule.length > 1) {
-						stageMessage = " on the **" + res.stage.stage + "** " + res.stage.emoji + " stage!";
-					}
-
-					if (date > res.date) {
-						ret += res.set.name + " already played on **" + weekDay + "**, at " + localTime + stageMessage + "\n";
-					} else {
-						ret += res.set.name + " plays on **" + weekDay + "**, at " + localTime + stageMessage + "\n";
-					}
-				}
-			}
-
-			msg.channel.send(":calendar_spiral: " + ret.trim());
-			return true;
+		var parse = [];
+		if (isCommand) {
+			parse = cmdsplit(msg.content);
 		}
 
 		if (isCommand && this.schedule.length > 1 && (parse[0] == ".schedule" || parse[0] == ".timetable" || parse[0] == ".sched" || parse[0] == ".current" || parse[0] == ".now")) {

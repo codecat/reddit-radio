@@ -1,8 +1,10 @@
 var discord = require("discord.js");
 var http = require("https");
 
-module.exports = {
-	get: function(dir, callback) {
+class QdanceModule
+{
+	get(dir, callback)
+	{
 		var ret = {};
 
 		http.get("https://feed.q-dance.com/onair", function(res) {
@@ -20,9 +22,10 @@ module.exports = {
 				}
 			});
 		});
-	},
+	}
 
-	makeEmbed: function(track, title) {
+	makeEmbed(track, title)
+	{
 		var embed = new discord.RichEmbed({
 			title: title,
 			description: track.Artist + " - " + track.Title
@@ -32,4 +35,27 @@ module.exports = {
 		embed.setColor("#D26F1C");
 		return embed;
 	}
-};
+
+	onCmdQdnp(msg)
+	{
+		this.get(0, (track) => {
+			msg.channel.send("", this.makeEmbed(track, "Q-Dance Radio is now playing:"));
+		});
+	}
+
+	onCmdQdnext(msg)
+	{
+		this.get(1, (track) => {
+			msg.channel.send("", this.makeEmbed(track, "Next track on Q-Dance Radio:"));
+		});
+	}
+
+	onCmdQdprev(msg)
+	{
+		this.get(-1, (track) => {
+			msg.channel.send("", this.makeEmbed(track, "Previous track on Q-Dance Radio:"));
+		});
+	}
+}
+
+module.exports = QdanceModule;

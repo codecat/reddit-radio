@@ -6,105 +6,84 @@ var https = require("https");
 
 var cmdsplit = require("./cmdsplit");
 var Radio = require("./Radio");
-var EventSchedule = require("./EventSchedule");
-var EventImpromptu = require("./EventImpromptu");
+var MongoClient = require("mongodb").MongoClient;
 
 class RedditRadio
 {
 	constructor(config)
 	{
 		this.config = config;
-		this.loadCache();
+		this.readyPromises = [];
 
 		this.client = new discord.Client();
-		this.client.on("ready", () => { this.onReady(); });
 		this.client.on("message", (msg) => { this.onMessage(msg); });
 		this.client.on("guildMemberAdd", (member) => { this.onMemberJoin(member); });
+		this.readyPromises.push(this.client.login(this.config.discord.token));
 
-		this.radios = [];
-		this.events = [];
+		this.modules = [];
 
-		this.commands = [];
-		this.loadConfigCommands();
+		if (this.config.database) {
+			this.mongoclient = new MongoClient(this.config.database.url, { useUnifiedTopology: true });
+			this.readyPromises.push(this.mongoclient.connect());
+		}
 	}
 
-	loadCache()
+	loadConfigModules()
 	{
-		this.cache = {};
-		if (!fs.existsSync("cache.json")) {
+		if (!this.config.modules) {
 			return;
 		}
 
-		this.cache = JSON.parse(fs.readFileSync("cache.json", "utf8"));
-	}
-
-	saveCache()
-	{
-		fs.writeFileSync("cache.json", JSON.stringify(this.cache));
-	}
-
-	loadEvents()
-	{
-		if (this.config.events === undefined) {
-			return;
-		}
-
-		for (var i = 0; i < this.config.events.length; i++) {
-			var event = this.config.events[i];
-			if (event.impromptu) {
-				this.events.push(new EventImpromptu(this, event, this.client));
-			} else {
-				this.events.push(new EventSchedule(event, this.client));
+		for (var name in this.config.modules) {
+			var moduleClass = require('./modules/' + name);
+			if (!moduleClass) {
+				console.error('Unable to find module with name "' + name + '"!');
+				continue;
 			}
+
+			console.log('Module: "' + name + '"');
+
+			var config = this.config.modules[name];
+			var newModule = new moduleClass(config, this.client, this);
+			this.modules.push(newModule);
 		}
 	}
 
-	loadConfigCommands()
+	onReady()
 	{
-		if (this.config.commands === undefined) {
-			return;
+		this.loadConfigModules();
+
+		this.logChannel = this.client.channels.get(this.config.discord.logchannel);
+		//this.addLogMessage("Bot started!");
+
+		if (this.mongoclient) {
+			this.mongodb = this.mongoclient.db(this.config.database.db);
+			console.log("Database connected.");
 		}
 
-		for (var i = 0; i < this.config.commands.length; i++) {
-			var cmd = this.config.commands[i];
-			this.commands[cmd.prefix] = require("./commands/" + cmd.prefix);
+		console.log("Client ready.");
 
-			if (cmd.aliases !== undefined) {
-				for (var j = 0; j < cmd.aliases.length; j++) {
-					this.commands[cmd.aliases[j]] = this.commands[cmd.prefix];
-				}
-			}
-		}
-	}
-
-	loadConfigRadios()
-	{
-		if (this.config.radios === undefined) {
-			return;
-		}
-
-		for (var i = 0; i < this.config.radios.length; i++) {
-			this.radios.push(new Radio(this.config, this.config.radios[i]));
-		}
+		setInterval(() => { this.onTick(); }, 1000);
 	}
 
 	start()
 	{
-		this.client.login(this.config.discord.token);
-		setInterval(() => { this.onTick(); }, 1000);
-
-		this.loadConfigRadios();
+		Promise.all(this.readyPromises).then(() => {
+			this.onReady();
+		});
 	}
 
 	stop()
 	{
 		var promises = [];
-		for (var i = 0; i < this.radios.length; i++) {
-			promises.push(this.radios[i].stop());
-		}
 
 		console.log("Stopping client...");
 		promises.push(this.client.destroy());
+
+		if (this.mongoclient) {
+			console.log("Stopping MongoDB...");
+			promises.push(this.mongoclient.close());
+		}
 
 		Promise.all(promises).then(() => {
 			console.log("Client stopped.");
@@ -127,19 +106,6 @@ class RedditRadio
 		this.logChannel.send(":robot: " + text);
 	}
 
-	setStatusText(status)
-	{
-		if (typeof(status) !== "string") {
-			return;
-		}
-		this.client.user.setActivity(status, { type: "LISTENING" });
-	}
-
-	resetStatusText()
-	{
-		this.client.user.setPresence({ game: null });
-	}
-
 	isAdmin(member)
 	{
 		return member.hasPermission("ADMINISTRATOR");
@@ -152,20 +118,12 @@ class RedditRadio
 
 	onTick()
 	{
-		for (var i = 0; i < this.events.length; i++) {
-			this.events[i].onTick();
+		for (var i = 0; i < this.modules.length; i++) {
+			var m = this.modules[i];
+			if (m.onTick) {
+				m.onTick();
+			}
 		}
-	}
-
-	onReady()
-	{
-		console.log("Client started.");
-		this.resetStatusText();
-
-		this.loadEvents();
-
-		this.logChannel = this.client.channels.get(this.config.discord.logchannel);
-		//this.addLogMessage("Bot started!");
 	}
 
 	onMemberJoin(member)
@@ -228,9 +186,9 @@ class RedditRadio
 			return;
 		}
 
-		for (var i = 0; i < this.events.length; i++) {
-			if (this.events[i].onMessage(msg)) {
-				console.log("Event command handled from \"" + msg.member.user.username + "\": " + msg.content);
+		for (var i = 0; i < this.modules.length; i++) {
+			var m = this.modules[i];
+			if (m.onMessage && m.onMessage(msg)) {
 				return;
 			}
 		}
@@ -268,6 +226,7 @@ class RedditRadio
 		}
 
 		var cmdName = "onCmd" + cmdID;
+		var cmdFound = false;
 
 		if (this[cmdName] !== undefined) {
 			if (msg.member !== null) {
@@ -276,20 +235,28 @@ class RedditRadio
 				console.log("Built-in command from offline member: " + cmdID);
 			}
 			this[cmdName].apply(this, [ msg ].concat(parse.slice(1)));
-			return;
+			cmdFound = true;
 		}
 
-		if (this.commands[cmdID] !== undefined) {
-			if (msg.member !== null) {
-				console.log("External command from \"" + msg.member.user.username + "\": " + cmdID);
-			} else {
-				console.log("External command from offline member: " + cmdID);
+		for (var i = 0; i < this.modules.length; i++) {
+			var m = this.modules[i];
+			if (m[cmdName] === undefined) {
+				continue;
 			}
-			this.commands[cmdID].apply(this, [ msg ].concat(parse.slice(1)));
-			return;
+
+			if (msg.member !== null) {
+				console.log("Module command from \"" + msg.member.user.username + "\": " + cmdID);
+			} else {
+				console.log("Module command from offline member: " + cmdID);
+			}
+
+			m[cmdName].apply(m, [ msg ].concat(parse.slice(1)));
+			cmdFound = true;
 		}
 
-		console.log("Unknown command: \"" + cmdName + "\"");
+		if (!cmdFound) {
+			console.log("Unknown command: \"" + cmdName + "\"");
+		}
 	}
 
 	onCmdGithub(msg)
