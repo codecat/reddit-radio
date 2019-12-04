@@ -2,10 +2,9 @@
 config/
 config.toml
 local/
-commands/Livenp.js
+modules/livenp.js
 
 # Node
 node_modules/
 package-lock.json
 yarn.lock
-
