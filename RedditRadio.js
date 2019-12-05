@@ -51,8 +51,6 @@ class RedditRadio
 
 	onReady()
 	{
-		this.loadConfigModules();
-
 		this.logChannel = this.client.channels.get(this.config.discord.logchannel);
 		//this.addLogMessage("Bot started!");
 
@@ -61,7 +59,11 @@ class RedditRadio
 			console.log("Database connected.");
 		}
 
-		console.log("Client ready.");
+		console.log("Client ready, loading modules...");
+
+		this.loadConfigModules();
+
+		console.log("Modules loaded!");
 
 		setInterval(() => { this.onTick(); }, 1000);
 	}
