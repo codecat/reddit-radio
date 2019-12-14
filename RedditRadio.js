@@ -142,11 +142,18 @@ class RedditRadio
 		*/
 	}
 
-	onMessage(msg)
+	async onMessage(msg)
 	{
-		// Ignore DM's or glitched members
-		if (msg.member === null) {
+		// Ignore DM's
+		if (msg.member === null && msg.guild === null) {
+			console.warn("Ignored a DM: \"" + msg.content + "\"");
 			return;
+		}
+
+		// Ensure we have a member (sometimes this is null if their status is offline)
+		if (msg.member === null) {
+			console.warn("Member is null, fetching member now");
+			msg.member = await msg.guild.fetchMember(msg.author);
 		}
 
 		// Ignore our own messages
