@@ -51,6 +51,12 @@ class RedditRadio
 
 	onReady()
 	{
+		this.client.guilds.tap(guild => {
+			guild.fetchMembers().then(() => {
+				console.log('Cached ' + guild.members.size + ' members in ' + guild.name);
+			});
+		});
+
 		this.client.user.setActivity(this.config.discord.activity);
 
 		this.logChannel = this.client.channels.get(this.config.discord.logchannel);
