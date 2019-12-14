@@ -74,6 +74,8 @@ class RedditRadio
 	{
 		Promise.all(this.readyPromises).then(() => {
 			this.onReady();
+		}).catch((err) => {
+			console.error(err);
 		});
 	}
 
