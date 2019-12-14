@@ -51,6 +51,8 @@ class RedditRadio
 
 	onReady()
 	{
+		this.client.user.setActivity(this.config.discord.activity);
+
 		this.logChannel = this.client.channels.get(this.config.discord.logchannel);
 		//this.addLogMessage("Bot started!");
 
