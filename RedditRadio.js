@@ -1,4 +1,6 @@
 var discord = require("discord.js");
+var colors = require("colors");
+var moment = require("moment");
 
 var process = require("process");
 var fs = require("fs");
@@ -16,7 +18,8 @@ class RedditRadio
 		this.readyPromises = [];
 
 		this.client = new discord.Client();
-		this.client.on("message", (msg) => { this.onMessage(msg); });
+		this.client.on("message", (msg) => { this.onMessage(msg, false); });
+		this.client.on("messageUpdate", (oldMsg, newMsg) => { this.onMessageUpdate(oldMsg, newMsg); });
 		this.client.on("guildMemberAdd", (member) => { this.onMemberJoin(member); });
 		this.readyPromises.push(this.client.login(this.config.discord.token));
 
@@ -148,7 +151,7 @@ class RedditRadio
 		*/
 	}
 
-	async onMessage(msg)
+	async onMessage(msg, edited)
 	{
 		// Ignore DM's
 		if (msg.member === null && msg.guild === null) {
@@ -167,7 +170,21 @@ class RedditRadio
 			return;
 		}
 
-		console.log('[' + Date() + '] ' + msg.member.user.username + '#' + msg.member.user.discriminator + ' in #' + msg.channel.name + ': "' + msg.content + '"');
+		// Log line
+		var logUsername = msg.author.username + '#' + msg.author.discriminator;
+		if (this.isAdmin(msg.member)) {
+			logUsername = logUsername.red;
+		} else if (this.isMod(msg.member)) {
+			logUsername = logUsername.yellow;
+		} else {
+			logUsername = logUsername.brightWhite;
+		}
+
+		console.log('[' + moment().format('MMM Do LTS') + '] '
+			+ logUsername
+			+ ' in ' + ('#' + msg.channel.name).green.underline + ': '
+			+ (edited ? '(edited) '.gray : '')
+			+ '"' + msg.content + '"');
 
 		// Delete unwanted messages only if not a moderator
 		if (!this.isMod(msg.member)) {
@@ -207,7 +224,7 @@ class RedditRadio
 
 		for (var i = 0; i < this.modules.length; i++) {
 			var m = this.modules[i];
-			if (m.onMessage && m.onMessage(msg)) {
+			if (m.onMessage && m.onMessage(msg, edited)) {
 				return;
 			}
 		}
@@ -275,6 +292,13 @@ class RedditRadio
 
 		if (!cmdFound) {
 			console.log("Unknown command: \"" + cmdName + "\"");
+		}
+	}
+
+	async onMessageUpdate(oldMsg, newMsg)
+	{
+		if (oldMsg.content != newMsg.content) {
+			this.onMessage(newMsg, true);
 		}
 	}
 
