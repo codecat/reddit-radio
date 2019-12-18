@@ -159,6 +159,12 @@ class RedditRadio
 			return;
 		}
 
+		// Ignore webhooks
+		if (msg.webhookID) {
+			console.warn("Ignored webhook: \"" + msg.content + "\"");
+			return;
+		}
+
 		// Ensure we have a member (sometimes this is null if their status is offline)
 		if (msg.member === null) {
 			console.warn("Member is null, fetching member now");
