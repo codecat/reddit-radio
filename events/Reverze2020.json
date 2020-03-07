@@ -15,14 +15,15 @@
 			[ 2020, 3, 8, 0, 45, "The Elite", "Da Tweekaz, Coone, Hard Driver" ],
 			[ 2020, 3, 8, 1, 45, "D-Block & S-te-Fan" ],
 			[ 2020, 3, 8, 2, 45, "Sub Zero Project: Rave Into Space (LIVE)" ],
-			[ 2020, 3, 8, 3, 15, "15 Years Reverze Flashback", "Pat B, Dark-E, Mark with a K, MC Chucky" ],
+			[ 2020, 3, 8, 3, 15, "15 Years Reverze Flashback", "Pat B, Dark-E, Mark with a K & MC Chucky" ],
 			[ 2020, 3, 8, 4, 0, "Warface & D-Sturb: Synchronised" ],
 			[ 2020, 3, 8, 4, 45, "Minus Militia: The Code of Conduct (LIVE)" ],
 			[ 2020, 3, 8, 5, 15 ]
 		],
 		"responses": {
 			"^\\.(url|stream|link|watch)$": ":tv: Tune in to the livestream here: **<https://www.youtube.com/watch?v=QP0AGJ0avRs>**",
-			"^\\.(mc|host)$": ":microphone: The MC is **Villain**."
+			"^\\.(mc|host)$": ":microphone: The MC is **Villain**.",
+			"^\\.(lotto|arena|stages)$": ":warning: **ONLY** the Sportpaleis is being streamed, the Lotto Arena stage is **NOT** being streamed."
 		}
 	}
 ]
