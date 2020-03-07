@@ -1,0 +1,28 @@
+[
+	{
+		"stage": "sportpaleis",
+		"channel": "319525278978277407",
+		"emoji": "<:bassevents:685858154839408650>",
+		"url": "https://www.youtube.com/watch?v=QP0AGJ0avRs",
+		"unconfirmed": false,
+		"streamdelay": 3,
+		"sets": [
+			[ 2020, 3, 7, 21, 0, "Refuzion" ],
+			[ 2020, 3, 7, 21, 30, "Mandy" ],
+			[ 2020, 3, 7, 22, 15, "Keltek vs. Sound Rush" ],
+			[ 2020, 3, 7, 23, 15, "Psyko Punkz" ],
+			[ 2020, 3, 8, 0, 0, "Brennan Heart: 15 Years Reverze Special" ],
+			[ 2020, 3, 8, 0, 45, "The Elite", "Da Tweekaz, Coone, Hard Driver" ],
+			[ 2020, 3, 8, 1, 45, "D-Block & S-te-Fan" ],
+			[ 2020, 3, 8, 2, 45, "Sub Zero Project: Rave Into Space (LIVE)" ],
+			[ 2020, 3, 8, 3, 15, "15 Years Reverze Flashback", "Pat B, Dark-E, Mark with a K, MC Chucky" ],
+			[ 2020, 3, 8, 4, 0, "Warface & D-Sturb: Synchronised" ],
+			[ 2020, 3, 8, 4, 45, "Minus Militia: The Code of Conduct (LIVE)" ],
+			[ 2020, 3, 8, 5, 15 ]
+		],
+		"responses": {
+			"^\\.(url|stream|link|watch)$": ":tv: Tune in to the livestream here: **<https://www.youtube.com/watch?v=QP0AGJ0avRs>**",
+			"^\\.(mc|host)$": ":microphone: The MC is **Villain**."
+		}
+	}
+]

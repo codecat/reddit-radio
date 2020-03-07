@@ -60,7 +60,8 @@ class EventSchedule
 					name: set[5],
 					report: moment() > setDate,
 					report_5min: moment().add(5, 'm') > setDate,
-					nothing: (set[5] === undefined || set[5] == "Nothing")
+					nothing: (set[5] === undefined || set[5] == "Nothing"),
+					who: set[6]
 				};
 
 				stage.sets[j] = newSet;
@@ -104,7 +105,10 @@ class EventSchedule
 			var stage = this.schedule[i];
 			for (var j = 0; j < stage.sets.length; j++) {
 				var set = stage.sets[j];
-				if (!set.nothing && set.name.toLowerCase().indexOf(query) != -1) {
+				if (set.nothing) {
+					continue;
+				}
+				if (set.name.toLowerCase().indexOf(query) != -1 || (set.who && set.who.toLowerCase().indexOf(query) != -1)) {
 					ret.push({
 						set: set,
 						stage: stage
@@ -229,7 +233,11 @@ class EventSchedule
 
 		var current = this.getCurrentSet(stage);
 		if (current !== null && !current.nothing) {
-			msg.channel.send(":red_circle: Now playing: **" + current.name + "**, started " + current.date.fromNow() + "!");
+			if (current.who) {
+				msg.channel.send(":red_circle: Now playing: **" + current.name + "**, started " + current.date.fromNow() + "! (" + current.who + ")");
+			} else {
+				msg.channel.send(":red_circle: Now playing: **" + current.name + "**, started " + current.date.fromNow() + "!");
+			}
 		} else {
 			msg.channel.send("Nobody's playing right now.");
 		}
@@ -247,7 +255,11 @@ class EventSchedule
 			var localTime = "**" + this.getTimeString(next.date) + "**";
 			localTime += " (" + next.date.fromNow() + ")";
 
-			msg.channel.send(":arrow_forward: Next up: **" + next.name + "**, at " + localTime);
+			if (next.who) {
+				msg.channel.send(":arrow_forward: Next up: **" + next.name + "**, at " + localTime + " (" + next.who + ")");
+			} else {
+				msg.channel.send(":arrow_forward: Next up: **" + next.name + "**, at " + localTime);
+			}
 		} else {
 			msg.channel.send("There's nothing playing next.");
 		}

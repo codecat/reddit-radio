@@ -1,0 +1,37 @@
+[
+	{
+		"stage": "mainstage",
+		"channel": "319525278978277407",
+		"emoji": "<:qdance:328585093553586176>",
+		"url": "https://www.q-dance.com/en/videos/dediqated-live",
+		"unconfirmed": true,
+		"streamdelay": 3,
+		"sets": [
+			[ 2020, 2, 8, 12, 50, "Early Rave Rebels", "Buzz Fuzz, Franky Jones, Gizmo, The Darkraver" ],
+			[ 2020, 2, 8, 13, 13, "The Qlubtempo Parade", "ASYS, DJ Luna, Dana, Pavo, Pila" ],
+			[ 2020, 2, 8, 13, 41, "Fusion Records", "Donkey Rollers, The Pitcher, Zany" ],
+			[ 2020, 2, 8, 13, 58, "Bella Hardstyle Italia", "Tatanka, TNT, Zatox" ],
+			[ 2020, 2, 8, 14, 30, "Masters of Melody Part 1", "Bass Modulators, Frontliner, Max Enforcer" ],
+			[ 2020, 2, 8, 15, 0, "Praise the Reverse Bass", "DJ Isaac, Technoboy, Tuneboy" ],
+			[ 2020, 2, 8, 15, 20, "Viva Hollandia", "Deepack, Dr. Rude, Outsiders, Ruthless, The Viper" ],
+			[ 2020, 2, 8, 15, 58, "World of Madness", "Headhunterz, Noisecontrollers, Wildstylez" ],
+			[ 2020, 2, 8, 16, 44, "Millenium Hardcore Mayhem", "Art of Fighters, Endymion, Evil Activities, Noize Supperssor, Nosferatu, Promo" ],
+			[ 2020, 2, 8, 17, 16, "Scantraxx Recordz", "D-Block & S-te-Fan, Devin Wild, The Prophet" ],
+			[ 2020, 2, 8, 17, 37, "The Land Down Under", "Audiofreq, Code Black, Outbreak" ],
+			[ 2020, 2, 8, 17, 52, "The Best of Power Hour", "Neophyte, The Stunned Guys, Zazafront and many more" ],
+			[ 2020, 2, 8, 18, 53, "Dirty Workz", "Coone, Da Tweekaz, Hard Driver, Psyko Punkz" ],
+			[ 2020, 2, 8, 19, 20, "Birth of Raw", "Adaro, Alpha Twins, B-Front, Crypsis, Digital Punk, E-Force, Ran-D" ],
+			[ 2020, 2, 8, 20, 4, "Masters of Melody Part 2", "Atmozfears, Audiotricz, KELTEK, Sound Rush" ],
+			[ 2020, 2, 8, 20, 36, "Future Heroes", "D-Sturb, Frequencerz, Rebelion, Sefa, Sub Zero Project, Warface" ],
+			[ 2020, 2, 8, 21, 22, "Hardcore 2.0", "Dr. Peacock, Korsakoff, Mad Dog, Partyraiser" ],
+			[ 2020, 2, 8, 22, 0, "Hardstyle Top 25 of All-Time" ],
+			[ 2020, 2, 8, 22, 50, "The Endshow" ],
+			[ 2020, 2, 8, 23, 0 ]
+		],
+		"responses": {
+			"^\\.(top100|top25)": "Find the all-time top 100 here: <#675627527208697856>",
+			"^\\.(url|stream|link|watch)$": ":tv: Tune in to the livestream here: **<https://www.q-dance.com/en/videos/dediqated-live>**",
+			"^\\.(mc|host)$": ":microphone: The MCs are **Villain**, **DV8**, and **Ruffian**."
+		}
+	}
+]

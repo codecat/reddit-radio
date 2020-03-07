@@ -1,0 +1,35 @@
+[
+	{
+		"stage": "mainstage",
+		"channel": "319525278978277407",
+		"emoji": "<:epiqE:661533593356468244><:epiqP:661533593088294933><:epiqI:661533593323044874><:epiqQ:661533593343885353>",
+		"url": "https://www.q-dance.com/en/radio/",
+		"unconfirmed": false,
+		"streamdelay": 1,
+		"sets": [
+			[ 2019, 12, 31, 17, 45, "Q-dance Hardstyle Top 100 to 11" ],
+			[ 2019, 12, 31, 20, 30, "Primeshock" ],
+			[ 2019, 12, 31, 21, 30, "Demi Kanon" ],
+			[ 2019, 12, 31, 22, 15, "Sound Rush vs. Demi Kanon" ],
+			[ 2019, 12, 31, 22, 45, "Sound Rush" ],
+			[ 2019, 12, 31, 23, 40, "Hardstyle Top 10" ],
+			[ 2020, 1, 1, 0, 0, "Frequencerz" ],
+			[ 2020, 1, 1, 0, 45, "Devin Wild" ],
+			[ 2020, 1, 1, 1, 30, "Devin Wild vs. Rebelion" ],
+			[ 2020, 1, 1, 2, 0, "Psyko Punkz vs. Frequencerz" ],
+			[ 2020, 1, 1, 2, 30, "Psyko Punkz" ],
+			[ 2020, 1, 1, 3, 0, "D-Block & S-te-Fan vs. D-Sturb" ],
+			[ 2020, 1, 1, 4, 0, "TILT MODE" ],
+			[ 2020, 1, 1, 4, 10, "Rebelion" ],
+			[ 2020, 1, 1, 5, 0, "Act of Rage" ],
+			[ 2020, 1, 1, 5, 45, "Act of Rage vs. Sefa" ],
+			[ 2020, 1, 1, 6, 15, "Sefa" ],
+			[ 2020, 1, 1, 7, 0 ]
+		],
+		"responses": {
+			"^\\.(top100|top10)": "Find the Q-dance Top 100 here: <#661622907109244939>",
+			"^\\.(url|stream|link|watch)$": ":tv: Listen to the livestream in our **Q-Dance Radio voice channel** or here: **<https://www.q-dance.com/en/radio/>**",
+			"^\\.(mc|host)$": ":microphone: The top 100 is hosted by **Tellem**. The MC during Epiq is **Villan**."
+		}
+	}
+]

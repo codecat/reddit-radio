@@ -25,6 +25,13 @@ class RedditRadio
 
 		this.modules = [];
 
+		/*
+		this.banned_usernames = fs.readFileSync("banned_usernames.txt").toString().split("\n");
+		for (var i = 0; i < this.banned_usernames.length; i++) {
+			this.banned_usernames[i] = this.banned_usernames[i].trim();
+		}
+		*/
+
 		if (this.config.database) {
 			this.mongoclient = new MongoClient(this.config.database.url, { useUnifiedTopology: true });
 			this.readyPromises.push(this.mongoclient.connect());
@@ -143,10 +150,22 @@ class RedditRadio
 
 	onMemberJoin(member)
 	{
+		console.log("User joined: " + member + " (" + member.user.username + ")");
 		/*
-		if (member.user.username.match(/^[A-Z][a-z]+[a-f0-9]{4}$/)) {
+		var index_normal = this.banned_usernames.indexOf(member.user.username);
+		var index_atos = this.banned_usernames.indexOf(member.user.username.replace('a', 's'));
+		if (index_normal == -1 && index_atos == -1) {
+			return;
+		}
+		console.warn("Username is in banned usernames list!");
+		var millisecondsSinceRegistration = new Date() - member.user.createdAt;
+		if (millisecondsSinceRegistration < 30 * 1000) {
 			console.log("!! Possible spambot joined: " + member);
-			this.addLogMessage("Possible spambot joined: " + member);
+			member.kick()
+				.then(() => this.addLogMessage("Kicked possible spambot: " + member))
+				.catch(console.error);
+		} else {
+			this.addLogMessage("**Review required**: Possible spambot: " + member);
 		}
 		*/
 	}
