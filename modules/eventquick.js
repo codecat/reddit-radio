@@ -12,7 +12,7 @@ class EventQuickModule
 			this.current = this.event.current;
 		}
 
-		this.channel = client.channels.get(this.event.channel);
+		this.channel = client.channels.resolve(this.event.channel);
 		this.updateChannel();
 	}
 

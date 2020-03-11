@@ -26,13 +26,13 @@ class QdanceModule
 
 	makeEmbed(track, title)
 	{
-		var embed = new discord.RichEmbed({
+		var embed = new discord.MessageEmbed({
 			title: title,
-			description: track.Artist + " - " + track.Title
+			description: track.Artist + " - " + track.Title,
+			hexColor: "#D26F1C"
 		});
 		embed.setAuthor("Q-Dance Radio", "https://4o4.nl/20170908JHxVy.png");
 		embed.setThumbnail(track.CoverImage);
-		embed.setColor("#D26F1C");
 		return embed;
 	}
 

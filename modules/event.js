@@ -27,10 +27,12 @@ class EventSchedule
 			let stage = this.schedule[i];
 
 			console.log("Event channel: " + stage.channel);
-			stage.channel = this.client.channels.get(stage.channel);
-			if (!stage.channel) {
-				console.log("WARNING: Couldn't find channel!");
-			}
+			this.client.channels.fetch(stage.channel).then(channel => {
+				stage.channel = channel;
+				this.updateChannel(stage);
+			}).catch(() => {
+				console.error("Unable to find channel for stage \"" + stage.stage + "\"");
+			});
 
 			var newResponses = [];
 			for (var expression in stage.responses) {
@@ -44,7 +46,11 @@ class EventSchedule
 
 			stage.channelExtra = null;
 			if (stage.extra_channel !== undefined) {
-				stage.channelExtra = this.client.channels.get(stage.extra_channel);
+				this.client.channels.fetch(stage.extra_channel).then(channel => {
+					stage.channelExtra = channel;
+				}).catch(() => {
+					console.error("Unable to find channel for stage \"" + stage.stage + "\"");
+				});
 			}
 
 			var streamDelay = stage.streamdelay;
@@ -66,11 +72,6 @@ class EventSchedule
 
 				stage.sets[j] = newSet;
 			}
-		}
-
-		for (var i = 0; i < this.schedule.length; i++) {
-			var stage = this.schedule[i];
-			this.updateChannel(stage);
 		}
 	}
 
@@ -462,6 +463,10 @@ class EventSchedule
 
 	updateChannel(stage)
 	{
+		if (typeof(stage.channel) == "string") {
+			return;
+		}
+
 		var line = "";
 
 		var current = this.getCurrentSet(stage);

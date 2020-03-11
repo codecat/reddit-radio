@@ -4,13 +4,14 @@ class ToolsModule
 {
 	constructor(config, client, bot)
 	{
+		this.client = client;
 		this.bot = bot;
 	}
 
 	onCmdJoinTime(msg) { this.onCmdJoinDate(msg); }
 	onCmdJoinDate(msg)
 	{
-		msg.guild.fetchMember(msg.author).then((member) => {
+		msg.guild.members.fetch(msg.author).then((member) => {
 			var joinedAt = moment(member.joinedAt);
 			msg.reply("you joined this server **" + joinedAt.fromNow() + "**. (" + joinedAt.format() + ")");
 		});
@@ -24,7 +25,14 @@ class ToolsModule
 
 		var member = msg.guild.member(user);
 		if (!member) {
-			msg.channel.send("Unable to find user. Please provide snowflake for best results.");
+			this.client.users.fetch(user).then((fetcheduser) => {
+				var createdAt = moment(fetcheduser.createdAt);
+
+				msg.channel.send(
+					"**Info for non-member " + fetcheduser.tag + "**:\n" +
+					":alarm_clock: Account age: **" + createdAt.fromNow() + "** (" + createdAt.format() + ")"
+				);
+			});
 			return;
 		}
 
@@ -32,9 +40,9 @@ class ToolsModule
 		var createdAt = moment(member.user.createdAt);
 
 		msg.channel.send(
-			"**Info for " + member + "**:\n" +
+			"**Info for member " + member + "**:\n" +
 			":alarm_clock: Join time: **" + joinedAt.fromNow() + "** (" + joinedAt.format() + ")\n" +
-			":alarm_clock: Account age: **" + createdAt.fromNow() + "** (" + createdAt.format() + ")\n"
+			":alarm_clock: Account age: **" + createdAt.fromNow() + "** (" + createdAt.format() + ")"
 		);
 	}
 }

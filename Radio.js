@@ -7,7 +7,6 @@ class Radio
 		this.config = config;
 
 		this.name = radioconfig.name;
-		this.channel = radioconfig.channel;
 		this.url = radioconfig.url;
 
 		this.client = new discord.Client();
@@ -16,13 +15,17 @@ class Radio
 		this.voice_connection = false;
 		this.voice_dispatcher = false;
 
+		this.channel = false;
+
 		this.client.on("ready", () => {
 			console.log("Radio client \"" + this.name + "\" connected!");
 
-			var channel = this.client.channels.get(this.channel);
-			if (channel.members.size > 0) {
-				this.joinChannel();
-			}
+			this.client.channels.fetch().then(channel => {
+				this.channel = channel;
+				if (channel.members.size > 0) {
+					this.joinChannel();
+				}
+			});
 		});
 
 		this.client.on("error", (e) => {
@@ -30,7 +33,7 @@ class Radio
 		});
 
 		this.client.on("voiceStateUpdate", (o, n) => {
-			var channel = this.client.channels.get(this.channel);
+			var channel = this.client.channels.resolve(this.channel);
 			if (n.voiceChannelID == this.channel) {
 				console.log("Someone joined \"" + this.name + "\": " + channel.members.size);
 				if (!this.running) {
@@ -60,7 +63,7 @@ class Radio
 		console.log("Joining and starting \"" + this.name + "\"!");
 		this.running = true;
 
-		this.client.channels.get(this.channel).join().then((conn) => {
+		this.client.channels.resolve(this.channel).join().then((conn) => {
 			this.voice_connection = conn;
 			this.voice_connection.on("disconnect", () => {
 				this.voice_connection = false;

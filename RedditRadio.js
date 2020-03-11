@@ -73,16 +73,19 @@ class RedditRadio
 
 	onReady()
 	{
-		this.client.guilds.tap(guild => {
-			guild.fetchMembers().then(() => {
+		/*
+		this.client.guilds.cache.tap(guild => {
+			guild.members.fetch().then(() => {
 				console.log('Cached ' + guild.members.size + ' members in ' + guild.name);
 			});
 		});
+		*/
 
 		this.client.user.setActivity(this.config.discord.activity);
 
-		this.logChannel = this.client.channels.get(this.config.discord.logchannel);
-		//this.addLogMessage("Bot started!");
+		this.client.channels.fetch(this.config.discord.logchannel).then(logChannel => {
+			this.logChannel = logChannel;
+		});
 
 		if (this.mongoclient) {
 			this.mongodb = this.mongoclient.db(this.config.database.db);
@@ -360,15 +363,9 @@ class RedditRadio
 			return;
 		}
 
-		var mutedRole = msg.guild.roles.find(val => val.name == "Chat mute");
-		if (!mutedRole) {
-			console.error("Couldn't find \"Chat mute\" role!");
-			return;
-		}
-
 		for (var memberID of msg.mentions.members.keys()) {
 			var member = msg.mentions.members.get(memberID);
-			member.addRole(mutedRole);
+			member.roles.remove(this.config.discord.mutedrole);
 
 			this.addLogMessage("Muted " + member.user.username, msg.member);
 		}
@@ -382,15 +379,9 @@ class RedditRadio
 			return;
 		}
 
-		var mutedRole = msg.guild.roles.find(val => val.name == "Chat mute");
-		if (!mutedRole) {
-			console.error("Couldn't find \"Chat mute\" role!");
-			return;
-		}
-
 		for (var memberID of msg.mentions.members.keys()) {
 			var member = msg.mentions.members.get(memberID);
-			member.removeRole(mutedRole);
+			member.roles.add(this.config.discord.mutedrole);
 
 			this.addLogMessage("Unmuted " + member.user.username, msg.member);
 		}
