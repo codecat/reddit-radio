@@ -10,6 +10,25 @@ var cmdsplit = require("./cmdsplit");
 var Radio = require("./Radio");
 var MongoClient = require("mongodb").MongoClient;
 
+function findCommand(obj, cmdID)
+{
+	var cmdName = "onCmd" + cmdID;
+	var cmdRegex = new RegExp("^" + cmdName + "$", "i");
+
+	var prototype = Object.getPrototypeOf(obj);
+	var props = Object.getOwnPropertyNames(prototype);
+	for (var i = 0; i < props.length; i++) {
+		var key = props[i];
+		if (!key.startsWith("onCmd")) {
+			continue;
+		}
+		if (key.match(cmdRegex)) {
+			return obj[key];
+		}
+	}
+	return null;
+}
+
 class RedditRadio
 {
 	constructor(config)
@@ -24,13 +43,6 @@ class RedditRadio
 		this.readyPromises.push(this.client.login(this.config.discord.token));
 
 		this.modules = [];
-
-		/*
-		this.banned_usernames = fs.readFileSync("banned_usernames.txt").toString().split("\n");
-		for (var i = 0; i < this.banned_usernames.length; i++) {
-			this.banned_usernames[i] = this.banned_usernames[i].trim();
-		}
-		*/
 
 		if (this.config.database) {
 			this.mongoclient = new MongoClient(this.config.database.url, { useUnifiedTopology: true });
@@ -151,23 +163,6 @@ class RedditRadio
 	onMemberJoin(member)
 	{
 		console.log("User joined: " + member + " (" + member.user.username + ")");
-		/*
-		var index_normal = this.banned_usernames.indexOf(member.user.username);
-		var index_atos = this.banned_usernames.indexOf(member.user.username.replace('a', 's'));
-		if (index_normal == -1 && index_atos == -1) {
-			return;
-		}
-		console.warn("Username is in banned usernames list!");
-		var millisecondsSinceRegistration = new Date() - member.user.createdAt;
-		if (millisecondsSinceRegistration < 30 * 1000) {
-			console.log("!! Possible spambot joined: " + member);
-			member.kick()
-				.then(() => this.addLogMessage("Kicked possible spambot: " + member))
-				.catch(console.error);
-		} else {
-			this.addLogMessage("**Review required**: Possible spambot: " + member);
-		}
-		*/
 	}
 
 	async onMessage(msg, edited)
@@ -286,22 +281,24 @@ class RedditRadio
 			return;
 		}
 
-		var cmdName = "onCmd" + cmdID;
 		var cmdFound = false;
 
-		if (this[cmdName] !== undefined) {
+		var cmdFunc = findCommand(this, cmdID);
+		if (cmdFunc) {
 			if (msg.member !== null) {
 				console.log("Built-in command from \"" + msg.member.user.username + "\": " + cmdID);
 			} else {
-				console.log("Built-in command from offline member: " + cmdID);
+				console.log("Module command from offline member: " + cmdID);
 			}
-			this[cmdName].apply(this, [ msg ].concat(parse.slice(1)));
+			cmdFunc.apply(this, [ msg ].concat(parse.slice(1)));
 			cmdFound = true;
 		}
 
 		for (var i = 0; i < this.modules.length; i++) {
 			var m = this.modules[i];
-			if (m[cmdName] === undefined) {
+
+			var cmdFunc = findCommand(m, cmdID);
+			if (!cmdFunc) {
 				continue;
 			}
 
@@ -311,12 +308,12 @@ class RedditRadio
 				console.log("Module command from offline member: " + cmdID);
 			}
 
-			m[cmdName].apply(m, [ msg ].concat(parse.slice(1)));
+			cmdFunc.apply(m, [ msg ].concat(parse.slice(1)));
 			cmdFound = true;
 		}
 
 		if (!cmdFound) {
-			console.log("Unknown command: \"" + cmdName + "\"");
+			console.log("Unknown command: \"" + cmdID + "\"");
 		}
 	}
 
@@ -333,6 +330,7 @@ class RedditRadio
 	}
 
 	/*
+	//TODO: Move this to a module
 	onCmdWeather(msg)
 	{
 		var url = "https://api.darksky.net/forecast/" + this.config.weather.apikey + "/" + this.config.weather.coords + "?units=auto";
