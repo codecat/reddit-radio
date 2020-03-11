@@ -20,7 +20,7 @@ class Radio
 		this.client.on("ready", () => {
 			console.log("Radio client \"" + this.name + "\" connected!");
 
-			this.client.channels.fetch().then(channel => {
+			this.client.channels.fetch(radioconfig.channel).then(channel => {
 				this.channel = channel;
 				if (channel.members.size > 0) {
 					this.joinChannel();
@@ -33,16 +33,15 @@ class Radio
 		});
 
 		this.client.on("voiceStateUpdate", (o, n) => {
-			var channel = this.client.channels.resolve(this.channel);
-			if (n.voiceChannelID == this.channel) {
-				console.log("Someone joined \"" + this.name + "\": " + channel.members.size);
+			if (n.channel == this.channel) {
+				console.log("Someone joined \"" + this.name + "\": " + this.channel.members.size);
 				if (!this.running) {
 					this.running = true;
 					this.joinChannel();
 				}
-			} else if (o.voiceChannelID == this.channel && n.voiceChannelID != this.channel) {
-				console.log("Someone left \"" + this.name + "\": " + channel.members.size);
-				if (this.running && channel.members.size == 1) {
+			} else if (o.channel == this.channel && n.channel != this.channel) {
+				console.log("Someone left \"" + this.name + "\": " + this.channel.members.size);
+				if (this.running && this.channel.members.size == 1) {
 					this.running = false;
 					this.leaveChannel();
 				}
@@ -63,7 +62,7 @@ class Radio
 		console.log("Joining and starting \"" + this.name + "\"!");
 		this.running = true;
 
-		this.client.channels.resolve(this.channel).join().then((conn) => {
+		this.channel.join().then((conn) => {
 			this.voice_connection = conn;
 			this.voice_connection.on("disconnect", () => {
 				this.voice_connection = false;
@@ -102,7 +101,7 @@ class Radio
 			this.voice_dispatcher.end();
 		}
 
-		this.voice_dispatcher = this.voice_connection.playArbitraryInput(this.url, this.config.voice);
+		this.voice_dispatcher = this.voice_connection.play(this.url, this.config.voice);
 		this.voice_dispatcher.on("end", (reason) => {
 			console.log("Radio voice \"" + this.name + "\" ended: \"" + reason + "\"");
 			this.voice_dispatcher = false;

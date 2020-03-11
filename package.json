@@ -4,15 +4,14 @@
   "description": "discord.gg/hardstyle",
   "main": "index.js",
   "dependencies": {
-    "@discordjs/uws": "^10.149.0",
-    "discord.js": "^11.5.1",
+    "colors": "^1.4.0",
+    "discord.js": "^12.0.2",
     "follow-redirects": "^1.9.0",
     "moment": "^2.24.0",
     "mongodb": "^3.3.5",
     "node-opus": "^0.3.3",
-    "sodium": "^2.0.3",
-    "toml": "^3.0.0",
-    "colors": "^1.4.0"
+    "sodium": "^3.0.2",
+    "toml": "^3.0.0"
   },
   "devDependencies": {},
   "scripts": {
