@@ -425,7 +425,7 @@ class RedditRadio
 		var hours = date.getHours();
 		var minutes = date.getMinutes();
 
-		var text = "The local time is: **" + hours + ":" + (minutes >= 10 ? minutes : "0" + minutes) + "**";
+		var text = "The local time is: **" + hours + ":" + (minutes >= 10 ? minutes : "0" + minutes) + "** (<https://time.is/CET>)";
 
 		msg.channel.send(text);
 	}
