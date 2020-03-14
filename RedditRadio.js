@@ -253,17 +253,17 @@ class RedditRadio
 		}
 
 		if (msg.content.toLowerCase() == "good bot") {
-			msg.channel.send(msg.member + " Thanks");
+			msg.channel.send(msg.member.toString() + " Thanks");
 			return;
 		}
 
 		if (msg.content.toLowerCase() == "bad bot") {
-			msg.channel.send(msg.member + " I'm sorry :sob: If I did something wrong, you can report a bug! <https://github.com/codecat/reddit-radio/issues>");
+			msg.channel.send(msg.member.toString() + " I'm sorry :sob: If I did something wrong, you can report a bug! <https://github.com/codecat/reddit-radio/issues>");
 			return;
 		}
 
 		if (msg.content.toLowerCase().indexOf("am i the only one") != -1 && msg.member !== null) {
-			msg.channel.send(msg.member + " Probably not.");
+			msg.channel.send(msg.member.toString() + " Probably not.");
 			return;
 		}
 
