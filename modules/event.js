@@ -210,7 +210,7 @@ class EventSchedule
 
 			var next = this.getNextSet(stage);
 			if (next !== null && !next.nothing) {
-				if (date.add(5, 'm') > next.date && !next.report_5min) {
+				if (date.clone().add(5, 'm') > next.date && !next.report_5min) {
 					next.report_5min = true;
 					console.log("Starting in 5 minutes: " + next.name);
 					var msg = ":warning: **" + next.name + "** starts in 5 minutes!";
