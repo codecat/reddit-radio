@@ -3,18 +3,18 @@
 		"stage": "I AM HARDSTYLE - Born & Raised",
 		"channel": "319525278978277407",
 		"emoji": ":warning:",
-		"url": "https://youtube.com/",
-		"unconfirmed": true,
+		"url": "https://www.youtube.com/watch?v=Y9KxiNOKaCI",
+		"unconfirmed": false,
 		"streamdelay": 0,
 		"sets": [
-			[ 2020, 3, 14, 20, 0, "Brennan Heart" ],
-			[ 2020, 3, 14, 21, 0, "Code Black" ],
-			[ 2020, 3, 14, 22, 0, "Dailucia" ],
-			[ 2020, 3, 14, 23, 0, "Toneshifterz" ],
+			[ 2020, 3, 14, 20, 0, "Toneshifterz" ],
+			[ 2020, 3, 14, 21, 0, "Brennan Heart" ],
+			[ 2020, 3, 14, 22, 0, "Code Black" ],
+			[ 2020, 3, 14, 23, 0, "Brennan Heart, Code Black, Dailucia & Toneshifterz" ],
 			[ 2020, 3, 15, 0, 0 ]
 		],
 		"responses": {
-			"^\\.(url|stream|link|watch)$": ":tv: Tune in to the livestream here: **<https://www.youtube.com/>**",
+			"^\\.(url|stream|link|watch)$": ":tv: Tune in to the livestream here: **<https://www.youtube.com/watch?v=Y9KxiNOKaCI>**",
 			"^\\.(corona)$": "Due to many hardstyle events being canceled due to the COVID-19 pandemic, several DJ's are setting up their own livestream events. For all Corona/Event related news: <https://redd.it/fh1kvr>"
 		}
 	},
@@ -22,7 +22,7 @@
 		"stage": "Quarantine Hardstyle Sessions",
 		"channel": "688383827407667272",
 		"emoji": ":wolf:",
-		"url": "https://youtube.com/",
+		"url": "https://www.youtube.com/watch?v=IP5W-6tiQFQ",
 		"unconfirmed": false,
 		"streamdelay": 0,
 		"sets": [
@@ -34,8 +34,25 @@
 			[ 2020, 3, 15, 0, 30 ]
 		],
 		"responses": {
-			"^\\.(url|stream|link|watch)$": ":tv: Tune in to the livestream here: **<https://www.youtube.com/>**",
+			"^\\.(url|stream|link|watch)$": ":tv: Tune in to the livestream here: **<https://www.youtube.com/watch?v=IP5W-6tiQFQ>**",
 			"^\\.(mc|host)$": ":microphone: Hosted by **MC Da Syndrone**.",
+			"^\\.(corona)$": "Due to many hardstyle events being canceled due to the COVID-19 pandemic, several DJ's are setting up their own livestream events. For all Corona/Event related news: <https://redd.it/fh1kvr>"
+		}
+	},
+	{
+		"stage": "United We Stand",
+		"channel": "688470315579605189",
+		"emoji": "<:frontliner:376092032361299979>",
+		"url": "https://www.youtube.com/watch?v=6B8OU5aQR_4",
+		"unconfirmed": true,
+		"streamdelay": 0,
+		"sets": [
+			[ 2020, 3, 14, 21, 0, "Blasterjaxx" ],
+			[ 2020, 3, 14, 22, 0, "Frontliner" ],
+			[ 2020, 3, 14, 23, 30 ]
+		],
+		"responses": {
+			"^\\.(url|stream|link|watch)$": ":tv: Tune in to the livestream here: **<https://www.youtube.com/watch?v=6B8OU5aQR_4>**",
 			"^\\.(corona)$": "Due to many hardstyle events being canceled due to the COVID-19 pandemic, several DJ's are setting up their own livestream events. For all Corona/Event related news: <https://redd.it/fh1kvr>"
 		}
 	}
