@@ -228,7 +228,7 @@ class RedditRadio
 				for (var i = 0; i < inviteLinks.length; i++) {
 					//TODO: Put whitelist in config file
 					if (inviteLinks[i].toLowerCase() != "discord.gg/hardstyle") {
-						this.addLogMessage("Deleted Discord invite link from " + msg.author + " in " + msg.channel + ": `" + inviteLinks[i].replace('/', ' slash ') + "`");
+						this.addLogMessage("Deleted Discord invite link from " + msg.author.toString() + " in " + msg.channel.toString() + ": `" + inviteLinks[i].replace('/', ' slash ') + "`");
 						msg.delete();
 						msg.author.send("Your recent message has been automatically deleted. Please do not post Discord invite links without prior permission from a moderator or admin.");
 						return;
@@ -239,7 +239,7 @@ class RedditRadio
 
 		var emotes = msg.content.toLowerCase().match(/(<a?:[^:]+:[0-9]+>|\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/g);
 		if (emotes && emotes.length > 14) {
-			this.addLogMessage("Deleted message from " + msg.member + " in " + msg.channel + " that contained " + emotes.length + " emotes");
+			this.addLogMessage("Deleted message from " + msg.member.toString() + " in " + msg.channel.toString() + " that contained " + emotes.length + " emotes");
 			msg.delete();
 			msg.author.send("You posted too many emojis. Calm down a little bit!");
 			return;

@@ -40,7 +40,7 @@ class ToolsModule
 		var createdAt = moment(member.user.createdAt);
 
 		msg.channel.send(
-			"**Info for member " + member + "**:\n" +
+			"**Info for member " + member.toString() + "**:\n" +
 			":alarm_clock: Join time: **" + joinedAt.fromNow() + "** (" + joinedAt.format() + ")\n" +
 			":alarm_clock: Account age: **" + createdAt.fromNow() + "** (" + createdAt.format() + ")"
 		);
