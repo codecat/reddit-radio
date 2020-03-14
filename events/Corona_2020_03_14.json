@@ -22,7 +22,7 @@
 		"stage": "Quarantine Hardstyle Sessions",
 		"channel": "688383827407667272",
 		"emoji": ":wolf:",
-		"url": "https://www.youtube.com/watch?v=IP5W-6tiQFQ",
+		"url": "https://www.facebook.com/195871095240/videos/623960038167040/",
 		"unconfirmed": false,
 		"streamdelay": 0,
 		"sets": [
@@ -34,7 +34,7 @@
 			[ 2020, 3, 15, 0, 30 ]
 		],
 		"responses": {
-			"^\\.(url|stream|link|watch)$": ":tv: Tune in to the livestream here: **<https://www.youtube.com/watch?v=IP5W-6tiQFQ>**",
+			"^\\.(url|stream|link|watch)$": ":tv: Tune in to the livestream here: **<https://www.facebook.com/195871095240/videos/623960038167040/>**",
 			"^\\.(mc|host)$": ":microphone: Hosted by **MC Da Syndrone**.",
 			"^\\.(corona)$": "Due to many hardstyle events being canceled due to the COVID-19 pandemic, several DJ's are setting up their own livestream events. For all Corona/Event related news: <https://redd.it/fh1kvr>"
 		}
