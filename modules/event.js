@@ -340,7 +340,7 @@ class EventSchedule
 
 				var stageMessage = "";
 				if (this.schedule.length > 1) {
-					stageMessage = " on the **" + res.stage.stage + "** " + res.stage.emoji + " stage!";
+					stageMessage = " on **" + res.stage.stage + "** " + res.stage.emoji + " stage!";
 				}
 
 				if (date > res.date) {
@@ -366,11 +366,15 @@ class EventSchedule
 
 	onMessage(msg)
 	{
+		var inStage = false;
+
 		for (var i = 0; i < this.schedule.length; i++) {
 			var stage = this.schedule[i];
-			if (stage.channel != msg.channel) {
+			if (stage.channel.id != msg.channel.id) {
 				continue;
 			}
+
+			inStage = true;
 
 			for (var j = 0; j < stage.responses.length; j++) {
 				var r = stage.responses[j];
@@ -393,7 +397,8 @@ class EventSchedule
 			parse = cmdsplit(msg.content);
 		}
 
-		if (isCommand && this.schedule.length > 1 && (parse[0] == ".schedule" || parse[0] == ".timetable" || parse[0] == ".sched" || parse[0] == ".current" || parse[0] == ".now")) {
+		// Outside-channel schedule command
+		if (isCommand && this.schedule.length > 1 && !inStage && (parse[0] == ".schedule" || parse[0] == ".timetable" || parse[0] == ".sched" || parse[0] == ".current" || parse[0] == ".now")) {
 			// Avoid spamming long .now message when jokers spam .now
 			var now = new Date();
 			if ((now - this.lastNow) < 60 * 1000) {
@@ -408,7 +413,7 @@ class EventSchedule
 				var current = this.getCurrentSet(stage);
 				var next = this.getNextSet(stage);
 
-				if (current === null && next !== null && next.date.date() != now.date()) {
+				if (current === null && next !== null && next.date.date() != moment(now).date()) {
 					continue;
 				}
 
@@ -424,7 +429,7 @@ class EventSchedule
 					ret += ".";
 				}
 
-				ret += " " + stage.channel + "\n";
+				ret += " " + stage.channel.toString() + "\n";
 			}
 			msg.channel.send(ret.trim());
 			return true;
