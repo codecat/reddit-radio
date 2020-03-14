@@ -252,14 +252,18 @@ class EventSchedule
 		}
 
 		var next = this.getNextSet(stage);
-		if (next !== null) {
+		if (next) {
 			var localTime = "**" + this.getTimeString(next.date) + "**";
 			localTime += " (" + next.date.fromNow() + ")";
 
-			if (next.who) {
-				msg.channel.send(":arrow_forward: Next up: **" + next.name + "**, at " + localTime + " (" + next.who + ")");
+			if (next.name) {
+				if (next.who) {
+					msg.channel.send(":arrow_forward: Next up: **" + next.name + "**, at " + localTime + " (" + next.who + ")");
+				} else {
+					msg.channel.send(":arrow_forward: Next up: **" + next.name + "**, at " + localTime);
+				}
 			} else {
-				msg.channel.send(":arrow_forward: Next up: **" + next.name + "**, at " + localTime);
+				msg.channel.send(":arrow_forward: The stream ends at " + localTime);
 			}
 		} else {
 			msg.channel.send("There's nothing playing next.");
