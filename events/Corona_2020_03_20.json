@@ -1,0 +1,24 @@
+[
+	{
+		"stage": "Quarantine Hardstyle Sessions",
+		"channel": "319525278978277407",
+		"emoji": ":wolf:",
+		"url": "https://youtube.com/",
+		"unconfirmed": false,
+		"streamdelay": 0,
+		"sets": [
+			[ 2020, 3, 20, 20, 0, "Frequencerz (Hardstyle Classics)" ],
+			[ 2020, 3, 20, 20, 30, "B-Freqz" ],
+			[ 2020, 3, 20, 21, 0, "Rejecta" ],
+			[ 2020, 3, 20, 21, 30, "Radianze" ],
+			[ 2020, 3, 20, 22, 0, "Digital Punk" ],
+			[ 2020, 3, 15, 22, 30, "D-Fence" ],
+			[ 2020, 3, 15, 23, 30 ]
+		],
+		"responses": {
+			"^\\.(url|stream|link|watch)$": ":tv: Tune in to the livestream here: **<https://youtube.com/>**",
+			"^\\.(mc|host)$": ":microphone: Hosted by **MC Da Syndrone**.",
+			"^\\.(corona)$": "Due to many hardstyle events being canceled due to the COVID-19 pandemic, several DJ's are setting up their own livestream events. For all Corona/Event related news: <https://redd.it/fh1kvr>"
+		}
+	}
+]
