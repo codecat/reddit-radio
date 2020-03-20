@@ -39,6 +39,7 @@ class RedditRadio
 		this.client = new discord.Client();
 		this.client.on("message", (msg) => { this.onMessage(msg, false); });
 		this.client.on("messageUpdate", (oldMsg, newMsg) => { this.onMessageUpdate(oldMsg, newMsg); });
+		this.client.on("messageDelete", (msg) => { this.onMessageDelete(msg); });
 		this.client.on("guildMemberAdd", (member) => { this.onMemberJoin(member); });
 		this.readyPromises.push(this.client.login(this.config.discord.token));
 
@@ -216,7 +217,7 @@ class RedditRadio
 				(this.config.filter.badwords && msg.content.toLowerCase().match(this.config.filter.badwords)) ||
 				(this.config.filter.badtokens && msg.content.match(this.config.filter.badtokens))
 				)) {
-				this.addLogMessage("Deleted unwanted message from " + msg.author + " in " + msg.channel + ": `" + msg.content.replace('`', '\\`') + "`");
+				this.addLogMessage("Deleted unwanted message from " + msg.author.toString() + " in " + msg.channel.toString() + ": `" + msg.content.replace('`', '\\`') + "`");
 				msg.delete();
 				msg.author.send("Your recent message has been automatically deleted. Please take another look at the rules in #info. We automatically delete messages for things like piracy and advertising.");
 				return;
@@ -325,6 +326,11 @@ class RedditRadio
 		if (oldMsg.content != newMsg.content) {
 			this.onMessage(newMsg, true);
 		}
+	}
+
+	async onMessageDelete(msg)
+	{
+		console.log("Message deleted: \"" + msg.content + "\"");
 	}
 
 	onCmdGithub(msg)
