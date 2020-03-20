@@ -17,6 +17,16 @@ class ToolsModule
 		});
 	}
 
+	onCmdSlow(msg, seconds)
+	{
+		if (!this.bot.isMod(msg.member)) {
+			return;
+		}
+
+		msg.channel.setRateLimitPerUser(parseInt(seconds));
+		msg.delete();
+	}
+
 	onCmdUserInfo(msg, user)
 	{
 		if (!this.bot.isMod(msg.member)) {
