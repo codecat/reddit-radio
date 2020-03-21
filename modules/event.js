@@ -270,27 +270,22 @@ class EventSchedule
 		}
 	}
 
-	onCmdTimetable(msg) { this.onCmdSchedule(msg); }
-	onCmdSched(msg) { this.onCmdSchedule(msg); }
-	onCmdSchedule(msg)
+	getScheduleString(stage, limit, starttime)
 	{
-		var stage = this.getStageByChannel(msg.channel);
-		if (!stage) {
-			return;
-		}
-
 		var ret = "";
 
 		if (stage.unconfirmed) {
 			ret = ":warning: **Note:** Set times are not confirmed!\n";
 		}
 
-		var date = moment();
+		if (!starttime) {
+			starttime = moment(stage.sets[0].date).clone().subtract(1, 'm');
+		}
 
 		var lines = 0;
 		for (var i = 0; i < stage.sets.length; i++) {
 			var set = stage.sets[i];
-			if (date > set.date) {
+			if (starttime > set.date) {
 				continue;
 			}
 
@@ -303,16 +298,42 @@ class EventSchedule
 				ret += "- " + this.getWeekDay(set.date.day()) + " " + localTime + ": **" + set.name + "**\n";
 			}
 
-			if (lines++ == 5) {
+			lines++;
+			if (limit && lines == limit) {
 				break;
 			}
 		}
 
 		if (lines == 0) {
-			msg.channel.send("We have nothing left! :frowning:");
+			ret = "We have nothing left! :frowning:";
 		} else {
-			msg.channel.send(":calendar_spiral: Next 5 sets are: (the local time is **" + this.getTimeString(moment()) + "**)\n" + ret.trim());
+			ret = ":calendar_spiral: Next 5 sets are: (the local time is **" + this.getTimeString(moment()) + "**)\n" + ret.trim();
 		}
+
+		return ret;
+	}
+
+	onCmdTimetable(msg) { this.onCmdSchedule(msg); }
+	onCmdSched(msg) { this.onCmdSchedule(msg); }
+	onCmdSchedule(msg)
+	{
+		var stage = this.getStageByChannel(msg.channel);
+		if (!stage) {
+			return;
+		}
+
+		msg.channel.send(this.getScheduleString(stage, 5, moment()));
+	}
+
+	onCmdFullSchedule(msg)
+	{
+		var stage = this.getStageByChannel(msg.channel);
+		if (!stage) {
+			return;
+		}
+
+		msg.author.send(this.getScheduleString(stage));
+		msg.reply("I've DM'd you the full schedule.");
 	}
 
 	onCmdFind(msg)
