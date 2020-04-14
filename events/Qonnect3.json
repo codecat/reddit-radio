@@ -1,0 +1,29 @@
+[
+	{
+		"stage": "The Studio",
+		"channel": "319525278978277407",
+		"emoji": "<:qdance:328585093553586176>",
+		"url": "https://live.q-dance.com/",
+		"unconfirmed": false,
+		"streamdelay": 3,
+		"sets": [
+			[ 2020, 4, 11, 13, 0, "Retrospect" ],
+			[ 2020, 4, 11, 14, 0, "Villain" ],
+			[ 2020, 4, 11, 15, 0, "Coone" ],
+			[ 2020, 4, 11, 16, 0, "Da Tweekaz" ],
+			[ 2020, 4, 11, 17, 0, "Zatox" ],
+			[ 2020, 4, 11, 18, 0, "Darkraver (Vinyl Mix at Six)" ],
+			[ 2020, 4, 11, 19, 0, "KELTEK" ],
+			[ 2020, 4, 11, 20, 0, "Headhunterz" ],
+			[ 2020, 4, 11, 21, 0, "Atmozfears" ],
+			[ 2020, 4, 11, 22, 0, "Crypsis" ],
+			[ 2020, 4, 11, 23, 0, "Sefa (LIVE)" ],
+			[ 2020, 4, 12, 0, 0 ]
+		],
+		"responses": {
+			"^\\.(url|stream|link|watch)$": ":tv: Tune in to the livestream here: **<https://live.q-dance.com/>**",
+			"^\\.(mc|host)$": ":microphone: The hosts between 13:00 and 18:00 are Adrenalize and Tellem. During 18:00 and 23:30 it's Audiofreq & E-life.",
+			"^\\.(hidechat|removechat|fuckchat)$": ":thinking: Press F12 and paste this into the console to hide the chat on live.q-dance.com: ```sc=document.getElementById(\"scrollContainer\");sc.classList.remove(\"col-l--9\");sc.classList.remove(\"col-m--8\");sc.classList.add(\"col-l--12\");sc.classList.remove(\"col-m--12\");```"
+		}
+	}
+]

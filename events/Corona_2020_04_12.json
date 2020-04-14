@@ -1,0 +1,24 @@
+[
+	{
+		"stage": "I AM HARDSTYLE",
+		"channel": "319525278978277407",
+		"emoji": ":warning:",
+		"url": "https://www.youtube.com/watch?v=0jWt1ZQd7Gg",
+		"unconfirmed": false,
+		"streamdelay": 0,
+		"sets": [
+			[ 2020, 4, 12, 19, 0, "Code Black" ],
+			[ 2020, 4, 12, 19, 45, "Dailucia" ],
+			[ 2020, 4, 12, 20, 15, "Aftershock" ],
+			[ 2020, 4, 12, 20, 45, "Toneshifterz" ],
+			[ 2020, 4, 12, 21, 15, "Brennan Heart" ],
+			[ 2020, 4, 12, 22, 15, "Radical Redemption & MC Nolz" ],
+			[ 2020, 4, 12, 23, 0 ]
+		],
+		"responses": {
+			"^\\.(url|stream|link|watch)$": ":tv: Tune in to the livestream here: **<https://www.youtube.com/watch?v=0jWt1ZQd7Gg>**",
+			"^\\.(corona)$": "Due to many hardstyle events being canceled due to the COVID-19 pandemic, several DJ's are setting up their own livestream events. For all Corona/Event related news: <https://redd.it/fh1kvr>",
+			"^\\.(ultrawide)$": "For the ultrawide viewers, this userscript is nice: <https://greasyfork.org/en/scripts/396195-video-zooming-buttons>"
+		}
+	}
+]

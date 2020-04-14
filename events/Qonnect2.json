@@ -1,0 +1,33 @@
+[
+	{
+		"stage": "The Studio",
+		"channel": "319525278978277407",
+		"emoji": "<:qdance:328585093553586176>",
+		"url": "https://live.q-dance.com/",
+		"unconfirmed": false,
+		"streamdelay": 0,
+		"sets": [
+			[ 2020, 4, 4, 18, 5, "Degos & Re-Done" ],
+			[ 2020, 4, 4, 18, 35, "MYST" ],
+			[ 2020, 4, 4, 19, 15, "Hard Driver" ],
+			[ 2020, 4, 4, 19, 45, "Apexx" ],
+			[ 2020, 4, 4, 20, 20, "B-Front" ],
+			[ 2020, 4, 4, 20, 55, "Adaro" ],
+			[ 2020, 4, 4, 21, 30, "Bloodlust" ],
+			[ 2020, 4, 4, 22, 5, "Vertile" ],
+			[ 2020, 4, 4, 22, 35, "Rejecta" ],
+			[ 2020, 4, 4, 23, 15, "The Qreator: The Ultimate QAPITAL Mix" ],
+			[ 2020, 4, 4, 23, 45, "Act of Rage" ],
+			[ 2020, 4, 5, 0, 20, "Rebelion" ],
+			[ 2020, 4, 5, 0, 50, "Rooler" ],
+			[ 2020, 4, 5, 1, 25, "Invector" ],
+			[ 2020, 4, 5, 1, 55, "Thyron" ],
+			[ 2020, 4, 5, 2, 25, "Imperatorz" ],
+			[ 2020, 4, 5, 3, 0 ]
+		],
+		"responses": {
+			"^\\.(url|stream|link|watch)$": ":tv: Tune in to the livestream here: **<https://live.q-dance.com/>**",
+			"^\\.(mc|host)$": ":microphone: The hosts are Tellem & Livid."
+		}
+	}
+]
