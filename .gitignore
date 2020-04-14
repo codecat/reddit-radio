@@ -4,9 +4,6 @@ config.toml
 local/
 modules/livenp.js
 
-# Unfinished
-modules/producing.js
-
 # Node
 node_modules/
 package-lock.json
