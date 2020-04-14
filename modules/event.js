@@ -289,6 +289,12 @@ class EventSchedule
 				continue;
 			}
 
+			if (limit && lines == limit) {
+				ret += "(limited, use `.fullschedule` for the full schedule)\n";
+				break;
+			}
+			lines++;
+
 			var localTime = "**" + this.getTimeString(set.date) + "**";
 			localTime += " (" + set.date.fromNow() + ")";
 
@@ -297,17 +303,14 @@ class EventSchedule
 			} else {
 				ret += "- " + this.getWeekDay(set.date.day()) + " " + localTime + ": **" + set.name + "**\n";
 			}
-
-			lines++;
-			if (limit && lines == limit) {
-				break;
-			}
 		}
 
 		if (lines == 0) {
 			ret = "We have nothing left! :frowning:";
+		} else if (limit) {
+			ret = ":calendar_spiral: Next " + limit + " sets are: (the local time is **" + this.getTimeString(moment()) + "**)\n" + ret.trim();
 		} else {
-			ret = ":calendar_spiral: Next 5 sets are: (the local time is **" + this.getTimeString(moment()) + "**)\n" + ret.trim();
+			ret = ":calendar_spiral: The full schedule: (the local time is **" + this.getTimeString(moment()) + "**)\n" + ret.trim();
 		}
 
 		return ret;
