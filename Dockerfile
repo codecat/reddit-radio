@@ -1,4 +1,4 @@
-FROM node:8-alpine
+FROM node:13-alpine
 
 ENV CONFIG_FILE="./config/config.toml"
 
