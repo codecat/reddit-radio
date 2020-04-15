@@ -31,7 +31,7 @@ class QdanceModule
 			description: track.Artist + " - " + track.Title,
 			hexColor: "#D26F1C"
 		});
-		embed.setAuthor("Q-Dance Radio", "https://4o4.nl/20170908JHxVy.png");
+		embed.setAuthor("Q-dance Radio", "https://4o4.nl/20170908JHxVy.png");
 		embed.setThumbnail(track.CoverImage);
 		return embed;
 	}
@@ -39,21 +39,21 @@ class QdanceModule
 	onCmdQdnp(msg)
 	{
 		this.get(0, (track) => {
-			msg.channel.send("", this.makeEmbed(track, "Q-Dance Radio is now playing:"));
+			msg.channel.send("", this.makeEmbed(track, "Q-dance Radio is now playing:"));
 		});
 	}
 
 	onCmdQdnext(msg)
 	{
 		this.get(1, (track) => {
-			msg.channel.send("", this.makeEmbed(track, "Next track on Q-Dance Radio:"));
+			msg.channel.send("", this.makeEmbed(track, "Next track on Q-dance Radio:"));
 		});
 	}
 
 	onCmdQdprev(msg)
 	{
 		this.get(-1, (track) => {
-			msg.channel.send("", this.makeEmbed(track, "Previous track on Q-Dance Radio:"));
+			msg.channel.send("", this.makeEmbed(track, "Previous track on Q-dance Radio:"));
 		});
 	}
 }
