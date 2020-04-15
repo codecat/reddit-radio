@@ -28,7 +28,7 @@
 		],
 		"responses": {
 			"^\\.(top100|top10)": "Find the Q-dance Top 100 here: <#661622907109244939>",
-			"^\\.(url|stream|link|watch)$": ":tv: Listen to the livestream in our **Q-Dance Radio voice channel** or here: **<https://www.q-dance.com/en/radio/>**",
+			"^\\.(url|stream|link|watch)$": ":tv: Listen to the livestream in our **Q-dance Radio voice channel** or here: **<https://www.q-dance.com/en/radio/>**",
 			"^\\.(mc|host)$": ":microphone: The top 100 is hosted by **Tellem**. The MC during Epiq is **Villan**."
 		}
 	}
