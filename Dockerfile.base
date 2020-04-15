@@ -1,0 +1,18 @@
+FROM node:13-alpine
+
+WORKDIR /app
+
+COPY ./package.json /app/package.json
+
+RUN apk add --no-cache ffmpeg \
+    && apk add --no-cache --virtual .build-deps \
+        g++ \
+        gcc \
+        libgcc \
+        make \
+        autoconf \
+        libtool \
+        automake \
+        python \
+    && npm install \
+    && apk del .build-deps

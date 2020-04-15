@@ -49,10 +49,11 @@ class Startup
 	{
 		this.radio = new Radio(this.config, radioConfig);
 
-		var self = this;
-		process.on("SIGINT", function() {
-			self.radio.stop();
-		});
+		var stopHandler = () => {
+			this.radio.stop();
+		};
+		process.on("SIGINT", stopHandler); // Ctrl+C
+		process.on("SIGTERM", stopHandler); // Terminate
 	}
 
 	startBot(config)
@@ -60,10 +61,11 @@ class Startup
 		this.bot = new RedditRadio(config);
 		this.bot.start();
 
-		var self = this;
-		process.on("SIGINT", function() {
-			self.bot.stop();
-		});
+		var stopHandler = () => {
+			this.bot.stop();
+		};
+		process.on("SIGINT", stopHandler);
+		process.on("SIGTERM", stopHandler);
 	}
 
 	parseArgs()

@@ -1,22 +1,9 @@
-FROM node:13-alpine
+FROM reddit-radio-base
 
 ENV CONFIG_FILE="./config/config.toml"
 
 WORKDIR /app
 
 COPY . /app
-
-RUN apk add --no-cache ffmpeg \
-    && apk add --no-cache --virtual .build-deps \
-        g++ \
-        gcc \
-        libgcc \
-        make \
-        autoconf \
-        libtool \
-        automake \
-        python \
-    && npm install \
-    && apk del .build-deps
 
 CMD ["node", "index.js"]
