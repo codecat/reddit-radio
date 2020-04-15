@@ -120,16 +120,16 @@ class ProducingModule
 			var filenames = "";
 			var numFiles = 0;
 
-			msg.attachments.tap(async a => {
-				if (!a.filename.match(/.*\.(wav|mp3|ogg|flac)/)) {
+			msg.attachments.each(async a => {
+				if (!a.name.match(/.*\.(wav|mp3|ogg|flac)/)) {
 					return;
 				}
 
-				filenames += a.filename + " ";
+				filenames += a.name + " ";
 				numFiles++;
 
 				var logUsername = msg.author.username + '#' + msg.author.discriminator;
-				console.log(logUsername + " uploaded " + a.filename.red.underline);
+				console.log(logUsername + " uploaded " + a.name.red.underline);
 
 				this.collUsers.updateOne({ id: user.id }, {
 					$inc: { files_uploaded: 1 }
@@ -155,10 +155,10 @@ class ProducingModule
 					displayName = msg.member.nickname;
 				}
 
-				msg.channel.send("**Give " + msg.member + " your feedback!** :outbox_tray: " + (user.files_uploaded + 1) + " / :bulb: " + numFeedbackGiven);
+				msg.channel.send("**Give " + msg.member.toString() + " your feedback!** :outbox_tray: " + (user.files_uploaded + 1) + " / :bulb: " + numFeedbackGiven);
 
 				if (numFeedbackGiven < user.files_uploaded) {
-					msg.channel.send(msg.member + " Remember to give others feedback, too! :ok_hand:");
+					msg.channel.send(msg.member.toString() + " Remember to give others feedback, too! :ok_hand:");
 				}
 			}
 		})();
@@ -177,7 +177,7 @@ class ProducingModule
 		var numFeedbackReceived = await this.collFilesFeedback.countDocuments({ msg_user: user.id });
 		var numFeedbackGiven = await this.getNumberOfFeedbackGiven(user.id);
 
-		msg.channel.send(":bar_chart: " + msg.member + ", you have uploaded **" + (user.files_uploaded || 0) + "** files, given **" + numFeedbackGiven + "** feedback reactions, and received **" + numFeedbackReceived + "**.");
+		msg.channel.send(":bar_chart: " + msg.member.toString() + ", you have uploaded **" + (user.files_uploaded || 0) + "** files, given **" + numFeedbackGiven + "** feedback reactions, and received **" + numFeedbackReceived + "**.");
 	}
 }
 
