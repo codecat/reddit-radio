@@ -17,6 +17,7 @@
   "scripts": {
     "start": "node index.js",
     "radio": "node index.js --radio",
+		"radios": "node index.js --radios",
     "no-radio": "node index.js --no-radios"
   },
   "author": "Codecat"

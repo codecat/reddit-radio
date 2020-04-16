@@ -8,6 +8,7 @@ class Startup
 	constructor()
 	{
 		this.RADIO = 'radio';
+		this.RADIOS = 'radios';
 		this.NO_RADIO = 'no-radio';
 		this.REGULAR_BOT = 'regular-bot';
 
@@ -20,6 +21,7 @@ class Startup
 		let args = this.parseArgs();
 		switch (args.type) {
 			case this.RADIO: this.setupRadio(args.name); break;
+			case this.RADIOS: this.setupRadios(); break;
 			case this.NO_RADIO: this.setupNoRadio(); break;
 			default: this.startBot(this.config); break;
 		}
@@ -40,20 +42,24 @@ class Startup
 		}
 		for (let i = 0; i < this.config.radios.length; i++) {
 			if (this.config.radios[i].name === name) {
-				this.startRadio(this.config.radios[i])
+				this.startRadio(this.config.radios[i]);
+				break;
 			}
 		}
+		this.setupSignals();
+	}
+
+	setupRadios()
+	{
+		for (var i = 0; i < this.config.radios.length; i++) {
+			this.startRadio(this.config.radios[i]);
+		}
+		this.setupSignals();
 	}
 
 	startRadio(radioConfig)
 	{
 		this.radio = new Radio(this.config, radioConfig);
-
-		var stopHandler = () => {
-			this.radio.stop();
-		};
-		process.on("SIGINT", stopHandler); // Ctrl+C
-		process.on("SIGTERM", stopHandler); // Terminate
 	}
 
 	startBot(config)
@@ -61,11 +67,16 @@ class Startup
 		this.bot = new RedditRadio(config);
 		this.bot.start();
 
+		this.setupSignals();
+	}
+
+	setupSignals()
+	{
 		var stopHandler = () => {
 			this.bot.stop();
 		};
-		process.on("SIGINT", stopHandler);
-		process.on("SIGTERM", stopHandler);
+		process.on("SIGINT", stopHandler); // Ctrl+C
+		process.on("SIGTERM", stopHandler); // Terminate
 	}
 
 	parseArgs()
@@ -73,6 +84,7 @@ class Startup
 		let args = process.argv.splice(2);
 		switch (args[0]) {
 			case '--radio': return { type: this.RADIO, name: args[1]};
+			case '--radios': return { type: this.RADIOS };
 			case '--no-radios': return { type: this.NO_RADIO };
 			default: return { type: this.REGULAR_BOT };
 		}
