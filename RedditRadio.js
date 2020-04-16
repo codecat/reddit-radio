@@ -263,6 +263,11 @@ class RedditRadio
 			return;
 		}
 
+		if (msg.content.toLowerCase() == "kut bot") {
+			msg.channel.send(msg.member.toString() + " nou sorry hoor");
+			return;
+		}
+
 		if (msg.content.toLowerCase().indexOf("am i the only one") != -1 && msg.member !== null) {
 			msg.channel.send(msg.member.toString() + " Probably not.");
 			return;
