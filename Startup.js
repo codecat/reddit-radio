@@ -12,6 +12,8 @@ class Startup
 		this.NO_RADIO = 'no-radio';
 		this.REGULAR_BOT = 'regular-bot';
 
+		this.radios = [];
+
 		let configFile = process.env.CONFIG_FILE || "config.toml";
 		this.config = toml.parse(fs.readFileSync(configFile, "utf8"));
 	}
@@ -59,7 +61,7 @@ class Startup
 
 	startRadio(radioConfig)
 	{
-		this.radio = new Radio(this.config, radioConfig);
+		this.radios.push(new Radio(this.config, radioConfig));
 	}
 
 	startBot(config)
@@ -73,7 +75,12 @@ class Startup
 	setupSignals()
 	{
 		var stopHandler = () => {
-			this.bot.stop();
+			if (this.bot) {
+				this.bot.stop();
+			}
+			for (var i = 0; i < this.radios.length; i++) {
+				this.radios[i].stop();
+			}
 		};
 		process.on("SIGINT", stopHandler); // Ctrl+C
 		process.on("SIGTERM", stopHandler); // Terminate
