@@ -1,5 +1,6 @@
 [discord]
 token = "main_bot_token"
+timezone = "Europe/Amsterdam"
 
 #[database]
 #url = "mongodb://localhost:27017"

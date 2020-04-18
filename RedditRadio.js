@@ -1,6 +1,6 @@
 var discord = require("discord.js");
 var colors = require("colors");
-var moment = require("moment");
+var moment = require("moment-timezone");
 
 var process = require("process");
 var fs = require("fs");
@@ -35,6 +35,8 @@ class RedditRadio
 	{
 		this.config = config;
 		this.readyPromises = [];
+
+		moment.tz.setDefault(this.config.discord.timezone || "Europe/Amsterdam");
 
 		this.client = new discord.Client();
 		this.client.on("message", (msg) => { this.onMessage(msg, false); });
@@ -421,12 +423,8 @@ class RedditRadio
 
 	onCmdTime(msg)
 	{
-		var date = new Date();
-		var hours = date.getHours();
-		var minutes = date.getMinutes();
-
-		var text = "The local time is: **" + hours + ":" + (minutes >= 10 ? minutes : "0" + minutes) + "** (<https://time.is/CET>)";
-
+		var date = moment();
+		var text = "The local time is: **" + date.format("HH:mm") + "** (<https://time.is/CET>)";
 		msg.channel.send(text);
 	}
 }
