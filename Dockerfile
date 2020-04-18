@@ -1,4 +1,4 @@
-FROM codecat/reddit-radio:base
+FROM codecatt/reddit-radio:base
 
 ENV CONFIG_FILE="./config/config.toml"
 
