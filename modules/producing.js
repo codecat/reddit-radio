@@ -150,12 +150,7 @@ class ProducingModule
 					quickLookText = ":ok_hand:";
 				}
 
-				var displayName = msg.author.username;
-				if (msg.member.nickname) {
-					displayName = msg.member.nickname;
-				}
-
-				msg.channel.send("**Give " + msg.member.toString() + " your feedback!** :outbox_tray: " + (user.files_uploaded + 1) + " / :bulb: " + numFeedbackGiven);
+				msg.channel.send("**Give " + msg.member.displayName + " your feedback!** :outbox_tray: " + (user.files_uploaded + 1) + " / :bulb: " + numFeedbackGiven);
 
 				if (numFeedbackGiven < user.files_uploaded) {
 					msg.channel.send(msg.member.toString() + " Remember to give others feedback, too! :ok_hand:");
