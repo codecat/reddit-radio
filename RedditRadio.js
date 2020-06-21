@@ -226,16 +226,21 @@ class RedditRadio
 			}
 
 			// Delete invite links
-			var inviteLinks = msg.content.toLowerCase().match(/discord\.gg\/([A-Za-z0-9]+)/g);
-			if (inviteLinks) {
-				for (var i = 0; i < inviteLinks.length; i++) {
-					//TODO: Put whitelist in config file
-					if (inviteLinks[i].toLowerCase() != "discord.gg/hardstyle") {
-						this.addLogMessage("Deleted Discord invite link from " + msg.author.toString() + " in " + msg.channel.toString() + ": `" + inviteLinks[i].replace('/', ' slash ') + "`");
-						msg.delete();
-						msg.author.send("Your recent message has been automatically deleted. Please do not post Discord invite links without prior permission from a moderator or admin.");
-						return;
-					}
+			var inviteLinks = msg.content.matchAll(/(discord\.gg|discord\.com\/invite|discordapp\.com\/invite)\/([A-Za-z0-9]+)/gi);
+			for (const link of inviteLinks) {
+				var inviteCode = link[2];
+				var isWhitelisted = false;
+				if (this.config.filter && this.config.filter.invites) {
+					isWhitelisted = (this.config.filter.invites.indexOf(inviteCode) != -1);
+				}
+
+				if (!isWhitelisted) {
+					this.addLogMessage("Deleted Discord invite link from " + msg.author.toString() + " in " + msg.channel.toString() + ": `" + msg.content.replace('`', '\\`').replace('/', ' slash ') + "`");
+					msg.delete();
+					msg.author.send("Your recent message has been automatically deleted. Please do not post Discord invite links without prior permission from a moderator or admin.");
+					return;
+				} else {
+					this.addLogMessage("**Whitelisted** Discord invite link from " + msg.author.toString() + " in " + msg.channel.toString() + ": `" + msg.content.replace('`', '\\`').replace('/', ' slash ') + "`");
 				}
 			}
 		}
