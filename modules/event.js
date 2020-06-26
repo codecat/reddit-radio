@@ -301,7 +301,11 @@ class EventSchedule
 			if (set.nothing) {
 				ret += "- " + this.getWeekDay(set.date.day()) + " " + localTime + ", the stream will be offline :no_entry_sign:\n";
 			} else {
-				ret += "- " + this.getWeekDay(set.date.day()) + " " + localTime + ": **" + set.name + "**\n";
+				if (set.who) {
+					ret += "- " + this.getWeekDay(set.date.day()) + " " + localTime + ": **" + set.name + "** (" + set.who + ")\n";
+				} else {
+					ret += "- " + this.getWeekDay(set.date.day()) + " " + localTime + ": **" + set.name + "**\n";
+				}
 			}
 		}
 
