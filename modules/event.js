@@ -335,7 +335,12 @@ class EventSchedule
 			return;
 		}
 
-		msg.author.send(this.getScheduleString(stage));
+		var text = this.getScheduleString(stage);
+		while (text.length > 0) {
+			msg.author.send(text.substr(0, 2000));
+			text = text.substr(2000);
+		}
+
 		msg.reply("I've DM'd you the full schedule.");
 	}
 
