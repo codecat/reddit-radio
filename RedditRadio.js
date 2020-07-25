@@ -51,6 +51,11 @@ class RedditRadio
 			this.mongoclient = new MongoClient(this.config.database.url, { useUnifiedTopology: true });
 			this.readyPromises.push(this.mongoclient.connect());
 		}
+
+		/** @type {discord.TextChannel} */
+		this.logChannel = null;
+		/** @type {discord.TextChannel} */
+		this.dmChannel = null;
 	}
 
 	loadConfigModules()
@@ -89,9 +94,8 @@ class RedditRadio
 
 		this.client.user.setActivity(this.config.discord.activity);
 
-		this.client.channels.fetch(this.config.discord.logchannel).then(logChannel => {
-			this.logChannel = logChannel;
-		});
+		this.client.channels.fetch(this.config.discord.logchannel).then(logChannel => this.logChannel = logChannel);
+		this.client.channels.fetch(this.config.discord.dmchannel).then(dmChannel => this.dmChannel = dmChannel);
 
 		if (this.mongoclient) {
 			this.mongodb = this.mongoclient.db(this.config.database.db);
@@ -149,11 +153,19 @@ class RedditRadio
 		this.logChannel.send(":robot: " + text);
 	}
 
+	/**
+	 * Checks if the given member is an admin.
+	 * @param {discord.GuildMember} member
+	 */
 	isAdmin(member)
 	{
 		return member.hasPermission("ADMINISTRATOR");
 	}
 
+	/**
+	 * Checks if the given member is a moderator.
+	 * @param {discord.GuildMember} member
+	 */
 	isMod(member)
 	{
 		return member.hasPermission("MANAGE_MESSAGES");
@@ -174,11 +186,28 @@ class RedditRadio
 		console.log("User joined: " + member + " (" + member.user.username + ")");
 	}
 
+	/**
+	 * @param {discord.Message} msg
+	 * @param {Boolean} edited
+	 */
 	async onMessage(msg, edited)
 	{
+		// Ignore our own messages
+		if (msg.author == this.client.user) {
+			return;
+		}
+
 		// Ignore DM's
 		if (msg.member === null && msg.guild === null) {
-			console.warn("Ignored a DM: \"" + msg.content + "\"");
+			// Log DM's
+			var logUsername = msg.author.username + '#' + msg.author.discriminator;
+			console.warn("Ignored a DM from " + logUsername.brightWhite + ": \"" + msg.content + "\"");
+
+			// Send DM's to the DM channel
+			if (this.dmChannel) {
+				this.dmChannel.send(":mailbox_with_mail: " + msg.author.toString() + ": `" + msg.content + "`");
+			}
+
 			return;
 		}
 
@@ -192,11 +221,6 @@ class RedditRadio
 		if (msg.member === null) {
 			console.warn("Member is null, fetching member now");
 			msg.member = await msg.guild.fetchMember(msg.author);
-		}
-
-		// Ignore our own messages
-		if (msg.member.user == this.client.user) {
-			return;
 		}
 
 		// Log line
@@ -215,47 +239,6 @@ class RedditRadio
 			+ (edited ? '(edited) '.gray : '')
 			+ '"' + msg.content + '"');
 
-		// Delete unwanted messages only if not a moderator
-		if (!this.isMod(msg.member)) {
-			// Delete unwanted messages
-			if (this.config.filter && (
-				(this.config.filter.badwords && msg.content.toLowerCase().match(this.config.filter.badwords)) ||
-				(this.config.filter.badtokens && msg.content.match(this.config.filter.badtokens))
-				)) {
-				this.addLogMessage("Deleted unwanted message from " + msg.author.toString() + " in " + msg.channel.toString() + ": `" + msg.content.replace('`', '\\`') + "`");
-				msg.delete();
-				msg.author.send("Your recent message has been automatically deleted. Please take another look at the rules in #info. We automatically delete messages for things like piracy and advertising.");
-				return;
-			}
-
-			// Delete invite links
-			var inviteLinks = msg.content.matchAll(/(discord\.gg|discord\.com\/invite|discordapp\.com\/invite)\/([A-Za-z0-9]+)/gi);
-			for (const link of inviteLinks) {
-				var inviteCode = link[2];
-				var isWhitelisted = false;
-				if (this.config.filter && this.config.filter.invites) {
-					isWhitelisted = (this.config.filter.invites.indexOf(inviteCode) != -1);
-				}
-
-				if (!isWhitelisted) {
-					this.addLogMessage("Deleted Discord invite link from " + msg.author.toString() + " in " + msg.channel.toString() + ": `" + msg.content.replace('`', '\\`').replace('/', ' slash ') + "`");
-					msg.delete();
-					msg.author.send("Your recent message has been automatically deleted. Please do not post Discord invite links without prior permission from a moderator or admin.");
-					return;
-				} else {
-					this.addLogMessage("**Whitelisted** Discord invite link from " + msg.author.toString() + " in " + msg.channel.toString() + ": `" + msg.content.replace('`', '\\`').replace('/', ' slash ') + "`");
-				}
-			}
-		}
-
-		var emotes = msg.content.toLowerCase().match(/(<a?:[^:]+:[0-9]+>|\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/g);
-		if (emotes && emotes.length > 14) {
-			this.addLogMessage("Deleted message from " + msg.member.toString() + " in " + msg.channel.toString() + " that contained " + emotes.length + " emotes");
-			msg.delete();
-			msg.author.send("You posted too many emojis. Calm down a little bit!");
-			return;
-		}
-
 		for (var i = 0; i < this.modules.length; i++) {
 			var m = this.modules[i];
 			if (m.onMessage && m.onMessage(msg, edited)) {
@@ -263,37 +246,11 @@ class RedditRadio
 			}
 		}
 
-		if (msg.content.toLowerCase() == "good bot") {
-			msg.channel.send(msg.member.toString() + " Thanks");
-			return;
-		}
-
-		if (msg.content.toLowerCase() == "bad bot") {
-			msg.channel.send(msg.member.toString() + " I'm sorry :sob: If I did something wrong, you can report a bug! <https://github.com/codecat/reddit-radio/issues>");
-			return;
-		}
-
-		if (msg.content.toLowerCase() == "kut bot") {
-			msg.channel.send(msg.member.toString() + " nou sorry hoor");
-			return;
-		}
-
-		if (msg.content.toLowerCase().indexOf("am i the only one") != -1 && msg.member !== null) {
-			msg.channel.send(msg.member.toString() + " Probably not.");
-			return;
-		}
-
-		var parse = cmdsplit(msg.content);
-
-		if (parse.indexOf(".shrug") != -1) {
-			msg.channel.send("\xaf\\\\\\_<:headykappa:330110432209797123>\\_/\xaf");
-			return;
-		}
-
 		if (!msg.content.startsWith(".")) {
 			return;
 		}
 
+		var parse = cmdsplit(msg.content);
 		var cmdID = parse[0].slice(1);
 		cmdID = cmdID.charAt(0).toUpperCase() + cmdID.slice(1);
 		if (!cmdID.match(/^[a-z]+$/i)) {
@@ -378,6 +335,7 @@ class RedditRadio
 	}
 	*/
 
+	//TODO: Change this to .timeout and move this to its own module
 	onCmdMute(msg)
 	{
 		if (!this.isMod(msg.member)) {
