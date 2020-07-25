@@ -66,11 +66,14 @@ class RedditRadio
 				continue;
 			}
 
-			console.log('Module: "' + name + '"');
+			var configs = this.config.modules[name];
 
-			var config = this.config.modules[name];
-			var newModule = new moduleClass(config, this.client, this);
-			this.modules.push(newModule);
+			console.log('Module: "' + name + '" (' + configs.length + ' instances)');
+
+			for (let config of configs) {
+				var newModule = new moduleClass(config, this.client, this);
+				this.modules.push(newModule);
+			}
 		}
 	}
 
