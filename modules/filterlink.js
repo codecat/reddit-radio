@@ -3,7 +3,7 @@ const RedditRadio = require("../RedditRadio");
 
 var moment = require("moment");
 
-class AntiSpamModule
+class FilterLinkModule
 {
 	constructor(config, client, bot)
 	{
@@ -72,4 +72,4 @@ class AntiSpamModule
 	}
 }
 
-module.exports = AntiSpamModule;
+module.exports = FilterLinkModule;
