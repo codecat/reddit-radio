@@ -61,10 +61,14 @@ class AntiSpamModule
 			return;
 		}
 
+		var mentions = "";
 		for (let member of msg.mentions.members) {
 			this.permitted.push(member[0]);
+			mentions += member[1].toString() + " ";
 		}
-		msg.reply(":robot: They may now post links.");
+		msg.channel.send(mentions + "A moderator has permitted you to post links!");
+
+		this.bot.addLogMessage(msg.member.toString() + " has permitted " + mentions + "to post links");
 	}
 }
 
