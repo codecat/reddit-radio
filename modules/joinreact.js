@@ -18,7 +18,9 @@ class JoinReactModule
 	{
 		if (msg.system && msg.type == "GUILD_MEMBER_JOIN") {
 			setTimeout(() => {
-				msg.react(this.config.emoji).catch(console.error);
+				try {
+					msg.react(this.config.emoji || "👋");
+				} catch (err) { console.error(err); }
 			}, 2000);
 		}
 	}
