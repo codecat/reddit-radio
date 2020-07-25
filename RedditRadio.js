@@ -336,6 +336,7 @@ class RedditRadio
 	*/
 
 	//TODO: Change this to .timeout and move this to its own module
+	/*
 	onCmdMute(msg)
 	{
 		if (!this.isMod(msg.member)) {
@@ -367,6 +368,7 @@ class RedditRadio
 
 		msg.delete();
 	}
+	*/
 
 	formatMilliseconds(ms)
 	{
