@@ -1,6 +1,8 @@
 var colors = require("colors");
 var moment = require("moment");
 
+const ffmpeg = require('fluent-ffmpeg');
+
 class ProducingModule
 {
 	constructor(config, client, bot)
@@ -135,6 +137,32 @@ class ProducingModule
 					$inc: { files_uploaded: 1 }
 				});
 
+				new Promise((resolve, reject) => {
+					let path = '/tmp/waveform-' + msg.id + '.png';
+					let cmd = ffmpeg(a.url);
+					cmd.complexFilter([
+						'[0:a] showspectrumpic=s=400x150:color=rainbow:legend=false [tmp1]',
+						'[0:a] showwavespic=s=400x100:colors=0xFFFFFFFF [tmp2]',
+						'[tmp1][tmp2] overlay=y=25:format=rgb:alpha=premultiplied [tmp3]',
+						'[tmp3] drawbox=0:0:400:150:black',
+					]);
+					cmd.frames(1);
+					cmd.on('error', err => {
+						reject(err);
+					});
+					cmd.on('end', () => {
+						msg.channel.send({
+							files: [{
+								attachment: path,
+								name: 'waveform.png',
+							}],
+						}).then(resolve).catch(reject);
+					});
+					cmd.save(path);
+				}).catch(err => {
+					console.error('ffmpeg waveform failed!', err);
+				})
+
 				for (var i = 0; i < this.config.reactions.length; i++) {
 					await msg.react(this.config.reactions[i]);
 				}
@@ -143,18 +171,13 @@ class ProducingModule
 			if (numFiles > 0) {
 				var numFeedbackGiven = await this.getNumberOfFeedbackGiven(user.id);
 
-				var quickLookText = ":question:";
-				if (numFeedbackGiven < user.files_uploaded) {
-					quickLookText = ":rage:";
-				} else if (numFeedbackGiven > user.files_uploaded) {
-					quickLookText = ":ok_hand:";
-				}
-
 				msg.channel.send("**Give " + msg.member.displayName + " your feedback!** :outbox_tray: " + (user.files_uploaded + 1) + " / :bulb: " + numFeedbackGiven);
 
+				/*
 				if (numFeedbackGiven < user.files_uploaded) {
 					msg.channel.send(msg.member.toString() + " Remember to give others feedback, too! :ok_hand:");
 				}
+				*/
 			}
 		})();
 
