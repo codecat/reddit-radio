@@ -1,6 +1,8 @@
 [discord]
 token = "main_bot_token"
 timezone = "Europe/Amsterdam"
+logchannel = "647767937054277642"
+dmchannel = "736529983706628146"
 
 #[database]
 #url = "mongodb://localhost:27017"
@@ -9,12 +11,12 @@ timezone = "Europe/Amsterdam"
 [filter]
 badwords = "(thepiratebay|badwords)"
 
-[modules.qdance]
+[[modules.qdance]]
 
-#[modules.event]
+#[[modules.event]]
 #file = "events/Qlimax2019.json"
 
-#[modules.eventquick]
+#[[modules.eventquick]]
 #channel = "651911168650248208"
 
 [[radios]]
