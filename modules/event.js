@@ -332,6 +332,7 @@ class EventSchedule
 		msg.channel.send(this.getScheduleString(stage, 5, moment()));
 	}
 
+	onCmdFullSched(msg) { this.onCmdFullSchedule(msg); }
 	onCmdFullSchedule(msg)
 	{
 		var stage = this.getStageByChannel(msg.channel);
