@@ -44,8 +44,8 @@ class FunModule
 			msg.channel.send("\xaf\\\\\\_<:headykappa:330110432209797123>\\_/\xaf");
 			return;
 		}
-		
-		if (msg.content.toLowerCase() == "<@327816989114630145> <a:catjam150:760555281414881380>") {
+
+		if (msg.content.toLowerCase() == "<@!327816989114630145> <a:catjam150:760555281414881380>") {
 			msg.channel.send("<a:catjam150:760555281414881380>");
 			return;
 		}
