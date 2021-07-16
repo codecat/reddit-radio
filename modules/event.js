@@ -296,12 +296,12 @@ class EventSchedule
 			lines++;
 
 			if (set.nothing) {
-				ret += "- <t:" + set.date.unix() + ":F>, the stream will be offline :no_entry_sign:\n";
+				ret += "- <t:" + set.date.unix() + ":t> (<t:" + set.date.unix() + ":R>), the stream will be offline :no_entry_sign:\n";
 			} else {
 				if (set.who) {
-					ret += "- <t:" + set.date.unix() + ":F>: **" + set.name + "** (" + set.who + ")\n";
+					ret += "- <t:" + set.date.unix() + ":t> (<t:" + set.date.unix() + ":R>): **" + set.name + "** (" + set.who + ")\n";
 				} else {
-					ret += "- <t:" + set.date.unix() + ":F>: **" + set.name + "**\n";
+					ret += "- <t:" + set.date.unix() + ":t> (<t:" + set.date.unix() + ":R>): **" + set.name + "**\n";
 				}
 			}
 		}
@@ -498,7 +498,7 @@ class EventSchedule
 			}
 
 			if (next !== null) {
-				line += " :arrow_forward: Next: __" + next.name + "__ <t:" + next.date + ":R>";
+				line += " :arrow_forward: Next: __" + next.name + "__ <t:" + next.date.unix() + ":R>";
 			} else {
 				line += " :warning: This is the last set!";
 			}
