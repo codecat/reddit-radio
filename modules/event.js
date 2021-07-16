@@ -510,13 +510,13 @@ class EventSchedule
 			line += " :tada: Thanks for watching.";
 		} else {
 			if (current !== null && !current.nothing) {
-				line += " __" + current.name + "__ (" + this.getTimeString(current.date) + ")";
+				line += " __" + current.name + "__ <t:" + current.date.unix() + ":R>";
 			} else {
 				line += " :no_entry_sign: __Not currently live__.";
 			}
 
 			if (next !== null) {
-				line += " :arrow_forward: Next: __" + next.name + "__ (" + this.getTimeString(next.date) + ")";
+				line += " :arrow_forward: Next: __" + next.name + "__ <t:" + next.date + ":R>";
 			} else {
 				line += " :warning: This is the last set!";
 			}
