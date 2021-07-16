@@ -191,7 +191,7 @@ class EventSchedule
 						console.log("Stream is not live anymore.");
 						var next = this.getNextSet(stage);
 						if (next !== null && !next.nothing) {
-							var msg = ":no_entry_sign: Stream is no longer live. Next set it on " + this.getWeekDay(next.date.day()) + " at **" + this.getTimeString(next.date) + "**!";
+							var msg = ":no_entry_sign: Stream is no longer live. Next set is at **" + this.getTimeString(next.date) + "**!";
 							stage.channel.send(msg);
 							if (stage.channelExtra) {
 								stage.channelExtra.send(msg);
@@ -295,16 +295,13 @@ class EventSchedule
 			}
 			lines++;
 
-			var localTime = "**" + this.getTimeString(set.date) + "**";
-			localTime += " (<t:" + set.date.unix() + ":R>)";
-
 			if (set.nothing) {
-				ret += "- " + this.getWeekDay(set.date.day()) + " " + localTime + ", the stream will be offline :no_entry_sign:\n";
+				ret += "- <t:" + set.date.unix() + ":F>, the stream will be offline :no_entry_sign:\n";
 			} else {
 				if (set.who) {
-					ret += "- " + this.getWeekDay(set.date.day()) + " " + localTime + ": **" + set.name + "** (" + set.who + ")\n";
+					ret += "- <t:" + set.date.unix() + ":F>: **" + set.name + "** (" + set.who + ")\n";
 				} else {
-					ret += "- " + this.getWeekDay(set.date.day()) + " " + localTime + ": **" + set.name + "**\n";
+					ret += "- <t:" + set.date.unix() + ":F>: **" + set.name + "**\n";
 				}
 			}
 		}
@@ -372,7 +369,6 @@ class EventSchedule
 			for (var i = 0; i < results.length; i++) {
 				var res = results[i];
 
-				var weekDay = this.getWeekDay(res.set.date.day());
 				var localTime = "**" + this.getTimeString(res.set.date) + "**";
 				localTime += " (<t:" + res.set.date.unix() + ":R>)";
 
@@ -382,9 +378,9 @@ class EventSchedule
 				}
 
 				if (date > res.date) {
-					ret += res.set.name + " already played on **" + weekDay + "**, at " + localTime + stageMessage + "\n";
+					ret += res.set.name + " already played on <t:" + res.set.date.unix() + ":F>\n";
 				} else {
-					ret += res.set.name + " plays on **" + weekDay + "**, at " + localTime + stageMessage + "\n";
+					ret += res.set.name + " plays on <t:" + res.set.date.unix() + ":F>\n";
 				}
 			}
 		}
@@ -474,20 +470,6 @@ class EventSchedule
 		}
 
 		return false;
-	}
-
-	getWeekDay(index)
-	{
-		switch (index) {
-			case 0: return "Sunday";
-			case 1: return "Monday";
-			case 2: return "Tuesday";
-			case 3: return "Wednesday";
-			case 4: return "Thursday";
-			case 5: return "Friday";
-			case 6: return "Saturday";
-		}
-		return "It's everyday bro";
 	}
 
 	getTimeString(date)
