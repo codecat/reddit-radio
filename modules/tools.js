@@ -13,7 +13,7 @@ class ToolsModule
 	{
 		msg.guild.members.fetch(msg.author).then((member) => {
 			var joinedAt = moment(member.joinedAt);
-			msg.reply("you joined this server **" + joinedAt.fromNow() + "**. (" + joinedAt.format() + ")");
+			msg.reply("you joined this server **<t:" + joinedAt.unix() + ":R>** - <t:" + joinedAt.unix() + ":F>");
 		});
 	}
 
@@ -40,7 +40,7 @@ class ToolsModule
 
 				msg.channel.send(
 					"**Info for non-member " + fetcheduser.tag + "**:\n" +
-					":alarm_clock: Account age: **" + createdAt.fromNow() + "** (" + createdAt.format() + ")"
+					":alarm_clock: Account age: **<t:" + createdAt.unix() + ":R>** - <t:" + createdAt.format() + ":F>"
 				);
 			});
 			return;
@@ -51,8 +51,8 @@ class ToolsModule
 
 		msg.channel.send(
 			"**Info for member " + member.toString() + "**:\n" +
-			":alarm_clock: Join time: **" + joinedAt.fromNow() + "** (" + joinedAt.format() + ")\n" +
-			":alarm_clock: Account age: **" + createdAt.fromNow() + "** (" + createdAt.format() + ")"
+			":alarm_clock: Join time: **<t:" + joinedAt.unix() + ":R>** - <t:" + joinedAt.unix() + ":F>\n" +
+			":alarm_clock: Account age: **<t:" + createdAt.unix() + ":R>** - <t:" + createdAt.unix() + ":F>"
 		);
 	}
 }

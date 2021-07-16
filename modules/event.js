@@ -235,9 +235,9 @@ class EventSchedule
 		var current = this.getCurrentSet(stage);
 		if (current !== null && !current.nothing) {
 			if (current.who) {
-				msg.channel.send(":red_circle: Now playing: **" + current.name + "**, started " + current.date.fromNow() + "! (" + current.who + ")");
+				msg.channel.send(":red_circle: Now playing: **" + current.name + "**, started <t:" + current.date.unix() + ":R>! (" + current.who + ")");
 			} else {
-				msg.channel.send(":red_circle: Now playing: **" + current.name + "**, started " + current.date.fromNow() + "!");
+				msg.channel.send(":red_circle: Now playing: **" + current.name + "**, started <t:" + current.date.unix() + ":R>!");
 			}
 		} else {
 			msg.channel.send("Nobody's playing right now.");
@@ -254,7 +254,7 @@ class EventSchedule
 		var next = this.getNextSet(stage);
 		if (next) {
 			var localTime = "**" + this.getTimeString(next.date) + "**";
-			localTime += " (" + next.date.fromNow() + ")";
+			localTime += " (<t:" + next.date.unix() + ":R>)";
 
 			if (next.name) {
 				if (next.who) {
@@ -296,7 +296,7 @@ class EventSchedule
 			lines++;
 
 			var localTime = "**" + this.getTimeString(set.date) + "**";
-			localTime += " (" + set.date.fromNow() + ")";
+			localTime += " (<t:" + set.date.unix() + ":R>)";
 
 			if (set.nothing) {
 				ret += "- " + this.getWeekDay(set.date.day()) + " " + localTime + ", the stream will be offline :no_entry_sign:\n";
@@ -312,9 +312,9 @@ class EventSchedule
 		if (lines == 0) {
 			ret = "We have nothing left! :frowning:";
 		} else if (limit) {
-			ret = ":calendar_spiral: Next " + limit + " sets are: (the local time is **" + this.getTimeString(moment()) + "**)\n" + ret.trim();
+			ret = ":calendar_spiral: Next " + limit + " sets are:\n" + ret.trim();
 		} else {
-			ret = ":calendar_spiral: The full schedule: (the local time is **" + this.getTimeString(moment()) + "**)\n" + ret.trim();
+			ret = ":calendar_spiral: The full schedule:\n" + ret.trim();
 		}
 
 		return ret;
@@ -374,7 +374,7 @@ class EventSchedule
 
 				var weekDay = this.getWeekDay(res.set.date.day());
 				var localTime = "**" + this.getTimeString(res.set.date) + "**";
-				localTime += " (" + res.set.date.fromNow() + ")";
+				localTime += " (<t:" + res.set.date.unix() + ":R>)";
 
 				var stageMessage = "";
 				if (this.schedule.length > 1) {
@@ -492,16 +492,7 @@ class EventSchedule
 
 	getTimeString(date)
 	{
-		var ret = date.hour();
-		ret += ":";
-
-		var mins = date.minute();
-		if (mins < 10) {
-			ret += "0";
-		}
-		ret += mins;
-
-		return ret;
+		return "<t:" + date.unix() + ":t>";
 	}
 
 	updateChannel(stage)
