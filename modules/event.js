@@ -349,7 +349,7 @@ class EventSchedule
 	onCmdFind(msg)
 	{
 		var query = Array.from(arguments).slice(1).join(" ").trim();
-		if (query.length < 2) {
+		if (query.length < 3) {
 			return;
 		}
 
