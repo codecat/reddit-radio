@@ -395,7 +395,7 @@ class EventSchedule
 		}
 
 		this.loadSchedule(this.event.file);
-		msg.channel.reply("schedule reloaded!");
+		msg.reply("schedule reloaded!");
 	}
 
 	onMessage(msg)
