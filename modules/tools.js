@@ -40,7 +40,7 @@ class ToolsModule
 
 				msg.channel.send(
 					"**Info for non-member " + fetcheduser.tag + "**:\n" +
-					":alarm_clock: Account age: **<t:" + createdAt.unix() + ":R>** - <t:" + createdAt.format() + ":F>"
+					":alarm_clock: Account age: **<t:" + createdAt.unix() + ":R>** - <t:" + createdAt.unix() + ":F>"
 				);
 			});
 			return;
