@@ -184,6 +184,13 @@ class RedditRadio
 	onMemberJoin(member)
 	{
 		console.log("User joined: " + member + " (" + member.user.username + ")");
+
+		for (var i = 0; i < this.modules.length; i++) {
+			var m = this.modules[i];
+			if (m.onMemberJoin) {
+				m.onMemberJoin(member);
+			}
+		}
 	}
 
 	/**
