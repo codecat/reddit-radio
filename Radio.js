@@ -9,7 +9,13 @@ class Radio
 		this.name = radioconfig.name;
 		this.url = radioconfig.url;
 
-		this.client = new discord.Client();
+		this.client = new discord.Client({
+			intents: [
+				// List of intents: https://discord.com/developers/docs/topics/gateway#list-of-intents
+				discord.Intents.FLAGS.GUILDS,
+				discord.Intents.FLAGS.GUILD_VOICE_STATES,
+			],
+		});
 
 		this.running = false;
 		this.voice_connection = false;
