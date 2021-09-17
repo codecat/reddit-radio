@@ -38,6 +38,8 @@ class RedditRadio
 
 		moment.tz.setDefault(this.config.discord.timezone || "Europe/Amsterdam");
 
+		console.log('Discord.js version', discord.version);
+
 		this.client = new discord.Client({
 			intents: [
 				// List of intents: https://discord.com/developers/docs/topics/gateway#list-of-intents
