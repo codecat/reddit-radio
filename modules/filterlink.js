@@ -19,34 +19,42 @@ class FilterLinkModule
 		this.permitted = [];
 	}
 
+	isPermitted(member)
+	{
+		var delay = this.config.minutes || 60;
+		var minutes = moment().diff(member.joinedTimestamp, "minutes");
+
+		if (minutes >= delay) {
+			return true;
+		}
+
+		// Check the list of permitted users with .permit
+		var permittedIndex = this.permitted.indexOf(member.id);
+		if (permittedIndex != -1) {
+			if (minutes >= delay) {
+				this.permitted.splice(permittedIndex, 1);
+			}
+			return true;
+		}
+
+		return false;
+	}
+
 	/**
 	 * @param {discord.Message} msg
 	 * @param {Boolean} edited
 	 */
 	onMessage(msg, edited)
 	{
-		var delay = this.config.minutes || 60;
-
 		if (msg.content.match(/https?:\/\//i) || msg.content.match(/\.[a-z]{2,3}\//i) || msg.content.match(/(bit.ly|shorturl.at|tiny.cc)/i)) {
 			msg.guild.members.fetch(msg.author).then((member) => {
-				var minutes = moment().diff(member.joinedAt, "minutes");
-
-				// Check the list of permitted users with .permit
-				var permittedIndex = this.permitted.indexOf(msg.author.id);
-				if (permittedIndex != -1) {
-					if (minutes >= delay) {
-						this.permitted.splice(permittedIndex, 1);
-					}
+				if (this.isPermitted(member)) {
 					return;
 				}
 
-				// Check if we joined less than X minutes ago
-				if (minutes < delay) {
-					this.bot.addLogMessage("Deleted link from " + member.toString() + " in " + msg.channel.toString() + " who joined " + minutes + " minutes ago. Deleted message:\n```" + msg.content + "```");
-					msg.delete();
-					msg.author.send("Your recent message has been automatically deleted. We do not allow new users to post links for a short while, to combat spam. Check #info for more information about the rules. If you think this message is in error, please DM one of the mods.");
-					return;
-				}
+				this.bot.addLogMessage("Deleted link from " + member.toString() + " in " + msg.channel.toString() + " who joined " + minutes + " minutes ago. Deleted message:\n```" + msg.content + "```");
+				msg.delete();
+				msg.author.send("Your recent message has been automatically deleted. Brand new members can't post links for a short while, to combat spam. Check #info for more information about the rules. If you think this message is in error, please DM one of the mods.").catch(console.error);
 			});
 		}
 	}
@@ -62,13 +70,20 @@ class FilterLinkModule
 		}
 
 		var mentions = "";
-		for (let member of msg.mentions.members) {
-			this.permitted.push(member[0]);
-			mentions += member[1].toString() + " ";
-		}
-		msg.channel.send(mentions + "A moderator has permitted you to post links!");
+		var num = 0;
+		msg.mentions.members.each(member => {
+			if (this.isPermitted(member)) {
+				return;
+			}
+			this.permitted.push(member.id);
+			mentions += member.toString() + " ";
+			num++;
+		});
 
-		this.bot.addLogMessage(msg.member.toString() + " has permitted " + mentions + "to post links");
+		if (num > 0) {
+			msg.channel.send(mentions + "A moderator has permitted you to post links!");
+			this.bot.addLogMessage(msg.member.toString() + " has permitted " + mentions + "to post links");
+		}
 	}
 }
 

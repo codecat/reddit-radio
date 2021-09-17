@@ -38,8 +38,18 @@ class RedditRadio
 
 		moment.tz.setDefault(this.config.discord.timezone || "Europe/Amsterdam");
 
-		this.client = new discord.Client();
-		this.client.on("message", (msg) => { this.onMessage(msg, false); });
+		this.client = new discord.Client({
+			intents: [
+				// List of intents: https://discord.com/developers/docs/topics/gateway#list-of-intents
+				discord.Intents.FLAGS.GUILDS,
+				discord.Intents.FLAGS.GUILD_MEMBERS,
+				discord.Intents.FLAGS.GUILD_BANS,
+				discord.Intents.FLAGS.GUILD_MESSAGES,
+				discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+				discord.Intents.FLAGS.DIRECT_MESSAGES,
+			],
+		});
+		this.client.on("messageCreate", (msg) => { this.onMessage(msg, false); });
 		this.client.on("messageUpdate", (oldMsg, newMsg) => { this.onMessageUpdate(oldMsg, newMsg); });
 		this.client.on("messageDelete", (msg) => { this.onMessageDelete(msg); });
 		this.client.on("guildMemberAdd", (member) => { this.onMemberJoin(member); });
@@ -159,7 +169,7 @@ class RedditRadio
 	 */
 	isAdmin(member)
 	{
-		return member.hasPermission("ADMINISTRATOR");
+		return member.permissions.has(discord.Permissions.FLAGS.ADMINISTRATOR);
 	}
 
 	/**
@@ -168,7 +178,7 @@ class RedditRadio
 	 */
 	isMod(member)
 	{
-		return member.hasPermission("MANAGE_MESSAGES");
+		return member.permissions.has(discord.Permissions.FLAGS.MANAGE_MESSAGES);
 	}
 
 	onTick()
