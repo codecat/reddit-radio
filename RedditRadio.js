@@ -283,7 +283,13 @@ class RedditRadio
 			} else {
 				console.log("Module command from offline member: " + cmdID);
 			}
-			cmdFunc.apply(this, [ msg ].concat(parse.slice(1)));
+
+			try {
+				var r = cmdFunc.apply(this, [ msg ].concat(parse.slice(1)));
+				if (r && r.catch) {
+					r.catch(console.error);
+				}
+			} catch (ex) { console.error(ex); }
 			cmdFound = true;
 		}
 
@@ -301,7 +307,12 @@ class RedditRadio
 				console.log("Module command from offline member: " + cmdID);
 			}
 
-			cmdFunc.apply(m, [ msg ].concat(parse.slice(1)));
+			try {
+				var r = cmdFunc.apply(m, [ msg ].concat(parse.slice(1)));
+				if (r && r.catch) {
+					r.catch(console.error);
+				}
+			} catch (ex) { console.error(ex); }
 			cmdFound = true;
 		}
 
