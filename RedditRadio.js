@@ -206,7 +206,7 @@ class RedditRadio
 		}
 	}
 
-	handleCmdError(ex)
+	handleError(ex)
 	{
 		console.log(ex);
 		if (this.errorChannel) {
@@ -269,8 +269,12 @@ class RedditRadio
 
 		for (var i = 0; i < this.modules.length; i++) {
 			var m = this.modules[i];
-			if (m.onMessage && m.onMessage(msg, edited)) {
-				return;
+			if (m.onMessage) {
+				try {
+					if (m.onMessage(msg, edited)) {
+						return;
+					}
+				} catch (ex) { this.handleError(ex); }
 			}
 		}
 
@@ -298,9 +302,9 @@ class RedditRadio
 			try {
 				var r = cmdFunc.apply(this, [ msg ].concat(parse.slice(1)));
 				if (r && r.catch) {
-					r.catch(ex => this.handleCmdError(ex));
+					r.catch(ex => this.handleError(ex));
 				}
-			} catch (ex) { this.handleCmdError(ex); }
+			} catch (ex) { this.handleError(ex); }
 			cmdFound = true;
 		}
 
@@ -321,9 +325,9 @@ class RedditRadio
 			try {
 				var r = cmdFunc.apply(m, [ msg ].concat(parse.slice(1)));
 				if (r && r.catch) {
-					r.catch(ex => this.handleCmdError(ex));
+					r.catch(ex => this.handleError(ex));
 				}
-			} catch (ex) { this.handleCmdError(ex); }
+			} catch (ex) { this.handleError(ex); }
 			cmdFound = true;
 		}
 
