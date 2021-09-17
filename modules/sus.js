@@ -15,7 +15,7 @@ class SusModule
 	/**
 	 * @param {discord.GuildMember} member
 	 */
-	 onMemberJoin(member)
+	onMemberJoin(member)
 	{
 		if (moment().diff(member.user.createdAt, "hours") < 48) {
 			this.bot.addLogMessage("<:skepticalpepe:743455915935662133> Brand new user account joined: " + member.user.toString()
