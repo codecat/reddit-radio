@@ -12,7 +12,7 @@ class ToolsModule
 	onCmdJoinDate(msg)
 	{
 		msg.guild.members.fetch(msg.author).then((member) => {
-			var joinedAt = moment(member.joinedAt);
+			var joinedAt = moment(member.joinedTimestamp);
 			msg.reply("you joined this server **<t:" + joinedAt.unix() + ":R>** - <t:" + joinedAt.unix() + ":F>");
 		});
 	}
@@ -27,27 +27,27 @@ class ToolsModule
 		msg.delete();
 	}
 
-	onCmdUserInfo(msg, user)
+	async onCmdUserInfo(msg, user)
 	{
 		if (!this.bot.isMod(msg.member)) {
 			return;
 		}
 
-		var member = msg.guild.member(user);
-		if (!member) {
-			this.client.users.fetch(user).then((fetcheduser) => {
-				var createdAt = moment(fetcheduser.createdAt);
+		try {
+			var member = await msg.guild.members.fetch(user);
+		} catch {
+			var fetcheduser = await this.client.users.fetch(user);
+			var createdAt = moment(fetcheduser.createdTimestamp);
 
-				msg.channel.send(
-					"**Info for non-member " + fetcheduser.tag + "**:\n" +
-					":alarm_clock: Account age: **<t:" + createdAt.unix() + ":R>** - <t:" + createdAt.unix() + ":F>"
-				);
-			});
+			msg.channel.send(
+				"**Info for non-member " + fetcheduser.tag + "**:\n" +
+				":alarm_clock: Account age: **<t:" + createdAt.unix() + ":R>** - <t:" + createdAt.unix() + ":F>"
+			);
 			return;
 		}
 
-		var joinedAt = moment(member.joinedAt);
-		var createdAt = moment(member.user.createdAt);
+		var joinedAt = moment(member.joinedTimestamp);
+		var createdAt = moment(member.user.createdTimestamp);
 
 		msg.channel.send(
 			"**Info for member " + member.toString() + "**:\n" +

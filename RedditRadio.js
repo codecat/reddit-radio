@@ -66,6 +66,8 @@ class RedditRadio
 		this.logChannel = null;
 		/** @type {discord.TextChannel} */
 		this.dmChannel = null;
+		/** @type {discord.TextChannel} */
+		this.errorChannel = null;
 	}
 
 	loadConfigModules()
@@ -106,6 +108,7 @@ class RedditRadio
 
 		this.client.channels.fetch(this.config.discord.logchannel).then(logChannel => this.logChannel = logChannel);
 		this.client.channels.fetch(this.config.discord.dmchannel).then(dmChannel => this.dmChannel = dmChannel);
+		this.client.channels.fetch(this.config.discord.errorchannel).then(errorChannel => this.errorChannel = errorChannel);
 
 		if (this.mongoclient) {
 			this.mongodb = this.mongoclient.db(this.config.database.db);
@@ -203,6 +206,14 @@ class RedditRadio
 		}
 	}
 
+	handleCmdError(ex)
+	{
+		console.log(ex);
+		if (this.errorChannel) {
+			this.errorChannel.send(":octagonal_sign: Bot error!\n```\n" + ex.toString() + "\n```");
+		}
+	}
+
 	/**
 	 * @param {discord.Message} msg
 	 * @param {Boolean} edited
@@ -287,9 +298,9 @@ class RedditRadio
 			try {
 				var r = cmdFunc.apply(this, [ msg ].concat(parse.slice(1)));
 				if (r && r.catch) {
-					r.catch(console.error);
+					r.catch(ex => this.handleCmdError(ex));
 				}
-			} catch (ex) { console.error(ex); }
+			} catch (ex) { this.handleCmdError(ex); }
 			cmdFound = true;
 		}
 
@@ -310,9 +321,9 @@ class RedditRadio
 			try {
 				var r = cmdFunc.apply(m, [ msg ].concat(parse.slice(1)));
 				if (r && r.catch) {
-					r.catch(console.error);
+					r.catch(ex => this.handleCmdError(ex));
 				}
-			} catch (ex) { console.error(ex); }
+			} catch (ex) { this.handleCmdError(ex); }
 			cmdFound = true;
 		}
 

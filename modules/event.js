@@ -339,7 +339,7 @@ class EventSchedule
 
 		var text = this.getScheduleString(stage);
 		while (text.length > 0) {
-			msg.author.send(text.substr(0, 2000)).catch(console.error);
+			msg.author.send(text.substr(0, 2000));
 			text = text.substr(2000);
 		}
 

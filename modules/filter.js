@@ -62,7 +62,7 @@ class FilterModule
 
 			msg.delete();
 			this.bot.addLogMessage("Deleted unwanted message from " + msg.author.toString() + " in " + msg.channel.toString() + ": `" + msg.content.replace('`', '\\`') + "`");
-			msg.author.send(usermessage).catch(console.error);
+			msg.author.send(usermessage);
 		}
 	}
 }

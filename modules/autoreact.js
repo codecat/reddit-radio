@@ -21,7 +21,7 @@ class AutoReactModule
 		}
 
 		if (msg.content.match(new RegExp(this.config.match, "i"))) {
-			msg.react(this.config.emoji).catch(console.error);
+			msg.react(this.config.emoji);
 		}
 	}
 }

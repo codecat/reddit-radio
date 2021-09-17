@@ -28,7 +28,7 @@ class WelcomeModule
 				users: []
 			}
 		});
-		message.react(this.config.emoji || "👋").catch(console.error);
+		message.react(this.config.emoji || "👋");
 	}
 }
 
