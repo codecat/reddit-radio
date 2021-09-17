@@ -1,4 +1,4 @@
-FROM node:13-alpine
+FROM node:16-alpine
 
 WORKDIR /app
 
@@ -13,6 +13,6 @@ RUN apk add --no-cache ffmpeg \
         autoconf \
         libtool \
         automake \
-        python \
+        python3 \
     && npm install \
     && apk del .build-deps
