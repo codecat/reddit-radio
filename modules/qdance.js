@@ -3,23 +3,24 @@ var http = require("https");
 
 class QdanceModule
 {
-	get(dir, callback)
+	get(dir)
 	{
-		var ret = {};
-
-		http.get("https://feed.q-dance.com/onair", function(res) {
-			var data = "";
-			res.setEncoding("utf8");
-			res.on("data", function(chunk) { data += chunk; });
-			res.on("end", function() {
-				var obj = JSON.parse(data);
-				if (dir == -1) {
-					callback(obj.TrackData.PreviousPlaying);
-				} else if (dir == 0) {
-					callback(obj.TrackData.NowPlaying);
-				} else if (dir == 1) {
-					callback(obj.TrackData.NextPlaying);
-				}
+		return new Promise((resolve, reject) => {
+			http.get("https://feed.q-dance.com/onair", function(res) {
+				var data = "";
+				res.setEncoding("utf8");
+				res.on("data", function(chunk) { data += chunk; });
+				res.on("end", function() {
+					var obj = JSON.parse(data);
+					if (dir == -1) {
+						resolve(obj.TrackData.PreviousPlaying);
+					} else if (dir == 0) {
+						resolve(obj.TrackData.NowPlaying);
+					} else if (dir == 1) {
+						resolve(obj.TrackData.NextPlaying);
+					}
+					reject('Unknown track direction!');
+				});
 			});
 		});
 	}
@@ -36,24 +37,27 @@ class QdanceModule
 		return embed;
 	}
 
-	onCmdQdnp(msg)
+	async onCmdQdnp(msg)
 	{
-		this.get(0, (track) => {
-			msg.channel.send("", this.makeEmbed(track, "Q-dance Radio is now playing:"));
+		var track = await this.get(0);
+		msg.channel.send({
+			embeds: [ this.makeEmbed(track, "Q-dance Radio is now playing:") ],
 		});
 	}
 
-	onCmdQdnext(msg)
+	async onCmdQdnext(msg)
 	{
-		this.get(1, (track) => {
-			msg.channel.send("", this.makeEmbed(track, "Next track on Q-dance Radio:"));
+		var track = await this.get(1);
+		msg.channel.send({
+			embeds: [ this.makeEmbed(track, "Next track on Q-dance Radio:") ],
 		});
 	}
 
-	onCmdQdprev(msg)
+	async onCmdQdprev(msg)
 	{
-		this.get(-1, (track) => {
-			msg.channel.send("", this.makeEmbed(track, "Previous track on Q-dance Radio:"));
+		var track = await this.get(-1);
+		msg.channel.send({
+			embeds: [ this.makeEmbed(track, "Previous track on Q-dance Radio:") ],
 		});
 	}
 }
