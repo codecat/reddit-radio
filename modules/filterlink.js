@@ -52,9 +52,11 @@ class FilterLinkModule
 					return;
 				}
 
-				this.bot.addLogMessage("Deleted link from " + member.toString() + " in " + msg.channel.toString() + " who joined " + minutes + " minutes ago. Deleted message:\n```" + msg.content + "```");
 				msg.delete();
 				msg.author.send("Your recent message has been automatically deleted. Brand new members can't post links for a short while, to combat spam. Check #info for more information about the rules. If you think this message is in error, please DM one of the mods.");
+
+				var minutes = moment().diff(member.joinedTimestamp, "minutes");
+				this.bot.addLogMessage("Deleted link from " + member.toString() + " in " + msg.channel.toString() + " who joined " + minutes + " minutes ago. Deleted message:\n```" + msg.content + "```");
 			});
 		}
 	}
