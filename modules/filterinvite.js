@@ -36,7 +36,7 @@ class FilterInviteModule
 			if (!isWhitelisted) {
 				msg.delete();
 				this.bot.addLogMessage("Deleted Discord invite link from " + msg.author.toString() + " in " + msg.channel.toString() + ": `" + msg.content.replace('`', '\\`') + "`");
-				msg.author.send("Your recent message has been automatically deleted. Please do not post Discord invite links without prior permission from a moderator or admin.");
+				msg.author.send("Your recent message has been automatically deleted. Please do not post Discord invite links without prior permission from a moderator or admin.").catch(console.error);
 			}
 		}
 	}

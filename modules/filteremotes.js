@@ -26,7 +26,7 @@ class FilterEmotesModule
 		if (emotes && emotes.length > limit) {
 			msg.delete();
 			this.bot.addLogMessage("Deleted message from " + msg.member.toString() + " in " + msg.channel.toString() + " that contained " + emotes.length + " emotes");
-			msg.author.send("You posted too many emojis. Calm down a little bit!");
+			msg.author.send("You posted too many emojis. Calm down a little bit!").catch(console.error);
 		}
 	}
 }
