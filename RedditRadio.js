@@ -7,7 +7,6 @@ var fs = require("fs");
 var https = require("https");
 
 var cmdsplit = require("./cmdsplit");
-var Radio = require("./Radio");
 var MongoClient = require("mongodb").MongoClient;
 
 function findCommand(obj, cmdID)
