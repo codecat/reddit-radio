@@ -3,28 +3,7 @@ token = "main_bot_token"
 timezone = "Europe/Amsterdam"
 logchannel = "647767937054277642"
 dmchannel = "736529983706628146"
-
-#[database]
-#url = "mongodb://localhost:27017"
-#db = "redditradio"
+errorchannel = "888401480833450016"
 
 [filter]
 badwords = "(thepiratebay|badwords)"
-
-[[modules.qdance]]
-
-#[[modules.event]]
-#file = "events/Qlimax2019.json"
-
-#[[modules.eventquick]]
-#channel = "651911168650248208"
-
-[[radios]]
-token = "radio_bot_1_token"
-channel = "330121740758024193"
-name = "Q-dance Radio"
-url = "http://audio.true.nl/qdance-hard"
-
-[voice]
-passes = 2
-bitrate = 44100

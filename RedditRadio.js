@@ -41,13 +41,13 @@ class RedditRadio
 
 		this.client = new discord.Client({
 			intents: [
-				// List of intents: https://discord.com/developers/docs/topics/gateway#list-of-intents
-				discord.Intents.FLAGS.GUILDS,
-				discord.Intents.FLAGS.GUILD_MEMBERS,
-				discord.Intents.FLAGS.GUILD_BANS,
-				discord.Intents.FLAGS.GUILD_MESSAGES,
-				discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
-				discord.Intents.FLAGS.DIRECT_MESSAGES,
+				discord.GatewayIntentBits.MessageContent,
+				discord.GatewayIntentBits.Guilds,
+				discord.GatewayIntentBits.GuildMembers,
+				discord.GatewayIntentBits.GuildBans,
+				discord.GatewayIntentBits.GuildMessages,
+				discord.GatewayIntentBits.GuildMessageReactions,
+				discord.GatewayIntentBits.DirectMessages,
 			],
 		});
 		this.client.on("messageCreate", (msg) => { this.onMessage(msg, false); });
@@ -173,7 +173,7 @@ class RedditRadio
 	 */
 	isAdmin(member)
 	{
-		return member.permissions.has(discord.Permissions.FLAGS.ADMINISTRATOR);
+		return member.permissions.has(discord.PermissionsBitField.Administrator);
 	}
 
 	/**
@@ -182,7 +182,7 @@ class RedditRadio
 	 */
 	isMod(member)
 	{
-		return member.permissions.has(discord.Permissions.FLAGS.MANAGE_MESSAGES);
+		return member.permissions.has(discord.PermissionsBitField.ManageMessages);
 	}
 
 	onTick()
