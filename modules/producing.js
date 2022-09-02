@@ -1,8 +1,6 @@
 var colors = require("colors");
 var moment = require("moment");
 
-const ffmpeg = require('fluent-ffmpeg');
-
 class ProducingModule
 {
 	constructor(config, client, bot)
@@ -136,40 +134,6 @@ class ProducingModule
 				this.collUsers.updateOne({ id: user.id }, {
 					$inc: { files_uploaded: 1 }
 				});
-
-				/*
-				statsmessage = false
-				feedbackmessage = false
-				spectrumpic = false
-				*/
-
-				if (this.config.spectrumpic) {
-					new Promise((resolve, reject) => {
-						let path = '/tmp/waveform-' + msg.id + '.png';
-						let cmd = ffmpeg(a.url);
-						cmd.complexFilter([
-							'[0:a] showspectrumpic=s=400x70:color=nebulae:legend=false [tmp1]',
-							//'[0:a] showwavespic=s=400x70:colors=0xFFFFFFFF:filter=peak [tmp2]',
-							//'[tmp1][tmp2] overlay=y=0:format=rgb:alpha=premultiplied [tmp3]',
-							'[tmp1] drawbox=0:0:400:70:black',
-						]);
-						cmd.frames(1);
-						cmd.on('error', err => {
-							reject(err);
-						});
-						cmd.on('end', () => {
-							msg.channel.send({
-								files: [{
-									attachment: path,
-									name: 'waveform.png',
-								}],
-							}).then(resolve).catch(reject);
-						});
-						cmd.save(path);
-					}).catch(err => {
-						console.error('ffmpeg waveform failed!', err);
-					});
-				}
 
 				for (var i = 0; i < this.config.reactions.length; i++) {
 					await msg.react(this.config.reactions[i]);
