@@ -97,14 +97,6 @@ class RedditRadio
 
 	onReady()
 	{
-		/*
-		this.client.guilds.cache.tap(guild => {
-			guild.members.fetch().then(() => {
-				console.log('Cached ' + guild.members.size + ' members in ' + guild.name);
-			});
-		});
-		*/
-
 		this.client.user.setActivity(this.config.discord.activity);
 
 		this.client.channels.fetch(this.config.discord.logchannel).then(logChannel => this.logChannel = logChannel);
@@ -173,7 +165,7 @@ class RedditRadio
 	 */
 	isAdmin(member)
 	{
-		return member.permissions.has(discord.PermissionsBitField.Administrator);
+		return member.permissions.has('Administrator');
 	}
 
 	/**
@@ -182,7 +174,7 @@ class RedditRadio
 	 */
 	isMod(member)
 	{
-		return member.permissions.has(discord.PermissionsBitField.ManageMessages);
+		return member.permissions.has('ManageMessages');
 	}
 
 	onTick()
@@ -249,7 +241,7 @@ class RedditRadio
 		// Ensure we have a member (sometimes this is null if their status is offline)
 		if (msg.member === null) {
 			console.warn("Member is null, fetching member now");
-			msg.member = await msg.guild.fetchMember(msg.author);
+			msg.member = await msg.guild.members.fetch(msg.author);
 		}
 
 		// Log line
