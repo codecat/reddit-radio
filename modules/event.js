@@ -365,6 +365,9 @@ class EventSchedule
 			}
 			this.lastNotFound = now;
 		} else {
+			// Sort results based on date
+			results.sort((a, b) => a.set.date.unix() - b.set.date.unix());
+
 			var date = new Date();
 			for (var i = 0; i < results.length; i++) {
 				var res = results[i];
