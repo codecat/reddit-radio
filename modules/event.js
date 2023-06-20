@@ -378,9 +378,9 @@ class EventSchedule
 				}
 
 				if (date > res.date) {
-					ret += res.set.name + " already played on <t:" + res.set.date.unix() + ":F>\n";
+					ret += res.set.name + " already played on <t:" + res.set.date.unix() + ":F>" + stageMessage + "\n";
 				} else {
-					ret += res.set.name + " plays on <t:" + res.set.date.unix() + ":F>\n";
+					ret += res.set.name + " plays on <t:" + res.set.date.unix() + ":F>" + stageMessage + "\n";
 				}
 			}
 		}
