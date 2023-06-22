@@ -369,7 +369,7 @@ class EventSchedule
 			results.sort((a, b) => a.set.date.unix() - b.set.date.unix());
 
 			var date = new Date();
-			for (var i = 0; i < results.length; i++) {
+			for (var i = 0; i < Math.min(results.length, 5); i++) {
 				var res = results[i];
 
 				var localTime = "**" + this.getTimeString(res.set.date) + "**";
@@ -385,6 +385,10 @@ class EventSchedule
 				} else {
 					ret += res.set.name + " plays on <t:" + res.set.date.unix() + ":F>" + stageMessage + "\n";
 				}
+			}
+
+			if (results.length > 5) {
+				ret += "*(" + (results.length - 5) + " more not displayed)*";
 			}
 		}
 
